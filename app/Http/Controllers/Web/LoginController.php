@@ -22,7 +22,7 @@ class LoginController extends Controller
 
             if($request->session()->get('user')->role_flag == 1){
 
-                return view('dashboard');
+                return view('Sale.sale_page');
 
             }elseif ($request->session()->get('user')->role_flag == 4) {
 

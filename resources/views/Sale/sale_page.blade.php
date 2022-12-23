@@ -122,7 +122,7 @@
                                 @foreach($table_lists as $table)
                                 @if ($table->table_type_id == 1)
                                     <div class="col-md-10 ml-4">
-                                        <div class="card"  style="border:1px solid lightblue;border-radius:10px;" onclick="showorder({{$table->id}})">
+                                        <div class="card"  style="border:1px solid lightblue;border-radius:10px;" onclick="showorder({{$table->id}},{{$table->status}})">
                                             <div class="card-body">
                                                 <div class="d-flex flex-row">
                                                     @if ($table->status == 1)
@@ -165,7 +165,7 @@
                                 @foreach($table_lists as $table)
                                 @if ($table->table_type_id == 2)
                                     <div class="col-md-5 ml-4">
-                                        <div class="card"  style="border:1px solid lightblue;border-radius:10px;" onclick="showorder({{$table->id}})">
+                                        <div class="card"  style="border:1px solid lightblue;border-radius:10px;" onclick="showorder({{$table->id}},{{$table->status}})">
                                             <div class="card-body">
                                                 <div class="d-flex flex-row">
                                                     @if ($table->status == 1)
@@ -209,7 +209,7 @@
                                 @foreach($table_lists as $table)
                                 @if ($table->table_type_id == 3)
                                     <div class="col-md-6">
-                                        <div class="card"  style="border:1px solid lightblue;border-radius:10px;" onclick="showorder({{$table->id}})">
+                                        <div class="card"  style="border:1px solid lightblue;border-radius:10px;" onclick="showorder({{$table->id}},{{$table->status}})">
                                             <div class="card-body">
                                                 <div class="d-flex flex-row">
                                                     @if ($table->status == 1)
@@ -322,6 +322,7 @@
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
+
         </div>
       </div>
 
@@ -335,9 +336,13 @@
               </button>
             </div>
             <div class="modal-body">
+                {{-- <input type="text" value="" id="scanId"> --}}
+
               <p>Scan Here.</p>
-              <div class="text-center printableArea">
-                {!! QrCode::size(150)->generate('http://powerhome.kwintechnologykw11.com/qrcode') !!}
+              <div  id="scanid">
+                <div class="text-center printableArea">
+                    {!! QrCode::size(150)->generate($table->id) !!}
+                  </div>
               </div>
             </div>
             <div class="modal-footer">
@@ -376,9 +381,18 @@
         });
     });
 
-   function showorder(id){
-    $('#ordermodal').modal('show');
-    $('#tableid').val(id);
+   function showorder(id,status){
+    if(status == 1){
+        $('#ordermodal').modal('show');
+        $('#tableid').val(id);
+    }else{
+        swal({
+                title: "Warning!",
+                text : "This table is not free!",
+                icon : "warning",
+            });
+    }
+
    }
 
    function showscancode(){
@@ -390,6 +404,7 @@
     var birth_qty = $('#bd').val();
     var start_time = $('#time').val();
     var table_id = $('#tableid').val();
+    $('#scanId').val(table_id);
     $.ajax({
 
     type:'POST',
@@ -412,6 +427,8 @@
 
     }
 })
+
+
     $('#scanshow').modal('show');
    }
 

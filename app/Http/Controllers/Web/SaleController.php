@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class SaleController extends Controller
 {
@@ -215,6 +216,7 @@ class SaleController extends Controller
 
     //Start store thai
     protected function storeThaiShopOrder(Request $request){
+        return response()->json(QrCode::size(150)->generate('hello'));
         $validator = Validator::make($request->all(), [
 			'table_id' => 'required',
 		]);
