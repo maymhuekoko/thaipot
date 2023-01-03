@@ -216,7 +216,7 @@ class SaleController extends Controller
 
     //Start store thai
     protected function storeThaiShopOrder(Request $request){
-        return response()->json(QrCode::size(150)->generate('hello'));
+        // return response()->json(QrCode::size(150)->generate('hello'));
         $validator = Validator::make($request->all(), [
 			'table_id' => 'required',
 		]);
@@ -497,10 +497,6 @@ foreach($code_lists as $code){
 
 		$cuisine_types = CuisineType::all();
 
-		 DB::table('option_shop_order')
-		->where('shop_order_id', $order_id)
-		->update(['tocook' => 0]);
-
 		$table_number = $order->table->table_number??0;
 		// dd($table);
 		return view('Sale.order_sale_page', compact('codes','items','meal_types','cuisine_types','table_number','order','table'));
@@ -547,12 +543,11 @@ foreach($code_lists as $code){
 		if ($validator->fails()) {
 
 			alert()->error('Something Wrong! Validation Error.');
-
             return redirect()->back();
+
 		}
 
 		$option_lists = json_decode($request->option_lists);
-
 
 		try {
 
@@ -568,23 +563,6 @@ foreach($code_lists as $code){
 		if ($shop_order->status == 1) {
 
 
-			foreach ($option_lists as $option) {
-
-				$test = $shop_order->option()->where('option_id', $option->id)->first();
-
-				if (empty($test)) {
-
-					$shop_order->option()->attach($option->id, ['quantity' => $option->order_qty,'tocook'=>1,'note' => "Note Default", 'status' => 0]);
-
-				} else {
-
-					$update_qty = $option->order_qty + $test->pivot->quantity;
-
-					$shop_order->option()->updateExistingPivot($option->id, ['quantity' => $update_qty,'tocook'=>1,'add_same_item_status'=>1,'old_quantity'=>$test->pivot->quantity,'new_quantity'=>$option->order_qty,'status' => 5] );
-
-				}
-
-			}
 
 		    $shop_order->type=1;
 		    $shop_order->save();
@@ -595,18 +573,16 @@ foreach($code_lists as $code){
 
 			  $orders = ShopOrder::find($request->order_id);
 			  $tableno = Table::find($orders->table_id);
-			  $alloption = Option::all();
-			  $option_name = DB::table('option_shop_order')
-			  ->where('shop_order_id',$orders->id)
-			  ->where('tocook',1)
-			  ->get();
-			  $name = [];
-			  foreach($option_name as $optionss)
-			  {
-			  $oname = Option::find($optionss->option_id);
-			  array_push($name,$oname);
+              if($option_lists != null){
+                foreach($option_lists as $option){
+                    $items = DB::table('item_shop_order')->insert([
+                        'item_id' => $option->id,
+                        'shop_order_id' => $request->order_id,
+                        'quantity' => $option->order_qty,
+                    ]);
+                }
+            }
 
-			  }
 			  $take_away = $request->take_away;
 			  $fromadd = 1;
 			  $tablenoo = 0;
@@ -617,16 +593,19 @@ foreach($code_lists as $code){
 			$notte = [];
 			if($code_lists != null){
 			foreach($code_lists as $code){
-				$remark_note = DB::table('option_shop_order')
-								->where('option_id',$code->id)
+				$remark_note = DB::table('item_shop_order')
+								->where('item_id',$code->id)
 								->update(['note' => $code->remark]);
-				$note_remark = DB::table('option_shop_order')
-								->where('option_id',$code->id)
+				$note_remark = DB::table('item_shop_order')
+								->where('item_id',$code->id)
 								->first();
-					array_push($notte,$note_remark);
+				array_push($notte,$note_remark);
 			}
 			}
-			return view('Sale.kitchen_lists',compact('take_away','notte','option_name','name','tableno','fromadd','tablenoo','real_date'));
+            $kit = DB::table('item_shop_order')
+                        ->where('shop_order_id',$request->order_id)
+                        ->get();
+			return view('Sale.kitchen_lists',compact('take_away','kit','notte','tableno','fromadd','tablenoo','real_date','option_lists','code_lists'));
 
 		} else {
 

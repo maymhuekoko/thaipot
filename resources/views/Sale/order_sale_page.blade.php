@@ -4,25 +4,6 @@
 
 @section('place')
 
-<!--<div class="col-md-5 col-8 align-self-center">-->
-
-
-
-<!--    <h3 class="text-themecolor m-b-0 m-t-0">Order Sale Page</h3>-->
-
-
-<!--    <ol class="breadcrumb">-->
-<!--        <li class="breadcrumb-item"><a href="{{route('index')}}">Back to Dashborad</a></li>-->
-<!--        <li class="breadcrumb-item active">Order Sale Page</li>-->
-<!--        <div class="custom-control custom-switch" style="margin-left: 90px;">-->
-<!--            <input type="checkbox" class="custom-control-input" id="customSwitch2">-->
-<!--            <label class="custom-control-label text-info" for="customSwitch2">Take Away</label>-->
-<!--        </div>-->
-
-<!--    </ol>-->
-
-<!--</div>-->
-
 @endsection
 
 @section('content')
@@ -97,10 +78,11 @@
                     <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
                     <div style="height:40px;">
                         <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
+                        <input type="hidden" id="item_name{{$item->id}}" value="{{$item->item_name}}">
                     </div>
 
 
-                    <i class="btn btn-sm btn-success" onclick="getCountingUnit({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
+                    <i class="btn btn-sm btn-success" onclick="tgPanel({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
 
                 </div>
                 @endif
@@ -118,197 +100,16 @@
                         <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
                         <div style="height:40px;">
                             <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
+                            <input type="hidden" id="item_name{{$item->id}}" value="{{$item->item_name}}">
                         </div>
 
 
-                        <i class="btn btn-sm btn-success" onclick="getCountingUnit({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
+                        <i class="btn btn-sm btn-success" onclick="tgPanel({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
 
                     </div>
                     @endif
                     @endforeach
                 </div>
-            </div>
-
-            <div class="tab-pane" id="3" role="tabpanel">
-                <div class="row mt-3">
-                    @foreach($items as $item)
-                    @if($item->cuisine_type_id == 3)
-
-                    <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                        <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
-                        <div style="height:40px;">
-                            <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
-                        </div>
-
-
-                        <i class="btn btn-sm btn-success" onclick="getCountingUnit({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
-
-                    </div>
-                    @endif
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="tab-pane" id="4" role="tabpanel">
-                <div class="row mt-3">
-                    @foreach($items as $item)
-                    @if($item->cuisine_type_id == 4)
-
-                    <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                        <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
-                        <div style="height:40px;">
-                            <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
-                        </div>
-
-
-                        <i class="btn btn-sm btn-success" onclick="getCountingUnit({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
-
-                    </div>
-                    @endif
-                    @endforeach
-                    </div>
-            </div>
-
-            <div class="tab-pane" id="5" role="tabpanel">
-                <div class="row mt-3">
-                    @foreach($items as $item)
-                    @if($item->cuisine_type_id == 5)
-
-                    <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                        <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
-                        <div style="height:40px;">
-                            <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
-                        </div>
-
-
-                        <i class="btn btn-sm btn-success" onclick="getCountingUnit({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
-
-                    </div>
-                    @endif
-                    @endforeach
-                    </div>
-
-            </div>
-
-            <div class="tab-pane" id="6" role="tabpanel">
-                <div class="row mt-3">
-                    @foreach($items as $item)
-                    @if($item->cuisine_type_id == 6)
-
-                    <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                        <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
-                        <div style="height:40px;">
-                            <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
-                        </div>
-
-
-                        <i class="btn btn-sm btn-success" onclick="getCountingUnit({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
-
-                    </div>
-                    @endif
-                    @endforeach
-                    </div>
-
-            </div>
-            <div class="tab-pane" id="7" role="tabpanel">
-                <div class="row mt-3">
-                    @foreach($items as $item)
-                    @if($item->cuisine_type_id == 7)
-
-                    <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                        <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
-                        <div style="height:40px;">
-                            <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
-                        </div>
-
-
-                        <i class="btn btn-sm btn-success" onclick="getCountingUnit({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
-
-                    </div>
-                    @endif
-                    @endforeach
-                    </div>
-
-            </div>
-            <div class="tab-pane" id="8" role="tabpanel">
-                <div class="row mt-3">
-                    @foreach($items as $item)
-                    @if($item->cuisine_type_id == 8)
-
-                    <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                        <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
-                        <div style="height:40px;">
-                            <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
-                        </div>
-
-
-                        <i class="btn btn-sm btn-success" onclick="getCountingUnit({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
-
-                    </div>
-                    @endif
-                    @endforeach
-                    </div>
-
-            </div>
-            <div class="tab-pane" id="9" role="tabpanel">
-                <div class="row mt-3">
-                    @foreach($items as $item)
-                    @if($item->cuisine_type_id == 9)
-
-                    <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                        <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
-                        <div style="height:40px;">
-                            <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
-                        </div>
-
-
-                        <i class="btn btn-sm btn-success" onclick="getCountingUnit({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
-
-                    </div>
-                    @endif
-                    @endforeach
-                    </div>
-
-            </div>
-            <div class="tab-pane" id="10" role="tabpanel">
-                <div class="row mt-3">
-                    @foreach($items as $item)
-                    @if($item->cuisine_type_id == 10)
-
-                    <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                        <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
-                        <div style="height:40px;">
-                            <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
-                        </div>
-
-
-                        <i class="btn btn-sm btn-success" onclick="getCountingUnit({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
-
-                    </div>
-                    @endif
-                    @endforeach
-                    </div>
-
-            </div>
-            <div class="tab-pane" id="11" role="tabpanel">
-                <div class="row mt-3">
-                    @foreach($items as $item)
-                    @if($item->cuisine_type_id == 11)
-
-                    <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                        <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
-                        <div style="height:40px;">
-                            <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
-                        </div>
-
-
-                        <i class="btn btn-sm btn-success" onclick="getCountingUnit({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
-
-                    </div>
-                    @endif
-                    @endforeach
-                    </div>
-
             </div>
 
             <div class="modal fade" id="remark_table_modal" role="dialog" aria-hidden="true">
@@ -396,9 +197,8 @@
                         <thead>
                             <tr>
                                 <th class="font-weight-bold text-info">Menu Item</th>
-                                <th class="font-weight-bold text-info">Option</th>
+                                <th></th>
                                 <th class="font-weight-bold text-info">Quantity</th>
-                                <th class="font-weight-bold text-info">Price</th>
                                 <th class="font-weight-bold text-info">Note</th>
                             </tr>
                         </thead>
@@ -412,10 +212,10 @@
                                 <td class="font-weight-bold text-info" colspan="3">Total Quantity</td>
                                 <td class="font-weight-bold text-info" id="total_quantity">0</td>
                             </tr>
-                            <tr class="text-center">
+                            {{-- <tr class="text-center">
                                 <td class="font-weight-bold text-info" colspan="3">Sub Total Price</td>
                                 <td class="font-weight-bold text-info" id="sub_total">0</td>
-                            </tr>
+                            </tr> --}}
                         </tfoot>
                     </table>
                 </div>
@@ -730,112 +530,71 @@
         });
     }
 
-    function getCountingUnit(item_id){
+    // function getCountingUnit(item_id){
 
-        var html = "";
+    //     var html = "";
 
-        $.ajax({
+    //     $.ajax({
 
-           type:'POST',
+    //        type:'POST',
 
-           url:'/getCountingUnitsByItemId',
+    //        url:'/getCountingUnitsByItemId',
 
-           data:{
-            "_token":"{{csrf_token()}}",
-            "item_id":item_id,
+    //        data:{
+    //         "_token":"{{csrf_token()}}",
+    //         "item_id":item_id,
+    //        },
 
-           },
+    //         success:function(data){
 
-            success:function(data){
+    //             $.each(data, function(i, unit) {
+    //                 if(unit.brake_flag ==2){
+    //                     html+=`<tr class="text-center">
+    //                         <input type="hidden" id="item_name" value="${unit.menu_item.item_name}">
+    //                         <input type="hidden" id="price_${unit.id}" value="${unit.sale_price}">
+    //                         <td>${unit.menu_item.item_name}</td>
+    //                         <td id="name_${unit.id}">${unit.name}</td>
+    //                         <td>${unit.sale_price}</td>
+    //                         <td><i class="btn btn-danger">Brake</i></td>
+    //                         </tr>
 
-                $.each(data, function(i, unit) {
-                    if(unit.brake_flag ==2){
-                        html+=`<tr class="text-center">
-                            <input type="hidden" id="item_name" value="${unit.menu_item.item_name}">
-                            <input type="hidden" id="price_${unit.id}" value="${unit.sale_price}">
-                            <td>${unit.menu_item.item_name}</td>
-                            <td id="name_${unit.id}">${unit.name}</td>
-                            <td>${unit.sale_price}</td>
-                            <td><i class="btn btn-danger">Brake</i></td>
-                            </tr>
+    //                     `;
+    //                 }
+    //                 else{
+    //                     html+=`<tr class="text-center">
+    //                         <input type="hidden" id="item_name" value="${unit.menu_item.item_name}">
+    //                         <input type="hidden" id="price_${unit.id}" value="${unit.sale_price}">
+    //                         <td>${unit.menu_item.item_name}</td>
+    //                         <td id="name_${unit.id}">${unit.name}</td>
+    //                         <td>${unit.sale_price}</td>
+    //                         <td><i class="btn btn-primary" onclick="tgPanel(${unit.id})"><i class="fas fa-plus"></i>Add</i></td>
+    //                         </tr>
 
-                        `;
-                    }
-                    else{
-                        html+=`<tr class="text-center">
-                            <input type="hidden" id="item_name" value="${unit.menu_item.item_name}">
-                            <input type="hidden" id="price_${unit.id}" value="${unit.sale_price}">
-                            <td>${unit.menu_item.item_name}</td>
-                            <td id="name_${unit.id}">${unit.name}</td>
-                            <td>${unit.sale_price}</td>
-                            <td><i class="btn btn-primary" onclick="tgPanel(${unit.id})"><i class="fas fa-plus"></i>Add</i></td>
-                            </tr>
+    //                     `;
+    //                 }
+    //             });
 
-                        `;
-                    }
-                });
+    //             $("#count_unit").html(html);
 
-                $("#count_unit").html(html);
+    //             $("#unit_table_modal").modal('show');
+    //         }
 
-                $("#unit_table_modal").modal('show');
-            }
-
-        });
-    }
+    //     });
+    // }
 
     function tgPanel(id){
 
         // alert(id);
 
-var item_name = $('#item_name').val();
+var item_name = $('#item_name'+id).val();
 console.log(item_name);
 
-var item_price_check = $('#price_' + id).val();
-
-var name = $('#name_' + id).text();
-
-var qty_check = $('#qty_' + id).val();
-
-var qty = parseInt(qty_check);
-
-var price = parseInt(item_price_check);
-
-if( item_price_check == ""){
-
-Swal.fire({
-    title:"Please Check",
-    text:"Please Select Price To Sell",
-    icon:"info",
-});
-}
-else{
-
-// swal("Please Enter Quantity:", {
-//     content: "input",
-// })
-
-// .then((value) => {
-//     if(value.toString().match(/^\d+$/)){
-//     if (value > qty ) {
-
-//         swal({
-//             title:"Can't Add",
-//             text:"Your Input is higher than Current Quantity!",
-//             icon:"info",
-//         });
-
-//     }else{
-
-        // alert('hello!');
 
         $('.note_class').hide();
 
-
-        var total_price = price * 1 ;
-
-        var item={id:id,item_name:item_name,unit_name:name,current_qty:qty,order_qty:1,selling_price:price};
+        var item={id:id,item_name:item_name,current_qty:1,order_qty:1};
         console.log(item);
-        var total_amount = {sub_total:total_price,total_qty:1};
+        var total_amount = {total_qty:1};
 
         var mycart = localStorage.getItem('mycart');
 
@@ -885,8 +644,6 @@ else{
 
             var grand_total_obj = JSON.parse(grand_total);
 
-            grand_total_obj.sub_total = total_price + grand_total_obj.sub_total;
-
             grand_total_obj.total_qty = parseInt(1) + parseInt(grand_total_obj.total_qty);
 
             localStorage.setItem('grandTotal',JSON.stringify(grand_total_obj));
@@ -896,17 +653,7 @@ else{
 
         showmodal();
 
-    }
-//     }else{
-//         swal({
-//             title:"Input Invalid",
-//             text:"Please only input english digit",
-//             icon:"info",
-//         });
-//     }
-// })
 
-// }
 }
 
     function showmodal(){
@@ -933,20 +680,16 @@ else{
 
                     var qty=v.order_qty;
 
-                    var count_name = v.unit_name
-
                     html+=`<tr>
                             <td class="text-success font-weight-bold">${item}</td>
 
-                            <td class="text-success font-weight-bold">${count_name}</td>
+                            <td class="text-success font-weight-bold"></td>
 
                             <td>
                                 <i class="fa fa-plus-circle btnplus" onclick="plus(${id})" id="${id}"></i>
                                 ${qty}
                                 <i class="fa fa-minus-circle btnminus"  onclick="minus(${id})" id="${id}"></i>
                             </td>
-
-                            <td class="text-success font-weight-bold">${v.selling_price}</td>
                             <td class="text-success font-weight-bold"><button class="btn btn-sm btn-info" id="note_${id}" onclick="note(${id})">Note</button></td>
                             </tr>
                             <tr>
@@ -1001,19 +744,19 @@ else{
 
         if( action == 'plus'){
 
-            if (item[0].order_qty == item[0].current_qty) {
+            // if (item[0].order_qty == item[0].current_qty) {
 
-                swal({
-                    title:"Can't Add",
-                    text:"Can't Added Anymore!",
-                    icon:"info",
-                });
+            //     swal({
+            //         title:"Can't Add",
+            //         text:"Can't Added Anymore!",
+            //         icon:"info",
+            //     });
 
-                $('#btn_plus_' + item[0].id).attr('disabled', 'disabled');
-            }
+            //     $('#btn_plus_' + item[0].id).attr('disabled', 'disabled');
+            // }
             item[0].order_qty++;
 
-          grand_total_obj.sub_total += parseInt(item[0].selling_price);
+        //   grand_total_obj.sub_total += parseInt(item[0].selling_price);
 
           grand_total_obj.total_qty ++;
 
@@ -1035,7 +778,7 @@ else{
 
                 let item_cart = mycartobj.filter(item =>item.id !== id );
 
-                grand_total_obj.sub_total -= parseInt(item[0].selling_price);
+                // grand_total_obj.sub_total -= parseInt(item[0].selling_price);
 
                 grand_total_obj.total_qty -- ;
 
@@ -1060,7 +803,7 @@ else{
 
             item[0].order_qty--;
 
-            grand_total_obj.sub_total -= parseInt(item[0].selling_price);
+            // grand_total_obj.sub_total -= parseInt(item[0].selling_price);
 
             grand_total_obj.total_qty -- ;
 

@@ -43,7 +43,7 @@
                         <div class="col-md-12">
                             <div class="text-center">
                                 <address>
-                                    <h4 class="font-weight-bold"> &nbsp;<b class="text-center">Law Ka Nat&nbsp;&nbsp;(<span class="text-danger">Kitchen</span>)</b></h4>
+                                    <h4 class="font-weight-bold"> &nbsp;<b class="text-center">Thai Pot&nbsp;&nbsp;(<span class="text-danger">Kitchen</span>)</b></h4>
                                         <h5 class="font-weight-bold">Restaurant</h5>
                                 </address>
                             </div>
@@ -73,318 +73,26 @@
                                         <tr>
                                             <td class="font-weight-bold">Kitchen</td>
                                             <td class="font-weight-bold">Menu Name</td>
-                                            <td class="font-weight-bold">Option & Size</td>
                                             <td class="font-weight-bold">Qty</td>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                    @if($fromadd == 0)
-                                    @foreach($name as $opname)
-                                   @foreach($option_name as $optqty)
-                                   @if($optqty->tocook == 0)
-
-                                    @if($opname->id == $optqty->option_id)
-                                    @if ($opname->menu_item->cuisine_type_id == 1)
-                                    <tr>
-                                        <td class="font-weight-bold">(Salad)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
+                                <tbody>
+                                    @foreach ($option_lists as $option)
+                                        <tr>
+                                            <td>Extra</td>
+                                            <td>{{$option->item_name}}</td>
+                                            <td>{{$option->order_qty}}</td>
+                                        </tr>
+                                        @foreach ($code_lists as $code)
+                                        @if ($code->id == $option->id)
+                                        <tr>
+                                            <th class="text-danger font-weight-bold">Notes :</th>
+                                            <td class="text-danger" colspan="3">{{$code->remark}}</td>
                                             </tr>
                                         @endif
+                                        @endforeach
                                     @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 2)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Breakfast)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 3)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Healthy Food)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 4)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Main)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 5)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Snacks)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @endif
-                                   </tbody>
-                                    @endif
-                                    @endif
-                                    @endforeach
-                                    @endforeach
-                                   @endif
-
-                                   @if($fromadd == 1)
-                                    @foreach($name as $opname)
-                                   @foreach($option_name as $optqty)
-
-                                    @if($optqty->tocook == 1)
-                                    @if($opname->id == $optqty->option_id)
-                                    @if ($opname->menu_item->cuisine_type_id == 1)
-                                    <tr>
-                                        <td class="font-weight-bold">(Salad)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 2)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Breakfast)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 3)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Healthy Food)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 4)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Main)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 5)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Snacks)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @endif
-                                    @endif
-                                    @endif
-                                    @endforeach
-                                    @endforeach
-                                   @endif
-
-                                   @if($fromadd == 3)
-                                   @foreach($name as $opname)
-                                   @foreach($option_name as $optqty)
-                                   {{-- @if($optqty->tocook == 0) --}}
-
-                                    @if($opname->id == $optqty->option_id)
-                                    @if ($opname->menu_item->cuisine_type_id == 1)
-                                    <tr>
-                                        <td class="font-weight-bold">(Salad)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 2)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Breakfast)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 3)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Healthy Food)</td>
-                                        <td class="font-weight-bold"> {{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 4)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Main)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @elseif ($opname->menu_item->cuisine_type_id == 5)
-
-                                    <tr>
-                                        <td class="font-weight-bold">(Snacks)</td>
-                                        <td class="font-weight-bold">{{$opname->name}}</td>
-                                        <td class="font-weight-bold">{{$opname->menu_item->item_name}}</td>
-                                        <td class="font-weight-bold">{{$optqty->quantity -$optqty->old_quantity}}</td>
-                                        {{-- <td>{{$optqty->note}}</td> --}}
-                                    </tr>
-                                    @foreach ($notte as $notes)
-                                        @if ($notes->option_id == $opname->id)
-                                            <tr>
-                                            <th class="text-danger font-weight-bold">Notes</th>
-                                            <td class="text-danger" colspan="3">{{$notes->note}}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    @endif
-                                   </tbody>
-                                    @endif
-                                    {{-- @endif --}}
-                                    @endforeach
-                                    @endforeach
-                                   @endif
+                                </tbody>
                                 </table>
 
 

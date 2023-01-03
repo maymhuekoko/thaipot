@@ -341,7 +341,7 @@
               <p>Scan Here.</p>
               <div  id="scanid">
                 <div class="text-center printableArea">
-                    {!! QrCode::size(150)->generate($table->id) !!}
+                    {!! QrCode::size(150)->generate('Welcome to ThaiPot!') !!}
                   </div>
               </div>
             </div>

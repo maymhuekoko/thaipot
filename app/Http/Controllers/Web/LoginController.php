@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Web;
 use Auth;
 use Session;
 use App\User;
+use App\Table;
 use App\Expense;
 use App\Voucher;
 use App\MenuItem;
 use App\Purchase;
+use App\TableType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,8 +23,13 @@ class LoginController extends Controller
         if (Session::has('user')) {
 
             if($request->session()->get('user')->role_flag == 1){
+                $table_lists = Table::orderBy('table_type_id', 'ASC')->get();
+        $table4n1 = Table::where('table_type_id', 2)->skip(0)->take(6)->get();
+        $table4n2 = Table::where('table_type_id', 2)->skip(6)->take(6)->get();
 
-                return view('Sale.sale_page');
+		$table_types = TableType::all();
+
+		return view('Sale.sale_page', compact('table_lists','table4n1','table4n2','table_types'));
 
             }elseif ($request->session()->get('user')->role_flag == 4) {
 

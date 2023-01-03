@@ -44,7 +44,7 @@
                                     <td>
                                     	<a href="{{route('pending_order_details', $order->id)}}" class="btn btn-info">Check Order Details</a>
 
-                                    	<a href="{{route('add_more_item', $order->id)}}" class="btn btn-success">Add More Item</a>
+                                    	<a href="{{route('add_more_item', $order->id)}}" class="btn btn-success">Extra Meal</a>
                                     	@if($user == 3)
                                     	    <button class="btn" style="background-color:lightgreen;color:white;" onclick="done({{$order->table_id}})">Done</button>
                                             {{-- <button class="btn btn-danger" style="color:white;" onclick="cancel({{$order->id}})">Cancel</button> --}}
@@ -203,26 +203,7 @@
                 <input type="text" class="form-control" readonly id="change_amount_dis" value="">
             </div>
             <div class="row">
-                {{-- <div class="col-3">
-                    <div class="form-group mt-3" id="promotion">
-                        <label class="control-label">Promotion</label>
-                           <div class="switch">
-                               <label>OFF
-                               <input type="checkbox"  name="customer_console" id="console" onchange="promotion_on()"><span class="lever"></span>ON</label>
-                            </div>
-                   </div>
-                </div> --}}
-                {{-- <div class="col-9">
-                    <div class="form-group mt-3" id="promotion_name">
-                        <label class="font-weight-bold">Choose Promotion</label>
-                        <select class="form-control" name="purchaseitem" onchange="promotionchange(this.value)">
-                            <option value="" hidden>Select Promotion</option>
-                            @foreach ($promotion as $p)
-                            <option value="{{$p->id}}">{{$p->title}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div> --}}
+
             </div>
             <div class="row" id="ispromotion">
 
@@ -377,12 +358,6 @@ function change_price(){
             }
             else{
 
-
-            swal({
-                title: "Success!",
-                text : "Successfully Stored!",
-                icon : "success",
-            });
 
             var url = '{{ route("shop_order_voucher", ":order_id") }}';
 
