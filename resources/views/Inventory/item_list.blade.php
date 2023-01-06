@@ -45,7 +45,7 @@
                                 <th>Menu Item Name</th>
                                 <th>Customer Console</th>
                                 <th>Related Cuisine & Meal</th>
-                                <th>Check Option List</th>
+                                <th>Price</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -63,8 +63,7 @@
 
                                 <td>{{$item->cuisine_type->name}} / {{$item->cuisine_type->meal->name}}</td>
                                 <td>
-                                    <a href="{{route('option_list',$item->id)}}" class="btn btn-info">
-                                    Check</a>
+                                    {{$item->price}}
                                 </td>
 
                                 <td class="text-center" style="text-overflow: ellipsis; white-space: nowrap;">
@@ -103,6 +102,11 @@
                                                     <div class="form-group">
                                                         <label class="font-weight-bold">Name</label>
                                                         <input type="text" name="name" class="form-control" value="{{$item->item_name}}" required>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bold">Price</label>
+                                                        <input type="text" name="price" class="form-control" value="{{$item->price}}" required>
                                                     </div>
 
                                                     <div class="form-group">
@@ -172,6 +176,17 @@
                             </span>
                         @enderror
 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold">Price</label>
+                        <input type="text" name="price" class="form-control @error('price') is-invalid @enderror" placeholder="Enter price" required>
+
+                        @error('price')
+                            <span class="invalid-feedback alert alert-danger" role="alert"  height="100">
+                                {{ $message }}
+                            </span>
+                        @enderror
                     </div>
 
                     <div class="form-group">

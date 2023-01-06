@@ -49,14 +49,14 @@
     </div>
 
     <div class="col-md-3">
-    <label class="font-weight-bold">Choose shop or delivery</label>
+    <label class="font-weight-bold">Choose shop or take away</label>
     <div class="dropdown">
   <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Shop
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-    <a class="dropdown-item" href="{{route('delivery')}}">Delivery</a>
+    <a class="dropdown-item" href="{{route('take_away')}}">Take Away</a>
 
   </div>
 </div>

@@ -235,6 +235,7 @@ class InventoryController extends Controller
 		$validator = Validator::make($request->all(), [
             'code' => 'required',
             'name' => 'required',
+            'price' => 'required',
             'cuisine_type_id' => 'required',
         ]);
 
@@ -277,6 +278,7 @@ class InventoryController extends Controller
             $item = MenuItem::create([
                 'item_code' => $request->code,
                 'item_name' => $request->name,
+                'price' => $request->price,
                 'created_by' => $user_code,
                 'photo_path' => $photo_path,
                 'customer_console' => $customer_console,
@@ -300,6 +302,7 @@ class InventoryController extends Controller
         $validator = Validator::make($request->all(), [
             'code' => 'required',
             'name' => 'required',
+            'price' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -349,6 +352,8 @@ class InventoryController extends Controller
         $item->item_code = $request->code;
 
         $item->item_name = $request->name;
+
+        $item->price = $request->price;
 
         $item->customer_console = $customer_console;
 
