@@ -35,59 +35,68 @@
 				        </div>
 
 				        <div class="row mt-1">
-			              	<div class="font-weight-bold text-primary col-md-6 offset-md-1">Order Total Quantity</div>
-			              	<h5 class="font-weight-bold col-md-4 mt-1">{{$total_qty}}</h5>
-				        </div>
-
-				        <div class="row mt-1">
-			              	<div class="font-weight-bold text-primary col-md-6 offset-md-1">Order Total Price</div>
-			              	<h5 class="font-weight-bold col-md-4 mt-1">{{$total_price}}</h5>
-				        </div>
-
-				        <div class="row mt-1">
 			              	<div class="font-weight-bold text-primary col-md-6 offset-md-1">Table Name</div>
 			              	<h5 class="font-weight-bold col-md-4 mt-1">{{$pending_order_details->table->table_number??"Take Away"}}</h5>
 				        </div>
 		    		</div>
 
 		    		<div class="col-md-8">
-		    			<h4 class="font-weight-bold mt-2 text-primary text-center">Pending Order Option's List</h4>
+		    			<h4 class="font-weight-bold mt-2 text-primary text-center">Pending Order Detail</h4>
 		    			<div class="table-responsive">
 		                    <table class="table">
 		                        <thead>
 		                            <tr>
-		                                <th>Item Name</th>
-		                                <th>Counting Unit Name</th>
-		                                <th>Order Quantity</th>
+		                                <th>Name</th>
+		                                <th>Quantity</th>
 		                                <th>Price</th>
 										<th>Sub Total Price</th>
-		                                {{-- <th>Status</th> --}}
+
 		                            </tr>
 		                        </thead>
 		                        <tbody>
-		                            @foreach($pending_order_details->option as $option)
-		                                <tr>
-		                                	<td>{{$option->menu_item->item_name}}</td>
-		                                	<td>{{$option->name}}</td>
-		                                	<td>{{$option->pivot->quantity}}</td>
-		                                	<td>{{$option->sale_price}}</td>
-											<td><?=$option->pivot->quantity * $option->sale_price?></td>
-		                                	{{-- @if($option->pivot->status == 0)
-		                                	<td>
-		                                		<span class="badge-pill badge-warning">Pending</span>
-											</td>
-											@elseif($option->pivot->status == 1)
-											<td>
-		                                		<span class="badge-pill badge-danger">Cooking</span>
-											</td>
-		                                	@else
-		                                	<td>
-		                                		<span class="badge-pill badge-success">Finished</span>
-		                                	</td>
-		                                	@endif --}}
-                                            <td><a href="{{route('canceldetail', ['order_id' => $pending_order_details->id, 'option_id' => $option->id])}}"><span class="badge-pill badge-danger">-</span></a></td>
-		                                </tr>
-		                            @endforeach
+
+                                    @if ($pending_order_details->adult_qty != 0)
+                                    <tr style="text-align:left;">
+                                        <th >Adult</th>
+                                        <th ><span>{{$pending_order_details->adult_qty}}</span></th>
+                                        <th>20900</th>
+                                        <th>{{$pending_order_details->adult_qty * 20900}}</th>
+                                    </tr>
+                                    @endif
+                                    @if ($pending_order_details->child_qty != 0)
+                                    <tr style="text-align:left;">
+                                        <th >Children</th>
+                                        <th ><span>{{$pending_order_details->child_qty}}</span></th>
+                                        <th>11000</th>
+                                        <th>{{$pending_order_details->child_qty * 11000}}</th>
+                                    </tr>
+                                    @endif
+                                    @if ($pending_order_details->kid_qty != 0)
+                                    <tr style="text-align:left;">
+                                        <th >Kids</th>
+                                        <th ><span>{{$pending_order_details->kid_qty}}</span></th>
+                                        <th>9000</th>
+                                        <th>{{$pending_order_details->kid_qty * 9000}}</th>
+                                    </tr>
+                                    @endif
+                                    @if ($pending_order_details->extrapot_qty != 0)
+                                    <tr style="text-align:left;">
+                                        <th >Extra Pot</th>
+                                        <th ><span>{{$pending_order_details->extrapot_qty}}</span></th>
+                                        <th>3000</th>
+                                        <th>{{$pending_order_details->extrapot_qty * 3000}}</th>
+                                    </tr>
+                                    @endif
+                                    @if ($pending_order_details->soup_name != null)
+                                    <tr style="text-align:left;">
+                                        <th >Soup Name</th>
+                                        <th ><span>{{$pending_order_details->soup_name}}</span></th>
+                                        {{-- <th></th> --}}
+                                        <th colspan="2" class="text-danger">Remark: {{$pending_order_details->remark}}</th>
+                                        {{-- <th>{{$pending_order_details->extrapot_qty * 3000}}</th> --}}
+                                    </tr>
+                                    @endif
+
 		                        </tbody>
 		                    </table>
 		                </div>
@@ -101,7 +110,7 @@
 
 <div class="row justify-content-center">
 
-	<a href="{{route('add_more_item', $pending_order_details->id)}}" class="btn btn-info text-center"> Add More Item</a>
+	<a href="{{route('add_more_item', $pending_order_details->id)}}" class="btn btn-info text-center">Extra Meal</a>
     @if($user != 3)
     {{-- <a href="#" class="btn  ml-2" style="background-color:lightgreen;color:white;" onclick="done({{$pending_order_details->id}})">Done</a>
 
@@ -130,6 +139,16 @@
                     <label class="font-weight-bold">Voucher Total</label>
                     <input type="text" class="form-control" readonly id="voucher_total" value="">
                 </div>
+                <div class="row">
+                    <div class="form-group  col-md-6" id="extra_gram1">
+                        <label class="font-weight-bold">Extra Gram</label>
+                        <input type="text" class="form-control"  id="no_extraamt1" value="0"  onkeyup="extragramadd1(this.value)">
+                    </div>
+                    <div class="form-group  col-md-6" id="extra_amt1">
+                        <label class="font-weight-bold">Extra Amount</label>
+                        <input type="text" class="form-control"  id="no_extra1" value="0" readonly>
+                    </div>
+                </div>
                 <div class="row text-center">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="radio_foc" onclick="foc_radio()">
@@ -152,7 +171,7 @@
                 </div>
                 <div class="form-group mt-3" id="dis_foc">
                     <label class="font-weight-bold">FOC</label>
-                    <input type="text" class="form-control"  value="0">
+                    <input type="text" class="form-control"  value="20900">
                 </div>
                 <div class="form-group mt-3" id="dis_percent">
                     <label class="font-weight-bold">Discount Percent</label>
@@ -164,7 +183,7 @@
                 </div>
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Current Voucher Total</label>
-                    <input type="text" class="form-control" readonly id="curr_voucher_total" value="">
+                    <input type="text" class="form-control" readonly id="curr_voucher_total1" value="">
                 </div>
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Pay Amount</label>
@@ -213,6 +232,21 @@
                 <label class="font-weight-bold">Voucher Total</label>
                 <input type="text" class="form-control" readonly id="voucher_total_dis" value="">
             </div>
+            <div class="row">
+                <div class="form-group col-md-6" id="extra_gram">
+                    <label class="font-weight-bold">Extra Gram</label>
+                    <input type="text" class="form-control"  id="no_extraamt" value="0"  onkeyup="extragramadd(this.value)">
+                </div>
+                <div class="form-group col-md-6" id="extra_amt">
+                    <label class="font-weight-bold">Extra Amount</label>
+                    <input type="text" class="form-control"  id="no_extra" value="0" readonly>
+                </div>
+            </div>
+            <div class="form-group mt-3" id="curr_extra_total">
+                <label class="font-weight-bold">Current Voucher Total</label>
+                <input type="text" class="form-control" readonly  value="" id="curr_voucher_total">
+            </div>
+
             <div class="form-group mt-3" id="dis_pay_amount">
                 <label class="font-weight-bold">Pay Amount</label>
                 <input type="text" class="form-control"  value="" id="pay_amount_dis" placeholder="Enter Pay Amount" onkeyup="pay_dis(this.value)">
@@ -221,6 +255,13 @@
                 <label class="font-weight-bold">Change</label>
                 <input type="text" class="form-control" readonly id="change_amount_dis" value="">
             </div>
+            <div class="row">
+
+            </div>
+            <div class="row" id="ispromotion">
+
+            </div>
+
         </div>
         <div class="modal-footer" id="dis_footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -228,7 +269,7 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
 @endsection
 @section('js')
 <script>
@@ -241,19 +282,42 @@ function yes_radio(){
     // alert('yes');
     $('#dis_radio_form').modal('hide');
     $('#voudiscount').modal('show');
+    $('#extra_gram1').show();
+    $('#extra_amt1').show();
 }
 function no_radio(){
     // alert('no');
     $('#dis_voucher_total').show();
     $('#dis_pay_amount').show();
     $('#dis_change_amount').show();
+    $('#promotion').show();
     $('#dis_footer').show();
+    $('#curr_extra_total').show();
+    $('#extra_gram').show();
+    $('#extra_amt').show();
 }
+
+function extragramadd(val){
+    // alert(val);
+    $('#no_extra').val(val*35);
+    var tot = parseInt($('#voucher_total_dis').val()) + parseInt(val*35);
+    var vtot = tot + (tot/100 * 5);
+    $('#curr_voucher_total').val(vtot);
+}
+
+function extragramadd1(val){
+    // alert(val);
+    $('#no_extra1').val(val*35);
+    var total = parseInt($('#voucher_total').val()) + parseInt(val*35);
+    var vtotal = total + (total/100 * 5);
+    $('#curr_voucher_total1').val(vtotal);
+}
+
 function foc_radio(){
     $('#dis_foc').show();
     $('#dis_percent').hide();
     $('#dis_amount').hide();
-    var dis_value = $('#curr_voucher_total').val(0);
+    var dis_value = $('#curr_voucher_total1').val(parseInt($('#curr_voucher_total1').val()) + parseInt($('#no_extra1').val())-20900);
     $('#dis_type').val(1);
     $('#dis_val').val(0);
 }
@@ -270,29 +334,35 @@ function amount_radio(){
     $('#dis_type').val(3);
 }
 function percent_dis(val){
-    // alert(val);
-    var v_total = $('#voucher_total').val();
-    // alert(v_total);
-    var per_amt = v_total - (val/100)*v_total;
-    $('#curr_voucher_total').val(per_amt);
+ var t = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
+ var tot = t + (t/100 * 5);
+    $('#curr_voucher_total1').val(tot-(parseInt(tot/100 * val)));
     $('#dis_val').val(val);
 }
 function amount_dis(val){
-    // alert(val);
-    var v_total = $('#voucher_total').val();
-    var per_amt = v_total-val;
-    $('#curr_voucher_total').val(per_amt);
+    var t = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
+   var tot = t + (t/100 * 5);
+    $('#curr_voucher_total1').val(tot - parseInt(val));
     $('#dis_val').val(val);
 }
 function pay_amt(val){
     // alert(val);
-    var curr_amt = $('#curr_voucher_total').val();
+    var curr_amt = $('#curr_voucher_total1').val();
     $('#change_amount').val(val - curr_amt);
 }
 function pay_dis(val){
     // alert(val);
     var curr_amt = $('#voucher_total_dis').val();
     $('#change_amount_dis').val(val - curr_amt);
+}
+function promotion_on(){
+    if($('#console').prop("checked") == true){
+         var console = 1;
+         $('#promotion_name').show();
+    }else{
+       var console = 0;
+       $('#promotion_name').hide();
+    }
 }
 function change_price(){
     // $('#voudiscount').modal('hide');
@@ -302,9 +372,14 @@ function change_price(){
     var pay_value = $('#pay_amount').val();
     var change_value = $('#change_amount').val();
     var pay_value_dis = $('#pay_amount_dis').val();
-    var change_value_dis = $('#change_amount_dis').val()
+    var change_value_dis = $('#change_amount_dis').val();
+    var extra_amt1 = $('#no_extra1').val();
+    var extra_amt = $('#no_extra').val();
+    var extra_gram1 = $('#no_extraamt1').val();
+    var extra_gram = $('#no_extraamt').val();
 
-     $.ajax({
+    if(change_value_dis>=0 && change_value>=0){
+        $.ajax({
 
         type:'POST',
 
@@ -319,11 +394,15 @@ function change_price(){
         "change_amount" : change_value,
         "pay_amount_dis" : pay_value_dis,
         "change_amount_dis" : change_value_dis,
+        "extragram1" : extra_gram1,
+        "extragram" : extra_gram,
+        "extraamt1" : extra_amt1,
+        "extraamt" : extra_amt,
         },
 
         success:function(data){
-            // alert(data);
-            if(data.error){
+    // $('#voudiscount').modal('show');
+    if(data.error){
                 swal({
                 title: "Failed!",
                 text : "Something Wrong!",
@@ -332,12 +411,6 @@ function change_price(){
             }
             else{
 
-
-            swal({
-                title: "Success!",
-                text : "Successfully Stored!",
-                icon : "success",
-            });
 
             var url = '{{ route("shop_order_voucher", ":order_id") }}';
 
@@ -350,12 +423,22 @@ function change_price(){
             }, 1000);
             }
         }
+        })
 
-        });
+    }
+  else{
+    swal({
+                title: "Failed!",
+                text : "Your Pay Amount is less than Voucher Total!",
+                icon : "error",
+            });
+  }
 
 }
-function storeVoucher(order_id){
 
+
+    function storeVoucher(order_id){
+        //
         $.ajax({
 
             type:'POST',
@@ -372,16 +455,93 @@ function storeVoucher(order_id){
                 $('#hid_order_id').val(order_id);
                 $('#dis_type').val();
                 $('#dis_val').val();
-                $('#voucher_total_dis').val(data);
-                $('#voucher_total').val(data);
+                $('#voucher_total_dis').val(data.vtot);
+                $('#voucher_total').val(data.vtot);
+                $('#curr_voucher_total1').val(data.stot);
+                $('#curr_voucher_total').val(data.stot);
             }
         })
         $('#dis_radio_form').modal('show');
         $('#dis_voucher_total').hide();
         $('#dis_pay_amount').hide();
         $('#dis_change_amount').hide();
+        $('#promotion').hide();
+        $('#promotion_name').hide();
         $('#dis_footer').hide();
+        $('#curr_extra_total').hide();
+        $('#extra_gram').hide();
+        $('#extra_amt').hide();
+        //
     }
+
+    function done(table_id){
+     $.ajax({
+
+            type:'POST',
+
+            url:'/waiterdone',
+
+            data:{
+            "_token":"{{csrf_token()}}",
+            "table_id":table_id,
+            },
+
+            success:function(data){
+            swal({
+                title: "Success!",
+                text : "Successfully Pay Amount!",
+                icon : "success",
+            });
+
+            }
+            })
+    }
+
+    function promotionchange(id){
+        let order = $('#hid_order_id').val();
+        $.ajax({
+
+        type:'POST',
+
+        url:'/PromotionCheck',
+
+        data:{
+        "_token":"{{csrf_token()}}",
+        "promotion_id":id,
+        "order_id": order,
+        },
+
+        success:function(data){
+            let html = '';
+           if(data.promotion.length == 0){
+            $('#ispromotion').html('<span class="text-danger offset-3">This promotion is expired.</span>')
+           }else{
+             if(data.promotion.type == 1){
+                var vtotal = $('#voucher_total_dis').val();
+                if(data.promotion.voucher_amount <= vtotal){
+                if(data.promotion.reward == 1){
+                    html += `<span class="text-success text-center offset-1">Cash Back : ${data.promotion.amount}</span>`;
+                    $('#ispromotion').html(html);
+                }else if(data.promotion.reward == 2){
+                    html += `<span class="text-success text-center offset-1">FOC Items : ${data.promotion.foc_items}</span>`;
+                    $('#ispromotion').html(html);
+                }
+               else{
+                    html += `<span class="text-success text-center offset-1">Discount Percentage : ${data.promotion.percent} %</span>`;
+                    $('#ispromotion').html(html);
+                }
+            }
+            else{
+                $('#ispromotion').html('<span class="text-danger offset-3">This voucher amount is less than promotion amount.</span>');
+            }
+             }
+
+           }
+        }
+        })
+
+    }
+
 
     function done(table_id){
      $.ajax({

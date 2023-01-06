@@ -13,7 +13,7 @@ class ShopOrder extends Model
     ];
 
     protected $fillable = [
-       'order_number','status','table_id','voucher_id','type','adult_qty','child_qty','kid_qty','birth_qty','extrapot_qty','start_time','end_time'
+       'order_number','status','table_id','voucher_id','type','adult_qty','child_qty','kid_qty','birth_qty','extrapot_qty','start_time','end_time','soup_name','remark',
     ];
 
     public function option() {

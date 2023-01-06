@@ -48,10 +48,10 @@
                                     	@if($user == 3)
                                     	    <button class="btn" style="background-color:lightgreen;color:white;" onclick="done({{$order->table_id}})">Done</button>
                                             {{-- <button class="btn btn-danger" style="color:white;" onclick="cancel({{$order->id}})">Cancel</button> --}}
-                                            <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a>
+                                            {{-- <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a> --}}
                                     	@else
                                     	    <button class="btn btn-primary" onclick="storeVoucher({{$order->id}})">Store Voucher</button>
-                                            <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a>
+                                            {{-- <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a> --}}
                                     	@endif
 
 
@@ -216,7 +216,7 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
 @endsection
 
 @section('js')
@@ -251,14 +251,16 @@ function no_radio(){
 function extragramadd(val){
     // alert(val);
     $('#no_extra').val(val*35);
-    var vtot = parseInt($('#voucher_total_dis').val()) + parseInt(val*35);
+    var tot = parseInt($('#voucher_total_dis').val()) + parseInt(val*35);
+    var vtot = tot + (tot/100 * 5);
     $('#curr_voucher_total').val(vtot);
 }
 
 function extragramadd1(val){
     // alert(val);
     $('#no_extra1').val(val*35);
-    var vtotal = parseInt($('#voucher_total').val()) + parseInt(val*35);
+    var total = parseInt($('#voucher_total').val()) + parseInt(val*35);
+    var vtotal = total + (total/100 * 5);
     $('#curr_voucher_total1').val(vtotal);
 }
 
@@ -266,7 +268,7 @@ function foc_radio(){
     $('#dis_foc').show();
     $('#dis_percent').hide();
     $('#dis_amount').hide();
-    var dis_value = $('#curr_voucher_total1').val(parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val())-20900);
+    var dis_value = $('#curr_voucher_total1').val(parseInt($('#curr_voucher_total1').val()) + parseInt($('#no_extra1').val())-20900);
     $('#dis_type').val(1);
     $('#dis_val').val(0);
 }
@@ -283,13 +285,15 @@ function amount_radio(){
     $('#dis_type').val(3);
 }
 function percent_dis(val){
- var tot = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
+ var t = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
+ var tot = t + (t/100 * 5);
     $('#curr_voucher_total1').val(tot-(parseInt(tot/100 * val)));
     $('#dis_val').val(val);
 }
 function amount_dis(val){
-
-    $('#curr_voucher_total1').val(parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val())- parseInt(val));
+    var t = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
+   var tot = t + (t/100 * 5);
+    $('#curr_voucher_total1').val(tot - parseInt(val));
     $('#dis_val').val(val);
 }
 function pay_amt(val){
@@ -402,10 +406,10 @@ function change_price(){
                 $('#hid_order_id').val(order_id);
                 $('#dis_type').val();
                 $('#dis_val').val();
-                $('#voucher_total_dis').val(data);
-                $('#voucher_total').val(data);
-                $('#curr_voucher_total1').val(data);
-                $('#curr_voucher_total').val(data);
+                $('#voucher_total_dis').val(data.vtot);
+                $('#voucher_total').val(data.vtot);
+                $('#curr_voucher_total1').val(data.stot);
+                $('#curr_voucher_total').val(data.stot);
             }
         })
         $('#dis_radio_form').modal('show');
