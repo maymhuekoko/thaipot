@@ -199,6 +199,8 @@ Route::group(['middleware' => ['UserAuth']], function () {
 
     Route::post('searchDelicharges','Web\SaleController@searchDelicharges');
 
+     //Soup Kitchen Route
+    Route::post('Kitchen-Soup', 'Web\SaleController@soupkitchen')->name('soup_kitchen');
 
     Route::get('Add-More/{order_id}', 'Web\SaleController@addMoreItemUI')->name('add_more_item');
     Route::get('Delivery-Add-More/{order_id}', 'Web\SaleController@deliaddMoreItemUI')->name('deli_add_more_item');

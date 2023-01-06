@@ -91,20 +91,11 @@ class SaleController extends Controller
 
             return redirect()->back();
     	}
+        //   dd($pending_order_details);
+    	return view('Sale.pending_order_details', compact('pending_order_details','table_number'));
 
-    	$total_qty = 0 ;
-
-    	$total_price = 0 ;
-
-    	foreach ($pending_order_details->option as $option) {
-
-			$total_qty += $option->pivot->quantity;
-
-			$total_price += $option->sale_price * $option->pivot->quantity;
-		}
-
-    	return view('Sale.pending_order_details', compact('pending_order_details','total_qty','total_price','table_number'));
 	}
+
     protected function getPendingDeliveryOrderDetails($order_id){
 		$table_number = 0;
 		try {
@@ -298,6 +289,8 @@ class SaleController extends Controller
                         'kid_qty' => $request->kid_qty,
                         'birth_qty' => $request->birth_qty,
                         'extrapot_qty' => $request->extrapot_qty,
+                        'soup_name' => $request->soup_name,
+                        'remark' => $request->remark,
 								// Order Status = 1
 		            ]);
                 // }
@@ -652,6 +645,60 @@ class SaleController extends Controller
             return redirect()->back();
 		}
 	}
+
+    //soup kitchen
+    protected function soupkitchen(Request $request){
+        $validator = Validator::make($request->all(), [
+			'order_id' => 'required',
+		]);
+
+		if ($validator->fails()) {
+
+			alert()->error('Something Wrong! Validation Error.');
+            return redirect()->back();
+
+		}
+
+		try {
+
+			$shop_order = ShopOrder::findOrFail($request->order_id);
+
+		} catch (\Exception $e) {
+
+			alert()->error('Something Wrong! Shop Order Cannot be Found.');
+
+            return redirect()->back();
+		}
+
+		if ($shop_order->status == 1) {
+
+		    $shop_order->type=1;
+		    $shop_order->save();
+
+			alert()->success('Successfully Added');
+
+      		// return redirect()->route('sale_page');
+
+			  $orders = ShopOrder::find($request->order_id);
+			  $tableno = Table::find($orders->table_id);
+
+
+			  $fromadd = 1;
+			  $tablenoo = 0;
+			  $date = new DateTime('Asia/Yangon');
+
+        	$real_date = $date->format('d-m-Y h:i:s');
+
+			return view('Sale.kitchen_soup',compact('tableno','fromadd','tablenoo','real_date','shop_order'));
+
+		} else {
+
+			alert()->error('Something Wrong! Shop Order is colsed.');
+
+            return redirect()->back();
+		}
+    }
+
     protected function deliaddMoreItem(Request $request){ //Unfinished
         // dd($request->all());
 		$validator = Validator::make($request->all(), [
@@ -981,10 +1028,15 @@ class SaleController extends Controller
 
 		$total_qty = 0 ;
 
-        $total = $shop_order->adult_qty * 21950 + $shop_order->child_qty * 11550 + $shop_order->kid_qty * 9450 + $shop_order->extrapot_qty * 3000 - $shop_order->birth_qty * 4390;
+        $tota = $shop_order->adult_qty * 20900 + $shop_order->child_qty * 11000 + $shop_order->kid_qty * 9000 + $shop_order->extrapot_qty * 3000;
+        $total = $tota + (($tota/100) * 5) - ($shop_order->birth_qty * 4390);
 
-        return response()->json($total);
+        return response()->json([
+            'vtot' => $tota,
+            'stot' => $total
+        ]);
     }
+
     protected function storeDeliveryDiscountForm(Request $request){
         try {
 
@@ -1062,7 +1114,11 @@ class SaleController extends Controller
 
     	$voucher = Voucher::where('id', $order->voucher_id)->first();
 
-    	return view('Sale.voucher', compact('voucher','order'));
+        $voutotal = ($order->adult_qty * 20900)+($order->child_qty * 11000)+ ($order->kid_qty * 9000)+ ($order->extrapot_qty *3000) + $voucher->extra_amount;
+
+        $servicecharges =($voutotal/100 * 5);
+
+    	return view('Sale.voucher', compact('voucher','order','voutotal','servicecharges'));
 	}
 
     protected function getDeliOrderVoucher($order_id){

@@ -52,12 +52,8 @@
                                 <h5 class="font-weight-bold">Waiter Name : {{$wname}}</h5>
                                     <h5 class="font-weight-bold">Date : <i class="fa fa-calendar"></i> {{$real_date}} </h5>
                                     @if($tablenoo != 1)
-                                       @if ($take_away == 1)
-                                       <h5 class="font-weight-bold">Table-Number :  {{$tableno->table_number}} (Take Away)</h5>
-                                       @else
-                                       <h5 class="font-weight-bold">Table-Number : {{$tableno->table_number}}</h5>
-                                       @endif
 
+                                       <h5 class="font-weight-bold">Table-Number : {{$tableno->table_number}}</h5>
 
                                     @elseif($tablenoo == 1)
                                     <h5 class="font-weight-bold">Table-Number : Delivery Order</h5>
@@ -72,33 +68,26 @@
                                     <thead>
                                         <tr>
                                             <td class="font-weight-bold">Kitchen</td>
-                                            <td class="font-weight-bold">Menu Name</td>
+                                            <td class="font-weight-bold">Soup Name</td>
                                             <td class="font-weight-bold">Qty</td>
                                         </tr>
                                     </thead>
                                 <tbody>
-                                    @foreach ($option_lists as $option)
+                                    {{-- @foreach ($shop_order as $option) --}}
                                         <tr>
                                             <td>Extra</td>
-                                            <td>{{$option->item_name}}</td>
-                                            <td>{{$option->order_qty}}</td>
+                                            <td>{{$shop_order->soup_name}}</td>
+                                            <td>{{$shop_order->extrapot_qty+1}}</td>
                                         </tr>
-
-                                        @if($code_lists != NULL)
-
-                                        @foreach ($code_lists as $code)
-                                        @if ($code->id == $option->id)
+                                        @if ($shop_order->remark != null)
                                         <tr>
                                             <th class="text-danger font-weight-bold">Notes :</th>
-                                            <td class="text-danger" colspan="3">{{$code->remark}}</td>
+                                            <td class="text-danger" colspan="3">{{$shop_order->remark}}</td>
                                             </tr>
                                         @endif
-                                        @endforeach
-                                        @endif
-                                    @endforeach
+                                    {{-- @endforeach --}}
                                 </tbody>
                                 </table>
-
 
                                 <h5 class="text-center font-weight-bold">***************</h5>
                         </div>
@@ -123,7 +112,6 @@
                     @else
                     <a href="{{route('gotopendinglist')}}" id="goto" class="btn btn-outline-danger" type="button">
                         <span><i class="fa fa-info"></i> To Pending Voucher Lists </span>
-
                     </a>
                     @endif
 
