@@ -129,19 +129,46 @@ class SaleController extends Controller
 
 
 	}
-	protected function deliverypage(){
+	protected function takeAwayPage(){
 		$table_number = 0;
 		$table = 0;
 		$items = MenuItem::all();
         // dd($items);
 
-		$meal_types = Meal::all();
+		$myUrl = explode('/', url()->current());
+		$currentUrl = ucwords($myUrl[count($myUrl)-1]);
+		$currentUrl = str_replace('_', ' ', $currentUrl);
+
+		$meal_types = Meal::where('name', $currentUrl)->first();
         $codes =Code::all();
 
-		$cuisine_types = CuisineType::all();
+		$cuisine_types = CuisineType::where('meal_id', $meal_types->id)->get();
+
 		$ygn_towns = Town::where('state_id',17)->get();
-		return view('Sale.order_sale_page', compact('ygn_towns','codes','items','meal_types','cuisine_types','table_number','table'));
+		return view('Sale.take_away_sale_page', compact('ygn_towns','codes','items','meal_types','cuisine_types','table_number','table'));
 	}
+
+	protected function takeAwayPage1($id){
+		$table_number = 0;
+		$table = 0;
+		$items = MenuItem::all();
+        // dd($items);
+
+		$myUrl = explode('/', url()->current());
+		$currentUrl = ucwords($myUrl[count($myUrl)-2]);
+		$currentUrl = str_replace('_', ' ', $currentUrl);
+
+		$tableId = $myUrl[count($myUrl)- 1];
+
+		$meal_types = Meal::where('name', $currentUrl)->first();
+        $codes =Code::all();
+
+		$cuisine_types = CuisineType::where('meal_id', $meal_types->id)->get();
+
+		$ygn_towns = Town::where('state_id',17)->get();
+		return view('Sale.take_away_sale_page', compact('tableId', 'ygn_towns','codes','items','meal_types','cuisine_types','table_number','table'));
+	}
+
 	protected function searchDelicharges(Request $request){
 		$deli_pay = Town::find($request->town_id);
 
@@ -183,7 +210,10 @@ class SaleController extends Controller
 		}
 		$table = 1;
 		$ygn_towns = Town::where('state_id',13)->get();
-		return view('Sale.order_sale_page', compact('ygn_towns','codes','items','meal_types','table','cuisine_types','table_number'));
+		$cuisine_types = CuisineType::all();
+		$table_id = $order->table_id; 
+
+		return view('Sale.order_sale_page', compact('table_id', 'ygn_towns','cuisine_types','codes','items','meal_types','table','cuisine_types','table_number'));
 	}
 
 	protected function getCountingUnitsByItemId(Request $request){
@@ -195,6 +225,12 @@ class SaleController extends Controller
         $units = Option::where('menu_item_id', $item->id)->with('menu_item')->get();
 
         return response()->json($units);
+	}
+
+	protected function getItemById(Request $request){
+		$item = MenuItem::where('id', $request->item_id)->first();
+
+		return response()->json($item);
 	}
 
     protected function save_note(Request $request){
@@ -291,7 +327,7 @@ class SaleController extends Controller
 	protected function storeShopOrder(Request $request){
 		// dd($request->all());
 		$validator = Validator::make($request->all(), [
-			'table_id' => 'required',
+			// 'table_id' => 'required',
 			'option_lists' => 'required',
 		]);
 
@@ -304,32 +340,40 @@ class SaleController extends Controller
 		 $user_name =  session()->get('user')->name;
 		//  dd($user_name);
 		$take_away = $request->take_away;
+		$table_number = $request->table_exists;
+
 		$option_lists = json_decode($request->option_lists);
 		// $agent = new \Jenssegers\Agent\Agent;
 		// $is_mobile = $agent->isMobile();
         // $is_desktop = $agent->isDesktop();
 		try {
 			// dd($is_mobile,$is_desktop);
-			$table = Table::where('id', $request->table_id)->first();
-// dd($table);
-				if (empty($table)) {
+
+			if($table_number != 0){
+				$table = Table::where('id', $request->table_id)->first();
+			}
+
+			if (empty($table)) {
                     // if($is_desktop == true || $is_mobile == true){
 					$order = ShopOrder::create([
-		                'table_id' => $request->table_id,
+		                // 'table_id' => $request->table_id,
 		                'status' => 1,
                         'is_mobile'=> 1,
 						'take_away_flag'=>$take_away,
 						'sale_by' =>$user_name,										// Order Status = 1
 		            ]);
                 // }
+					if($table_number != 0){
+						$order->table_id = $table_number;
+					}
 		            $order->order_number = "ORD-".sprintf("%04s", $order->id);
 
 		            $order->save();
 
-		            foreach ($option_lists as $option) {
+		            // foreach ($option_lists as $option) {
 
-						$order->option()->attach($option->id, ['quantity' => $option->order_qty,'note' => null,'status' => 7]);
-					}
+					// 	$order->option()->attach($option->id, ['quantity' => $option->order_qty,'note' => null,'status' => 7]);
+					// }
 
 				} else {
 
@@ -346,7 +390,7 @@ class SaleController extends Controller
 						$table->save();
                         // if($is_desktop == true || $is_mobile == true){
 						$order = ShopOrder::create([
-			                'table_id' => $request->table_id,
+			                // 'table_id' => $request->table_id,
 			                'status' => 1, 										// Order Status = 1
 			                 'type' => 1,
 							 'is_mobile'=> 1,
@@ -358,10 +402,10 @@ class SaleController extends Controller
 
 			            $order->save();
 
-			            foreach ($option_lists as $option) {
+			            // foreach ($option_lists as $option) {
 
-							$order->option()->attach($option->id, ['quantity' => $option->order_qty,'note' => null,'status' => 7]);
-						}
+						// 	$order->option()->attach($option->id, ['quantity' => $option->order_qty,'note' => null,'status' => 7]);
+						// }
 					}
 				}
 
@@ -377,43 +421,31 @@ class SaleController extends Controller
 		$orders = ShopOrder::find($order->id);
 		// dd($orders->option()->price);
 		$tableno = Table::find($orders->table_id);
-		$alloption = Option::all();
-		$option_name = DB::table('option_shop_order')
-		->where('shop_order_id',$orders->id)
-		->get();
-		// dd($option_name);
-		$name = [];
-		// $qty = [];
-		foreach($option_name as $optionss)
-		{
-		// dd($optionss->option_id);
-		$oname = Option::find($optionss->option_id);
-		array_push($name,$oname);
-		// array_push($qty,$oname->quantity);
-		// $temp['value']=array('key1'=>$oname->id,'key2'=>$oname->name);
-		}
-		// dd($name);
+		
+	
+		$take_away = $request->take_away;
+		$fromadd = 1;
+		$tablenoo = 0;
+		$date = new DateTime('Asia/Yangon');
 
-
-$fromadd = 0;
-$tablenoo = 0;
-$date = new DateTime('Asia/Yangon');
-
-$real_date = $date->format('d-m-Y h:i:s');
-$code_lists = json_decode($request->code_lists);
-$notte = [];
-if($code_lists != null){
-foreach($code_lists as $code){
-    $remark_note = DB::table('option_shop_order')
-                    ->where('option_id',$code->id)
-                    ->update(['note' => $code->remark]);
-    $note_remark = DB::table('option_shop_order')
-                    ->where('option_id',$code->id)
-                    ->first();
-         array_push($notte,$note_remark);
-}
-}
-		  return view('Sale.kitchen_lists',compact('take_away','notte','orders','tableno','option_name','real_date','oname','name','alloption','fromadd','tablenoo'));
+	  $real_date = $date->format('d-m-Y h:i:s');
+	  $code_lists = json_decode($request->code_lists);
+	  $notte = [];
+	  if($code_lists != null){
+	  foreach($code_lists as $code){
+		  $remark_note = DB::table('item_shop_order')
+						  ->where('item_id',$code->id)
+						  ->update(['note' => $code->remark]);
+		  $note_remark = DB::table('item_shop_order')
+						  ->where('item_id',$code->id)
+						  ->first();
+		  array_push($notte,$note_remark);
+	  }
+	  }
+	  $kit = DB::table('item_shop_order')
+				  ->where('shop_order_id',$request->order_id)
+				  ->get();
+		  return view('Sale.take_away_kitchen_lists',compact('table_number', 'take_away','notte','orders','tableno','real_date','fromadd','tablenoo', 'option_lists', 'code_lists'));
 
 	}
 
@@ -465,7 +497,7 @@ foreach($code_lists as $code){
 
 			$real_date = $date->format('d-m-Y h:i:s');
 
-					return view('Sale.kitchen_lists',compact('orders','tableno','option_name','real_date','oname','name','alloption','fromadd','tablenoo'));
+			return view('Sale.kitchen_lists',compact('take_away','kit','notte','tableno','fromadd','tablenoo','real_date','option_lists','code_lists'));
 
 	}
 	protected function addMoreItemUI($order_id){  //Finished UI
@@ -484,15 +516,20 @@ foreach($code_lists as $code){
 
     	$items = MenuItem::all();
 
-		$meal_types = Meal::all();
+		$meal_types = Meal::where('name', '<>', 'Take away')->get();
+
+		$meal_ids = $meal_types->pluck('id');
 
         $codes = Code::all();
-
-		$cuisine_types = CuisineType::all();
+		
+		// $cuisine_types = CuisineType::all();
+		$cuisine_types = DB::table('cuisine_types')->whereIn('meal_id', $meal_ids)->get();
 
 		$table_number = $order->table->table_number??0;
+
+		$table_id = $order->table_id;
 		// dd($table);
-		return view('Sale.order_sale_page', compact('codes','items','meal_types','cuisine_types','table_number','order','table'));
+		return view('Sale.order_sale_page', compact('table_id', 'codes','items','meal_types','cuisine_types','table_number','order','table'));
 	}
     protected function deliaddMoreItemUI($order_id){  //Finished UI
 		$table = 2;
@@ -521,9 +558,10 @@ foreach($code_lists as $code){
 		->update(['tocook' => 0]);
 
 		$table_number = $order->table->table_number??0;
+		$table_id = $order->table_id;
 		// dd($table);
         // dd($table_number);
-		return view('Sale.order_sale_page', compact('codes','items','meal_types','cuisine_types','table_number','order','table'));
+		return view('Sale.order_sale_page', compact('table_id', 'codes','items','meal_types','cuisine_types','table_number','order','table'));
 	}
 
 	protected function addMoreItem(Request $request){ //Unfinished

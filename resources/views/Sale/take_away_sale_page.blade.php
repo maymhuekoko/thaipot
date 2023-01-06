@@ -4,31 +4,53 @@
 
 @section('place')
 
+<!--<div class="col-md-5 col-8 align-self-center">-->
+
+
+
+<!--    <h3 class="text-themecolor m-b-0 m-t-0">Order Sale Page</h3>-->
+
+
+<!--    <ol class="breadcrumb">-->
+<!--        <li class="breadcrumb-item"><a href="{{route('index')}}">Back to Dashborad</a></li>-->
+<!--        <li class="breadcrumb-item active">Order Sale Page</li>-->
+<!--        <div class="custom-control custom-switch" style="margin-left: 90px;">-->
+<!--            <input type="checkbox" class="custom-control-input" id="customSwitch2">-->
+<!--            <label class="custom-control-label text-info" for="customSwitch2">Take Away</label>-->
+<!--        </div>-->
+
+<!--    </ol>-->
+
+<!--</div>-->
+
 @endsection
 
 @section('content')
-
-<div class="mb-3 text-center">
-    <input type="checkbox" id="switch_btn" />
-    <label for="switch_btn">Take away</label>
-</div>
 
 <div class="row">
 
     <div class="card col-md-6">
 
+
         <form action="{{route('store_shop_order')}}" method="post" id="vourcher_page">
             @csrf
             <input type="hidden" id="cus_complain" name="code_lists">
-
 
             <input type="hidden" id="item" name="option_lists">
 
             <input type="hidden" name="table_id" value="{{$table_number}}">
 
-            <input type="hidden" name="real_table_id" value="{{$table_id}}" id="real_table_id">
-
             <input type="hidden" name="take_away" id="t_away">
+
+            @php
+            if(isset($tableId)){
+                $id = $tableId;
+            }else{
+                $id = 0;
+            }    
+            @endphp
+
+            <input type="hidden" name="table_exists" value="{{$id}}" id="table_exists">
 
         </form>
 
@@ -55,7 +77,7 @@
         </form>
 
         <ul class="nav nav-tabs customtab" role="tablist">
-            
+
             @foreach($cuisine_types as $cuisine)
             <li class="nav-item" style="font-size:14px;">
                 <a class="nav-link" data-toggle="tab" href="#{{$cuisine->id}}" role="tab">
@@ -63,14 +85,17 @@
                     <span class="hidden-sm-up">
                         <i class="ti-home"></i>
                     </span>
-                    <span class="hidden-xs-down" id="cuisine_name">
+                    <span class="hidden-xs-down">
+
                         {{$cuisine->name}}
+
                     </span>
                 </a>
             </li>
             @endforeach
         </ul>
 
+       
         <!-- Tab panes -->
         <div class="tab-content">
             @foreach($cuisine_types as $cui)
@@ -85,6 +110,7 @@
                     <div style="height:40px;">
                         <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
                         <input type="hidden" id="item_name{{$item->id}}" value="{{$item->item_name}}">
+                        <input type="hidden" id="price{{$item->id}}" value="{{$item->price}}">
                     </div>
 
 
@@ -96,28 +122,6 @@
                 </div>
             </div>
             @endforeach
-
-            <div class="tab-pane" id="7" role="tabpanel">
-
-                <div class="row mt-3">
-                    @foreach($items as $item)
-                    @if($item->cuisine_type_id == 7)
-
-                    <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                        <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
-                        <div style="height:40px;">
-                            <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
-                            <input type="hidden" id="item_name{{$item->id}}" value="{{$item->item_name}}">
-                        </div>
-
-
-                        <i class="btn btn-sm btn-success" onclick="tgPanel({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
-
-                    </div>
-                    @endif
-                    @endforeach
-                </div>
-            </div>
 
             <div class="modal fade" id="remark_table_modal" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-m" role="document">
@@ -193,7 +197,7 @@
 
         <div class="card">
         @if($table == 0)
-    <h3 style="color:#49A8EF"><b>For Store<b></h3>
+    <h3 style="color:#49A8EF"><b>For Take Away<b></h3>
     @endif
             <div class="card-title">
                 <a href="" class="float-right" onclick="deleteItems()">Refresh Here &nbsp<i class="fas fa-sync"></i></a>
@@ -204,8 +208,9 @@
                         <thead>
                             <tr>
                                 <th class="font-weight-bold text-info">Menu Item</th>
-                                <th></th>
+                                <th class="font-weight-bold text-info">Option</th>
                                 <th class="font-weight-bold text-info">Quantity</th>
+                                <th class="font-weight-bold text-info">Price</th>
                                 <th class="font-weight-bold text-info">Note</th>
                             </tr>
                         </thead>
@@ -219,10 +224,10 @@
                                 <td class="font-weight-bold text-info" colspan="3">Total Quantity</td>
                                 <td class="font-weight-bold text-info" id="total_quantity">0</td>
                             </tr>
-                            {{-- <tr class="text-center">
-                                <td class="font-weight-bold text-info" colspan="3">Total Amount</td>
+                            <tr class="text-center">
+                                <td class="font-weight-bold text-info" colspan="3">Sub Total Price</td>
                                 <td class="font-weight-bold text-info" id="sub_total">0</td>
-                            </tr> --}}
+                            </tr>
                         </tfoot>
                     </table>
                 </div>
@@ -240,7 +245,7 @@
 
                     @if($table_number == 0)
                     <div class="col-md-2">
-                        <i class="btn btn-success mr-2"  data-toggle="modal" data-target="#myModal" onclick="storeoption()"><i class="fas fa-calendar-check"></i>Check Out</i>
+                        <i class="btn btn-success mr-2"  data-toggle="modal" data-target="#myModal" onclick="showCheckOut()"><i class="fas fa-calendar-check"></i>Check Out</i>
                     </div>
                     @endif
 
@@ -355,6 +360,7 @@
             "info":     false,
 
         });
+
     });
 
     function deleteItems() {
@@ -373,6 +379,7 @@
         $("#totalqty").attr('value',grandTotal_obj.total_qty);
         localStorage.clear();
     }
+
 
     function searchByCuisineOne(value){
 
@@ -537,71 +544,110 @@
         });
     }
 
-    // function getCountingUnit(item_id){
+    function getCountingUnit(item_id){
 
-    //     var html = "";
+        var html = "";
 
-    //     $.ajax({
+        $.ajax({
 
-    //        type:'POST',
+           type:'POST',
 
-    //        url:'/getCountingUnitsByItemId',
+           url:'/getCountingUnitsByItemId',
 
-    //        data:{
-    //         "_token":"{{csrf_token()}}",
-    //         "item_id":item_id,
-    //        },
+           data:{
+            "_token":"{{csrf_token()}}",
+            "item_id":item_id,
 
-    //         success:function(data){
+           },
 
-    //             $.each(data, function(i, unit) {
-    //                 if(unit.brake_flag ==2){
-    //                     html+=`<tr class="text-center">
-    //                         <input type="hidden" id="item_name" value="${unit.menu_item.item_name}">
-    //                         <input type="hidden" id="price_${unit.id}" value="${unit.sale_price}">
-    //                         <td>${unit.menu_item.item_name}</td>
-    //                         <td id="name_${unit.id}">${unit.name}</td>
-    //                         <td>${unit.sale_price}</td>
-    //                         <td><i class="btn btn-danger">Brake</i></td>
-    //                         </tr>
+            success:function(data){
 
-    //                     `;
-    //                 }
-    //                 else{
-    //                     html+=`<tr class="text-center">
-    //                         <input type="hidden" id="item_name" value="${unit.menu_item.item_name}">
-    //                         <input type="hidden" id="price_${unit.id}" value="${unit.sale_price}">
-    //                         <td>${unit.menu_item.item_name}</td>
-    //                         <td id="name_${unit.id}">${unit.name}</td>
-    //                         <td>${unit.sale_price}</td>
-    //                         <td><i class="btn btn-primary" onclick="tgPanel(${unit.id})"><i class="fas fa-plus"></i>Add</i></td>
-    //                         </tr>
+                $.each(data, function(i, unit) {
+                    if(unit.brake_flag ==2){
+                        html+=`<tr class="text-center">
+                            <input type="hidden" id="item_name" value="${unit.menu_item.item_name}">
+                            <input type="hidden" id="price_${unit.id}" value="${unit.sale_price}">
+                            <td>${unit.menu_item.item_name}</td>
+                            <td id="name_${unit.id}">${unit.name}</td>
+                            <td>${unit.sale_price}</td>
+                            <td><i class="btn btn-danger">Brake</i></td>
+                            </tr>
 
-    //                     `;
-    //                 }
-    //             });
+                        `;
+                    }
+                    else{
+                        html+=`<tr class="text-center">
+                            <input type="hidden" id="item_name" value="${unit.menu_item.item_name}">
+                            <input type="hidden" id="price_${unit.id}" value="${unit.sale_price}">
+                            <td>${unit.menu_item.item_name}</td>
+                            <td id="name_${unit.id}">${unit.name}</td>
+                            <td>${unit.sale_price}</td>
+                            <td><i class="btn btn-primary" onclick="tgPanel(${unit.id})"><i class="fas fa-plus"></i>Add</i></td>
+                            </tr>
 
-    //             $("#count_unit").html(html);
+                        `;
+                    }
+                });
 
-    //             $("#unit_table_modal").modal('show');
-    //         }
+                $("#count_unit").html(html);
 
-    //     });
-    // }
+                $("#unit_table_modal").modal('show');
+            }
+
+        });
+    }
 
     function tgPanel(id){
 
-        // alert(id);
 
 var item_name = $('#item_name'+id).val();
 
+var item_price_check = $('#price' + id).val();
 
+var name = $('#name_' + id).text();
+
+var qty_check = $('#qty_' + id).val();
+
+var qty = parseInt(qty_check);
+
+var price = parseInt(item_price_check);
+
+if( item_price_check == ""){
+
+Swal.fire({
+    title:"Please Check",
+    text:"Please Select Price To Sell",
+    icon:"info",
+});
+}
+else{
+
+// swal("Please Enter Quantity:", {
+//     content: "input",
+// })
+
+// .then((value) => {
+//     if(value.toString().match(/^\d+$/)){
+//     if (value > qty ) {
+
+//         swal({
+//             title:"Can't Add",
+//             text:"Your Input is higher than Current Quantity!",
+//             icon:"info",
+//         });
+
+//     }else{
+
+        // alert('hello!');
 
         $('.note_class').hide();
 
-        var item={id:id,item_name:item_name,current_qty:1,order_qty:1};
+
+        var total_price = price * 1 ;
+
+        var item={id:id,item_name:item_name,unit_name:name,current_qty:qty,order_qty:1,selling_price:price};
         console.log(item);
-        var total_amount = {total_qty:1};
+        var total_amount = {sub_total:total_price,total_qty:1};
 
         var mycart = localStorage.getItem('mycart');
 
@@ -651,6 +697,8 @@ var item_name = $('#item_name'+id).val();
 
             var grand_total_obj = JSON.parse(grand_total);
 
+            grand_total_obj.sub_total = total_price + grand_total_obj.sub_total;
+
             grand_total_obj.total_qty = parseInt(1) + parseInt(grand_total_obj.total_qty);
 
             localStorage.setItem('grandTotal',JSON.stringify(grand_total_obj));
@@ -660,7 +708,17 @@ var item_name = $('#item_name'+id).val();
 
         showmodal();
 
+    }
+//     }else{
+//         swal({
+//             title:"Input Invalid",
+//             text:"Please only input english digit",
+//             icon:"info",
+//         });
+//     }
+// })
 
+// }
 }
 
     function showmodal(){
@@ -687,16 +745,20 @@ var item_name = $('#item_name'+id).val();
 
                     var qty=v.order_qty;
 
+                    var count_name = v.unit_name
+
                     html+=`<tr>
                             <td class="text-success font-weight-bold">${item}</td>
 
-                            <td class="text-success font-weight-bold"></td>
+                            <td class="text-success font-weight-bold">${count_name}</td>
 
                             <td>
                                 <i class="fa fa-plus-circle btnplus" onclick="plus(${id})" id="${id}"></i>
                                 ${qty}
                                 <i class="fa fa-minus-circle btnminus"  onclick="minus(${id})" id="${id}"></i>
                             </td>
+
+                            <td class="text-success font-weight-bold">${v.selling_price}</td>
                             <td class="text-success font-weight-bold"><button class="btn btn-sm btn-info" id="note_${id}" onclick="note(${id})">Note</button></td>
                             </tr>
                             <tr>
@@ -751,19 +813,19 @@ var item_name = $('#item_name'+id).val();
 
         if( action == 'plus'){
 
-            // if (item[0].order_qty == item[0].current_qty) {
+            if (item[0].order_qty == item[0].current_qty) {
 
-            //     swal({
-            //         title:"Can't Add",
-            //         text:"Can't Added Anymore!",
-            //         icon:"info",
-            //     });
+                swal({
+                    title:"Can't Add",
+                    text:"Can't Added Anymore!",
+                    icon:"info",
+                });
 
-            //     $('#btn_plus_' + item[0].id).attr('disabled', 'disabled');
-            // }
+                $('#btn_plus_' + item[0].id).attr('disabled', 'disabled');
+            }
             item[0].order_qty++;
 
-        //   grand_total_obj.sub_total += parseInt(item[0].selling_price);
+          grand_total_obj.sub_total += parseInt(item[0].selling_price);
 
           grand_total_obj.total_qty ++;
 
@@ -785,7 +847,7 @@ var item_name = $('#item_name'+id).val();
 
                 let item_cart = mycartobj.filter(item =>item.id !== id );
 
-                // grand_total_obj.sub_total -= parseInt(item[0].selling_price);
+                grand_total_obj.sub_total -= parseInt(item[0].selling_price);
 
                 grand_total_obj.total_qty -- ;
 
@@ -810,7 +872,7 @@ var item_name = $('#item_name'+id).val();
 
             item[0].order_qty--;
 
-            // grand_total_obj.sub_total -= parseInt(item[0].selling_price);
+            grand_total_obj.sub_total -= parseInt(item[0].selling_price);
 
             grand_total_obj.total_qty -- ;
 
@@ -845,12 +907,12 @@ var item_name = $('#item_name'+id).val();
             });
 
         }else{
+            
             $("#t_away").attr('value', take_away);
 
             $("#item").attr('value', mycart);
 
             $('#cus_complain').attr('value',myremark);
-
 
             $("#vourcher_page").submit();
 
@@ -909,7 +971,7 @@ if(!mycart){
         icon:"info",
     });
 
-}else{
+}else{ 
 
     $("#deli_option_lists").attr('value', mycart);
 
@@ -931,13 +993,6 @@ if(!mycart){
     $('#address').val('');
     $('#order_date').val('');
     $('#note').val('');
-    var table_id = $('#real_table_id').val();
-
-    alert(table_id);
-
-    $('#switch_btn').on('click', function(e){
-        window.location.href = "/Add-More/take_away/"+table_id;
-    });
 });
 
 function fill_remark(){
@@ -988,9 +1043,7 @@ function  save_note(){
 
 }
 
-var str_url = window.location.href;
-var myArr = str_url.split("/");
-document.cookie = "myUrl=myArr[3]";
+
 </script>
 
 @endsection
