@@ -62,7 +62,7 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::post('getCountingUnitsByItemCode', 'Web\SaleController@getCountingUnitsByItemCode');
     Route::post('ajaxConvertResult', 'Web\InventoryController@ajaxConvertResult');*/
 
-    Route::post('getCountingUnitsByItemId', 'Web\SaleController@getCountingUnitsByItemId');
+    Route::post('getCountingUnitsByItemId', 'Web\SaleController@');
     Route::post('searchByCuisine', 'Web\SaleController@searchByCuisine');
     Route::post('getTableByFloor', 'Web\SaleController@getTableByFloor');
     Route::post('getTableByTableType', 'Web\SaleController@getTableByTableType');
@@ -192,9 +192,15 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::post('storedelivery','Web\OrderController@storedelivery')->name('storedelivery');
     Route::get('Sale/Shop-Order/{table_id}', 'Web\SaleController@getShopOrderSalePage')->name('shop_order_sale');
     // Route::post('shopOrdeli','Web\SaleController@getShopDeli');
-    Route::get('delivery', 'Web\SaleController@deliverypage')->name('delivery');
-     Route::post('searchDelicharges','Web\SaleController@searchDelicharges');
+    // Route::get('delivery', 'Web\SaleController@takeAwayPage')->name('take_away');
+    Route::get('take_away', 'Web\SaleController@takeAwayPage')->name('take_away');
 
+    Route::get('Add-More/take_away/{id}', 'Web\SaleController@takeAwayPage1');
+
+    Route::post('searchDelicharges','Web\SaleController@searchDelicharges');
+
+     //Soup Kitchen Route
+    Route::post('Kitchen-Soup', 'Web\SaleController@soupkitchen')->name('soup_kitchen');
 
     Route::get('Add-More/{order_id}', 'Web\SaleController@addMoreItemUI')->name('add_more_item');
     Route::get('Delivery-Add-More/{order_id}', 'Web\SaleController@deliaddMoreItemUI')->name('deli_add_more_item');

@@ -51,18 +51,13 @@
                             <div class="pull-right text-left">
                                 <h5 class="font-weight-bold">Waiter Name : {{$wname}}</h5>
                                     <h5 class="font-weight-bold">Date : <i class="fa fa-calendar"></i> {{$real_date}} </h5>
-                                    @if($tablenoo != 1)
-                                       @if ($take_away == 1)
-                                       <h5 class="font-weight-bold">Table-Number :  {{$tableno->table_number}} (Take Away)</h5>
-                                       @else
-                                       <h5 class="font-weight-bold">Table-Number : {{$tableno->table_number}}</h5>
-                                       @endif
-
-
-                                    @elseif($tablenoo == 1)
-                                    <h5 class="font-weight-bold">Table-Number : Delivery Order</h5>
-                                    @endif
-                                </font>
+                                   
+                                        @if($table_number != 0)
+                                           <h5 class="font-weight-bold">Table-Number :  {{$table_number}}</h5>
+                                        @else
+                                           <h5 class="font-weight-bold">Table-Number :   (Take Away)</h5>
+                                        @endif
+                                    
                             </div>
                         </div>
 
@@ -83,9 +78,7 @@
                                             <td>{{$option->item_name}}</td>
                                             <td>{{$option->order_qty}}</td>
                                         </tr>
-
                                         @if($code_lists != NULL)
-
                                         @foreach ($code_lists as $code)
                                         @if ($code->id == $option->id)
                                         <tr>

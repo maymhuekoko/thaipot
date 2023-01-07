@@ -26,6 +26,14 @@
     </div> --}}
 </div>
 
+<div>
+    <form action="{{route('soup_kitchen')}}" method="POST" id="soupkichen">
+        @csrf
+        <input type="hidden" id="kit_id" name="order_id">
+
+    </form>
+</div>
+
 <div class="row">
     <div class="col-md-3">
         <label class="font-weight-bold">Filter By Floor</label>
@@ -49,14 +57,14 @@
     </div>
 
     <div class="col-md-3">
-    <label class="font-weight-bold">Choose shop or delivery</label>
+    <label class="font-weight-bold">Choose shop or take away</label>
     <div class="dropdown">
   <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Shop
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-    <a class="dropdown-item" href="{{route('delivery')}}">Delivery</a>
+    <a class="dropdown-item" href="{{route('take_away')}}">Take Away</a>
 
   </div>
 </div>
@@ -314,6 +322,80 @@
                     <div class="form-group col-md-4">
                         <input class="form-control" type="text"  value="0" id="bd" disabled>
                     </div>
+                    <div class="form-check offset-md-3 col-md-3">
+                        <input class="form-check-input" type="radio" value="" name="selectsoup" id="simchk" onclick="simplechg()">
+                        <label class="form-check-label" for="simchk">
+                          Simple
+                        </label>
+                    </div>
+                    <div class="form-check col-md-4">
+                        <input class="form-check-input" type="radio" value=""  name="selectsoup" id="mixchk" onclick="mixchg()">
+                        <label class="form-check-label" for="mixchk">
+                          Mix
+                        </label>
+                    </div>
+                    <div id="soupchk" class="mt-3">
+                    <div class="form-check offset-md-10">
+                        <input class="form-check-input" type="checkbox" value="" id="mchk">
+                        <label class="form-check-label" for="mchk">
+                          Tonyan
+                        </label>
+                    </div>
+                    <div class="form-check offset-md-10">
+                        <input class="form-check-input" type="checkbox" value="" id="mchk1">
+                        <label class="form-check-label" for="mchk1">
+                          Marlar
+                        </label>
+                    </div>
+                    <div class="form-check offset-md-10">
+                        <input class="form-check-input" type="checkbox" value="" id="mchk2">
+                        <label class="form-check-label" for="mchk2">
+                          Soup
+                        </label>
+                    </div>
+                    <div class="form-check offset-md-10">
+                        <input class="form-check-input" type="checkbox" value="" id="mchk3">
+                        <label class="form-check-label" for="mchk3">
+                          Others
+                        </label>
+                    </div>
+                    </div>
+                    <div id="soupradio"  class="mt-3">
+                        <div class="form-check offset-md-10">
+                            <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk">
+                            <label class="form-check-label" for="simrchk">
+                              Tonyan
+                            </label>
+                        </div>
+                        <div class="form-check offset-md-10">
+                            <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk1">
+                            <label class="form-check-label" for="simrchk1">
+                              Marlar
+                            </label>
+                        </div>
+                        <div class="form-check offset-md-10">
+                            <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk2">
+                            <label class="form-check-label" for="simrchk2">
+                              Soup
+                            </label>
+                        </div>
+                        <div class="form-check offset-md-10">
+                            <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk3">
+                            <label class="form-check-label" for="simrchk3">
+                              Others
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class=" offset-md-2 col-md-4">
+                        <label class="font-weight-bold" for="remark">
+                          Remark
+                        </label>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input class="form-control" type="text" placeholder="Enter Remark" id="soupremark">
+                    </div>
                 </div>
 
             </div>
@@ -347,6 +429,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="print">Print</button>
+                <button type="button" class="btn btn-secondary" id="closescan">Close</button>
             </div>
           </div>
         </div>
@@ -362,6 +445,9 @@
 
     $(document).ready(function() {
 
+        $('#soupradio').hide();
+        $('#soupchk').hide();
+
         $("#print").click(function() {
             $('#scanshow').modal('hide');
             // window.print();
@@ -372,14 +458,26 @@
                 popClose: close
             };
             $("div.printableArea").printArea(options);
-            var url = '{{ route("pending_lists") }}';
 
             setTimeout(function(){
-
-                window.location.href= url;
+                $('#soupkichen').submit();
             }, 2500);
         });
+
+        $('#closescan').click(function() {
+            $('#soupkichen').submit();
+        })
     });
+
+    function simplechg(){
+        $('#soupradio').show();
+        $('#soupchk').hide();
+    }
+
+    function mixchg(){
+        $('#soupradio').hide();
+        $('#soupchk').show();
+    }
 
    function showorder(id,status){
     if(status == 1){
@@ -396,7 +494,37 @@
    }
 
    function showscancode(){
-    $('#ordermodal').modal('hide');
+        $('#ordermodal').modal('hide');
+    if(document.getElementById('simchk').checked == true){
+        if(document.getElementById('simrchk').checked == true){
+            var soup = 'Tonyan';
+        }
+        if(document.getElementById('simrchk1').checked == true){
+            var soup = 'Marlar';
+        }
+        if(document.getElementById('simrchk2').checked == true){
+            var soup = 'Soup';
+        }
+        if(document.getElementById('simrchk3').checked == true){
+            var soup = 'Others';
+        }
+    }
+    if(document.getElementById('mixchk').checked == true){
+        var soup ='';
+        if(document.getElementById('mchk').checked == true){
+            soup += 'Tonyan,';
+        }
+        if(document.getElementById('mchk1').checked == true){
+            soup += 'Marlar,';
+        }
+        if(document.getElementById('mchk2').checked == true){
+            soup += 'Soup,';
+        }
+        if(document.getElementById('mchk3').checked == true){
+            soup += 'Others,';
+        }
+    }
+
     var adult_qty = $('#adult').val();
     var child_qty = $('#child').val();
     var kid_qty = $('#kid').val();
@@ -404,6 +532,7 @@
     var birth_qty = $('#bd').val();
     var start_time = $('#time').val();
     var table_id = $('#tableid').val();
+    var remark = $('#soupremark').val();
     $('#scanId').val(table_id);
     $.ajax({
 
@@ -420,10 +549,13 @@
     "birth_qty" : birth_qty,
     "start_time" : start_time,
     "table_id" : table_id,
+    "soup_name" : soup,
+    'remark' : remark,
     },
 
     success:function(data){
         console.log('success');
+        $('#kit_id').val(data.id);
 
     }
 })

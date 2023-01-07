@@ -65,7 +65,6 @@
                                             <tr style="text-align:left;">
                                                 <th ><strong>Person</strong></th>
                                                 <th ><strong>Price & Qty</strong></th>
-                                                <th><strong>Tax (5%)</strong></th>
                                                 <th ><strong>Total</strong></th>
                                             </tr>
                                         </thead>
@@ -74,31 +73,27 @@
                                             <tr style="text-align:left;">
                                                 <th >Adult</th>
                                                 <th >20900 * <span>{{$order->adult_qty}}</span></th>
-                                                <th>{{$order->adult_qty * 1050}}</th>
-                                                <th>{{$order->adult_qty * 21950}}</th>
+                                                <th>{{$order->adult_qty * 20900}}</th>
                                             </tr>
                                             @endif
                                             @if ($order->child_qty != 0)
                                             <tr style="text-align:left;">
                                                 <th >Children</th>
                                                 <th >11000 * <span>{{$order->child_qty}}</span></th>
-                                                <th>{{$order->child_qty * 550}}</th>
-                                                <th>{{$order->child_qty * 11550}}</th>
+                                                <th>{{$order->child_qty * 11000}}</th>
                                             </tr>
                                             @endif
                                             @if ($order->kid_qty != 0)
                                             <tr style="text-align:left;">
                                                 <th >Kids</th>
                                                 <th >9000 * <span>{{$order->kid_qty}}</span></th>
-                                                <th>{{$order->kid_qty * 450}}</th>
-                                                <th>{{$order->kid_qty * 9450}}</th>
+                                                <th>{{$order->kid_qty * 9000}}</th>
                                             </tr>
                                             @endif
                                             @if ($order->extrapot_qty != 0)
                                             <tr style="text-align:left;">
                                                 <th >Extra Pot</th>
                                                 <th >3000 * <span>{{$order->extrapot_qty}}</span></th>
-                                                <th></th>
                                                 <th>{{$order->extrapot_qty * 3000}}</th>
                                             </tr>
                                             @endif
@@ -106,7 +101,6 @@
                                             <tr style="text-align:left;">
                                                 <th >Extra Gram</th>
                                                 <th >{{$voucher->extra_gram}}(g)</span></th>
-                                                <th></th>
                                                 <th>{{$voucher->extra_amount}}</th>
                                             </tr>
                                             @endif
@@ -114,23 +108,25 @@
                                     </table>
                                     @if($voucher->discount_type == null)
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
-                                         <strong>Voucher Total - {{($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount}}</strong><br>
+                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
+                                         <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
                                          @if ($voucher->promotion == 'Cash Back' || $voucher->promotion == 'Discount Percentage')
                                          <strong>{{$voucher->promotion}} - {{$voucher->promotion_value}}</strong><br>
                                           @if (explode(' ',$voucher->promotion_value)[1] == '%')
-                                          <strong>Total - {{($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount-(($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount*(explode(' ',$voucher->promotion_value)[0])/100)}}</strong><br>
+                                          <strong>Total - {{$voutotal-($voutotal*(explode(' ',$voucher->promotion_value)[0])/100)}}</strong><br>
                                           <strong>Pay - {{$voucher->pay_value}}</strong><br>
-                                          <strong>Change - {{$voucher->pay_value - (($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount-(($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount*(explode(' ',$voucher->promotion_value)[0])/100))}}</strong><br>
+                                          <strong>Change - {{$voucher->pay_value - $voutotal-(($voutotal*(explode(' ',$voucher->promotion_value)[0])/100))}}</strong><br>
                                           @else
-                                          <strong>Total - {{($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount - $voucher->promotion_value}}</strong><br>
+                                          <strong>Total - {{$voutotal - $voucher->promotion_value}}</strong><br>
                                           <strong>Pay - {{$voucher->pay_value}}</strong><br>
-                                          <strong>Change - {{$voucher->pay_value - (($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount - $voucher->promotion_value)}}</strong><br>
+                                          <strong>Change - {{$voucher->pay_value - ($voutotal - $voucher->promotion_value)}}</strong><br>
                                           @endif
                                           @else
                                           @if ($order->birth_qty != 0)
                                           <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong><br>
-                                          <strong>Total - {{($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount - ($order->birth_qty * 4390)}}</strong><br>
+                                          <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4390)}}</strong><br>
                                           @endif
+                                          <strong>Total - {{$voutotal + $servicecharges}}</strong><br>
                                           <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                           <strong>Change - {{$voucher->change_value}}</strong><br>
                                          @endif
@@ -141,36 +137,39 @@
                                     </div>
                                     @elseif ($voucher->discount_type == 1)
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
-                                        <strong>Voucher Total - {{$order->adult_qty * 21950+$order->child_qty * 11550+ $order->kid_qty * 9450+ $order->extrapot_qty *3000 + $voucher->extra_amount}}</strong><br>
+                                        <strong>Voucher Total - {{$voutotal}}</strong><br>
+                                        <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
                                         <strong>Discount - FOC(1 person)</strong><br>
                                         @if ($order->birth_qty != 0)
                                         <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong>
                                         @endif
-                                        <strong>Total - {{($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount - 20900 - ($order->birth_qty * 4390)}}</strong><br>
+                                        <strong>Total - {{$voutotal+ $servicecharges - 20900 - ($order->birth_qty * 4390)}}</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                         <strong>Change - {{$voucher->change_value}}</strong><br>
                                    </div>
                                    @elseif ($voucher->discount_type == 2)
-                                   <?php $total = ($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount - ($voucher->discount_value/100) * ($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount ; ?>
+                                   <?php $total = $voutotal - ($voucher->discount_value/100) * $voutotal ; ?>
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
-                                        <strong>Voucher Total - {{$order->adult_qty * 21950+$order->child_qty * 11550+ $order->kid_qty * 9450+ $order->extrapot_qty *3000 + $voucher->extra_amount}}</strong><br>
+                                        <strong>Voucher Total - {{$voutotal}}</strong><br>
+                                        <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
                                         <strong>Discount - {{$voucher->discount_value}} %</strong><br>
                                         @if ($order->birth_qty != 0)
                                         <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong>
                                         @endif
-                                        <strong>Total - {{$total - ($order->birth_qty * 4390)}}</strong><br>
+                                        <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4390)}}</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                          <strong>Change - {{$voucher->change_value}}</strong><br>
                                    </div>
                                    @elseif ($voucher->discount_type == 3)
-                                   <?php $total = ($order->adult_qty * 21950)+($order->child_qty * 11550)+ ($order->kid_qty * 9450)+ ($order->extrapot_qty *3000) + $voucher->extra_amount - $voucher->discount_value; ?>
+                                   <?php $total = $voutotal - $voucher->discount_value; ?>
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
-                                        <strong>Voucher Total - {{$order->adult_qty * 21950+$order->child_qty * 11550+ $order->kid_qty * 9450+ $order->extrapot_qty *3000 + $voucher->extra_amount}}</strong><br>
+                                        <strong>Voucher Total - {{$voutotal}}</strong><br>
+                                        <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
                                         <strong>Discount - {{$voucher->discount_value}} </strong><br>
                                         @if ($order->birth_qty != 0)
                                         <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong>
                                         @endif
-                                        <strong>Total - {{$total - ($order->birth_qty * 4390)}}</strong><br>
+                                        <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4390)}}</strong><br>
                                         {{-- <strong>Total - {{$total}}</strong><br> --}}
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                          <strong>Change - {{$voucher->change_value}}</strong><br>
