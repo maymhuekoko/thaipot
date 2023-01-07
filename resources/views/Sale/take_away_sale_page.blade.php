@@ -42,6 +42,8 @@
 
             <input type="hidden" name="take_away" id="t_away">
 
+            <input type="hidden" name="price" id="take_away_price">
+
             @php
             if(isset($tableId)){
                 $id = $tableId;
@@ -208,7 +210,6 @@
                         <thead>
                             <tr>
                                 <th class="font-weight-bold text-info">Menu Item</th>
-                                <th class="font-weight-bold text-info">Option</th>
                                 <th class="font-weight-bold text-info">Quantity</th>
                                 <th class="font-weight-bold text-info">Price</th>
                                 <th class="font-weight-bold text-info">Note</th>
@@ -249,11 +250,11 @@
                     </div>
                     @endif
 
-                    <div class="modal fade" id="myModal" role="dialog">
-                        <div class="modal-dialog">
+                    <!-- <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog"> -->
 
                         <!-- Modal content-->
-                        <div class="modal-content">
+                        <!-- <div class="modal-content">
                             <div class="modal-header">
                             <h4 class="modal-title"><b>Delivery Information<b></h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -310,7 +311,9 @@
                         </div>
 
                         </div>
-                    </div>
+                    </div> -->
+
+
                     </form>
                     @if($table_number != 0)
                     <div class="row">
@@ -907,12 +910,14 @@ else{
             });
 
         }else{
-            
+
             $("#t_away").attr('value', take_away);
 
             $("#item").attr('value', mycart);
 
             $('#cus_complain').attr('value',myremark);
+
+            $('#take_away_price').attr('value', mycart);
 
             $("#vourcher_page").submit();
 

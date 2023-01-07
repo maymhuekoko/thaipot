@@ -50,7 +50,7 @@
                                             {{-- <button class="btn btn-danger" style="color:white;" onclick="cancel({{$order->id}})">Cancel</button> --}}
                                             {{-- <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a> --}}
                                     	@else
-                                    	    <button class="btn btn-primary" onclick="storeVoucher({{$order->id}})">Store Voucher</button>
+                                    	        <button class="btn btn-primary" onclick="storeVoucher({{$order->id}}, {{$order->price}})">Store Voucher</button>
                                             {{-- <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a> --}}
                                     	@endif
 
@@ -179,7 +179,7 @@
                 <label class="font-weight-bold">Voucher Total</label>
                 <input type="text" class="form-control" readonly id="voucher_total_dis" value="">
             </div>
-            <div class="row">
+            <div class="row" id="extra_gram_display">
                 <div class="form-group col-md-6" id="extra_gram">
                     <label class="font-weight-bold">Extra Gram</label>
                     <input type="text" class="form-control"  id="no_extraamt" value="0"  onkeyup="extragramadd(this.value)">
@@ -227,7 +227,6 @@
     $('#dis_foc').hide();
     $('#dis_percent').hide();
     $('#dis_amount').hide();
-
 })
 function yes_radio(){
     // alert('yes');
@@ -338,7 +337,7 @@ function change_price(){
 
         data:{
         "_token":"{{csrf_token()}}",
-        "order_id":order_id,
+        "order_id": order_id,
         "discount_type" : discount_type ,
         "discount_value" : discount_value,
         "pay_amount" : pay_value,
@@ -388,7 +387,7 @@ function change_price(){
 }
 
 
-    function storeVoucher(order_id){
+    function storeVoucher(order_id, price){
         //
         $.ajax({
 
@@ -406,10 +405,19 @@ function change_price(){
                 $('#hid_order_id').val(order_id);
                 $('#dis_type').val();
                 $('#dis_val').val();
-                $('#voucher_total_dis').val(data.vtot);
-                $('#voucher_total').val(data.vtot);
-                $('#curr_voucher_total1').val(data.stot);
-                $('#curr_voucher_total').val(data.stot);
+                if(price == 0){
+                    $('#voucher_total_dis').val(data.vtot);
+                    $('#voucher_total').val(data.vtot);
+                    $('#curr_voucher_total1').val(data.stot);
+                    $('#curr_voucher_total').val(data.stot);
+                }else{
+                    $('#voucher_total_dis').val(price);
+                    $('#voucher_total').val(price);
+                    $('#curr_voucher_total1').val(price);
+                    $('#curr_voucher_total').val(price);
+                    $('#extra_gram_display').hide();
+
+                }
             }
         })
         $('#dis_radio_form').modal('show');
