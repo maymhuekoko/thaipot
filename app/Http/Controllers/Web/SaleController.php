@@ -325,6 +325,7 @@ class SaleController extends Controller
     //end
 
 	protected function storeShopOrder(Request $request){
+
 		// dd($request->all());
 		$validator = Validator::make($request->all(), [
 			// 'table_id' => 'required',
@@ -352,6 +353,7 @@ class SaleController extends Controller
 			if($table_number != 0){
 				$table = Table::where('id', $request->table_id)->first();
 			}
+			$card_total = 0;
 
 			if (empty($table)) {
                     // if($is_desktop == true || $is_mobile == true){
@@ -363,6 +365,12 @@ class SaleController extends Controller
 						'sale_by' =>$user_name,										// Order Status = 1
 		            ]);
                 // }
+					if($table_number == 0){
+						foreach(json_decode($request->price) as $card){
+							$card_total += $card->order_qty * $card->selling_price;
+						}
+						$order->price = $card_total;
+					}
 					if($table_number != 0){
 						$order->table_id = $table_number;
 					}
@@ -1012,11 +1020,16 @@ class SaleController extends Controller
         try {
 
 			$shop_order = ShopOrder::where('id',$request->order_id)->where('status','1')->first();
+			$take_away = 0;
 
 			if(empty($shop_order)){
 
 				return response()->json(['error' => 'Something Wrong! Cannot Checkbill again']);
 
+			}
+
+			if($shop_order->table_id == NULL){
+				$take_away = 1;
 			}
 
 		} catch (\Exception $e) {
@@ -1033,7 +1046,8 @@ class SaleController extends Controller
 
         return response()->json([
             'vtot' => $tota,
-            'stot' => $total
+            'stot' => $total,
+			'take_away' => $take_away,
         ]);
     }
 
