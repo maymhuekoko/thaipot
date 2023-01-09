@@ -48,18 +48,20 @@ class SaleController extends Controller
 
 	protected function getPendingShopOrderList(){
 
-		$pending_lists = ShopOrder::where('status', 1)->get();
+		$pending_lists = ShopOrder::where('status', 1)->where('take_away_flag', 0)->get();
 
         $promotion = Promotion::all();
 
 		return view('Sale.pending_lists', compact('pending_lists','promotion'));
 	}
 
-    protected function getPendingDeliveryOrderList(){
+    protected function getPendingTakeAwayOrderList(){
 
-		$pending_lists = Order::where('status', 2)->get();
-        // dd('hello');
-		return view('Sale.delivery_pending_lists', compact('pending_lists'));
+		$pending_lists = ShopOrder::where('status', 1)->where('take_away_flag', 1)->get();
+
+        $promotion = Promotion::all();
+
+		return view('Sale.take_away_pending_lists', compact('pending_lists','promotion'));
 	}
 
     protected function notification(Request $request){
@@ -378,10 +380,14 @@ class SaleController extends Controller
 
 		            $order->save();
 
-		            // foreach ($option_lists as $option) {
-
-					// 	$order->option()->attach($option->id, ['quantity' => $option->order_qty,'note' => null,'status' => 7]);
-					// }
+		            foreach ($option_lists as $option) {
+						DB::table('item_shop_order')->insert([
+							"shop_order_id" => $order->id,
+							"item_id" => $option->id,
+							"quantity" => $option->order_qty,
+							"price" => $option->selling_price
+						]);
+					}
 
 				} else {
 

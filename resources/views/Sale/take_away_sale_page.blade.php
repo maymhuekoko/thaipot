@@ -997,7 +997,7 @@ else{
 
         }else{
 
-            $("#t_away").attr('value', take_away);
+            $("#t_away").attr('value', 1);
 
             $("#item").attr('value', mycart);
 
