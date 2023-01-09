@@ -387,7 +387,7 @@ function change_price(){
 
             type:'POST',
 
-            url:'/DiscountForm',
+            url:'/TakeAwayDiscountForm',
 
             data:{
             "_token":"{{csrf_token()}}",

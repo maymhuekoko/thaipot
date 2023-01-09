@@ -208,8 +208,14 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::post('Deli-Add-More-Item', 'Web\SaleController@deliaddMoreItem')->name('deli_add_item');
 
     Route::post('ShopVoucherStore', 'Web\SaleController@storeShopOrderVoucher')->name('shop.ordervoucher');
+
+    Route::post('TakeAwayVoucherStore', 'Web\SaleController@storeShopOrderVoucher');
+
     Route::post('DeliveryVoucherStore', 'Web\SaleController@storeDeliveryOrderVoucher')->name('delivery.ordervoucher');
     Route::post('DiscountForm', 'Web\SaleController@storeShopDiscountForm')->name('shop.discountform');
+
+    Route::post('TakeAwayDiscountForm', 'Web\SaleController@storeTakeAwayDiscountForm');
+
     Route::post('DeliveryDiscountForm', 'Web\SaleController@storeDeliveryDiscountForm')->name('shop.discountform');
     Route::get('Purchase', 'Web\PurchaseController@getPurchaseHistory')->name('purchase_list');
     Route::get('Purchase/Details/{id}', 'Web\PurchaseController@getPurchaseHistoryDetails')->name('purchase_details');

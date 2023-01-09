@@ -814,7 +814,6 @@ class SaleController extends Controller
 	protected function storeShopOrderVoucher(Request $request){
 
 		// dd($request->all());
-
 		try {
 
 			$shop_order = ShopOrder::where('id',$request->order_id)->where('status','1')->first();
@@ -900,6 +899,125 @@ class SaleController extends Controller
 
             return response()->json($shop_order);
     }
+
+	protected function storeTakeAwayVoucher(Request $request){
+		try {
+
+			$shop_order = ShopOrder::where('id',$request->order_id)->where('status','1')->first();
+
+			if(empty($shop_order)){
+
+				return response()->json(['error' => 'Something Wrong! Cannot Checkbill again']);
+
+			}
+
+		} catch (\Exception $e) {
+
+			return response()->json(['error' => 'Something Wrong! Shop Order Cannot Be Found'], 404);
+
+		}
+
+
+
+		// $table = Table::where('id', $shop_order->table_id)->first();
+
+		// if (!empty($table)) {
+
+		// 	$table->status = 1;
+
+    	// 	$table->save();
+
+		// }
+
+		$user_code = $request->session()->get('user')->name;
+
+		$total = 0 ;
+
+		$total_qty = 0 ;
+
+		$date = new DateTime('Asia/Yangon');
+
+		$real_date = $date->format('Y-m-d H:i:s');
+
+        $re_date = $date->format('Y-m-d');
+
+		foreach ($shop_order->option as $option) {
+            $total += ($option->pivot->quantity * $option->sale_price);
+
+            $total_qty += $option->pivot->quantity;
+        }
+        //  dd($request->change_amount_dis);
+
+        $voucher = Voucher::create([
+            'sale_by' => $user_code,
+            'total_price' =>  $total,
+            'total_quantity' => $total_qty,
+            'voucher_date' => $real_date,
+            'type' => 1,
+            'status' => 0,
+            'date' => $re_date,
+        ]);
+        if($request->discount_type !=null && $request->discount_value != null){
+            $voucher->discount_type = $request->discount_type;
+            $voucher->discount_value = $request->discount_value;
+            $voucher->pay_value = $request->pay_amount;
+            $voucher->change_value = $request->change_amount;
+        }else{
+            $voucher->pay_value = $request->pay_amount_dis;
+            $voucher->change_value = $request->change_amount_dis;
+        }
+        if($request->promotion !=0 && $request->promotionvalue !=0){
+            $voucher->promotion = $request->promotion;
+            $voucher->promotion_value = $request->promotionvalue;
+        }
+
+    	$voucher->voucher_code = "VOU-".date('dmY')."-".sprintf("%04s", $voucher->id);
+
+        $voucher->save();
+
+     	foreach ($shop_order->option as $option) {
+
+        	$voucher->option()->attach($option->id, ['quantity' => $option->pivot->quantity,'price' => $option->sale_price, 'date' => $re_date]);
+
+			$moption = Option::findorFail($option->id);
+			// dd($moption->id);
+			$amount = DB::table('ingredient_option')
+
+			->where('option_id',$moption->id)
+			->get();
+			//   dd($amount);
+			foreach($amount as $amt)
+			$amountt = json_encode($amt->amount);
+			// dd($amountt);
+
+			// dd($amountt);
+			$ingredien = DB::table('ingredient_option')
+			// ->select('ingredient_id')
+			->where('option_id',$moption->id)
+			->get();
+			if($ingredien == null)
+			{
+			foreach($ingredien as $ingred)
+			// dd($ingredien);
+			$ingreID = $ingred->ingredient_id;
+			// dd($ingreID);
+
+            $ingredient_update = Ingredient::findorFail($ingreID);
+			$balance_qty = $ingredient_update->instock_quantity - $amountt;
+			$ingredient_update->instock_quantity = $balance_qty;
+			// dd("Hello");
+			$ingredient_update->save();
+			}
+            }
+    //  dd("Helllo");
+            $shop_order->voucher_id = $voucher->id;
+
+            $shop_order->status = 2;
+
+            $shop_order->save();
+
+            return response()->json($shop_order);
+	}
 
     //Delivery Voucher
     protected function storeDeliveryOrderVoucher(Request $request){
@@ -1057,11 +1175,9 @@ class SaleController extends Controller
         ]);
     }
 
-    protected function storeDeliveryDiscountForm(Request $request){
-        try {
-
-			$shop_order = Order::where('id',$request->order_id)->where('status','2')->first();
-
+	protected function storeTakeAwayDiscountForm(Request $request){
+		try {
+			$shop_order = ShopOrder::where('id',$request->order_id)->where('status','1')->where('take_away_flag', 1)->first();
 			if(empty($shop_order)){
 
 				return response()->json(['error' => 'Something Wrong! Cannot Checkbill again']);
@@ -1073,17 +1189,36 @@ class SaleController extends Controller
 			return response()->json(['error' => 'Something Wrong! Shop Order Cannot Be Found'], 404);
 
 		}
-        $total = 0 ;
+        return response()->json($shop_order->price);
+	}
 
-		$total_qty = 0 ;
+    // protected function storeDeliveryDiscountForm(Request $request){
+    //     try {
 
-		foreach ($shop_order->option as $option) {
-            $total += ($option->pivot->quantity * $option->sale_price);
+	// 		$shop_order = Order::where('id',$request->order_id)->where('status','2')->first();
 
-            $total_qty += $option->pivot->quantity;
-        }
-        return response()->json(['total'=>$total,'order'=>$shop_order]);
-    }
+	// 		if(empty($shop_order)){
+
+	// 			return response()->json(['error' => 'Something Wrong! Cannot Checkbill again']);
+
+	// 		}
+
+	// 	} catch (\Exception $e) {
+
+	// 		return response()->json(['error' => 'Something Wrong! Shop Order Cannot Be Found'], 404);
+
+	// 	}
+    //     $total = 0 ;
+
+	// 	$total_qty = 0 ;
+
+	// 	foreach ($shop_order->option as $option) {
+    //         $total += ($option->pivot->quantity * $option->sale_price);
+
+    //         $total_qty += $option->pivot->quantity;
+    //     }
+    //     return response()->json(['total'=>$total,'order'=>$shop_order]);
+    // }
 
 	protected function getFinishedOrderList(){
 
