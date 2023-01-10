@@ -100,15 +100,15 @@
        
         <!-- Tab panes -->
         <div class="tab-content">
-            @foreach($cuisine_types as $cui)
-            <div class="tab-pane active" id="{{$cui->id}}" role="tabpanel">
+
+            <div class="tab-pane active" id="7" role="tabpanel">
 
                 <div class="row mt-3">
                 @foreach($items as $item)
-                @if($item->cuisine_type_id == $cui->id)
+                @if($item->cuisine_type_id == 7)
 
                 <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                    <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
+                    <img src='{{asset("/photo/$item->photo_path")}}' class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
                     <div style="height:40px;">
                         <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
                         <input type="hidden" id="item_name{{$item->id}}" value="{{$item->item_name}}">
@@ -123,7 +123,95 @@
                 @endforeach
                 </div>
             </div>
-            @endforeach
+
+            <div class="tab-pane" id="8" role="tabpanel">
+
+                <div class="row mt-3">
+                @foreach($items as $item)
+                @if($item->cuisine_type_id == 8)
+
+                <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
+                    <img src='{{asset("/photo/$item->photo_path")}}' class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
+                    <div style="height:40px;">
+                        <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
+                        <input type="hidden" id="item_name{{$item->id}}" value="{{$item->item_name}}">
+                        <input type="hidden" id="price{{$item->id}}" value="{{$item->price}}">
+                    </div>
+
+
+                    <i class="btn btn-sm btn-success" onclick="tgPanel({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
+
+                </div>
+                @endif
+                @endforeach
+                </div>
+            </div>
+
+            <div class="tab-pane" id="9" role="tabpanel">
+                <div class="row mt-3">
+                @foreach($items as $item)
+                @if($item->cuisine_type_id == 9)
+
+                <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
+                    <img src='{{asset("/photo/$item->photo_path")}}' class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
+                    <div style="height:40px;">
+                        <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
+                        <input type="hidden" id="item_name{{$item->id}}" value="{{$item->item_name}}">
+                        <input type="hidden" id="price{{$item->id}}" value="{{$item->price}}">
+                    </div>
+
+
+                    <i class="btn btn-sm btn-success" onclick="tgPanel({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
+
+                </div>
+                @endif
+                @endforeach
+                </div>
+            </div>
+
+            <div class="tab-pane" id="10" role="tabpanel">
+                <div class="row mt-3">
+                @foreach($items as $item)
+                @if($item->cuisine_type_id == 10)
+
+                <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
+                    <img src='{{asset("/photo/$item->photo_path")}}' class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
+                    <div style="height:40px;">
+                        <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
+                        <input type="hidden" id="item_name{{$item->id}}" value="{{$item->item_name}}">
+                        <input type="hidden" id="price{{$item->id}}" value="{{$item->price}}">
+                    </div>
+
+
+                    <i class="btn btn-sm btn-success" onclick="tgPanel({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
+
+                </div>
+                @endif
+                @endforeach
+                </div>
+            </div>
+
+            <div class="tab-pane" id="11" role="tabpanel">
+                <div class="row mt-3">
+                @foreach($items as $item)
+                @if($item->cuisine_type_id == 11)
+
+                <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
+                    <img src='{{asset("/photo/$item->photo_path")}}' class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
+                    <div style="height:40px;">
+                        <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
+                        <input type="hidden" id="item_name{{$item->id}}" value="{{$item->item_name}}">
+                        <input type="hidden" id="price{{$item->id}}" value="{{$item->price}}">
+                    </div>
+
+
+                    <i class="btn btn-sm btn-success" onclick="tgPanel({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
+
+                </div>
+                @endif
+                @endforeach
+                </div>
+            </div>
 
             <div class="modal fade" id="remark_table_modal" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-m" role="document">
@@ -753,8 +841,6 @@ else{
                     html+=`<tr>
                             <td class="text-success font-weight-bold">${item}</td>
 
-                            <td class="text-success font-weight-bold">${count_name}</td>
-
                             <td>
                                 <i class="fa fa-plus-circle btnplus" onclick="plus(${id})" id="${id}"></i>
                                 ${qty}
@@ -911,7 +997,7 @@ else{
 
         }else{
 
-            $("#t_away").attr('value', take_away);
+            $("#t_away").attr('value', 1);
 
             $("#item").attr('value', mycart);
 

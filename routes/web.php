@@ -159,7 +159,7 @@ Route::group(['middleware' => ['UserAuth']], function () {
 
 
     Route::get('Pending-Order', 'Web\SaleController@getPendingShopOrderList')->name('pending_lists');
-    Route::get('Delivery-Pending-Order', 'Web\SaleController@getPendingDeliveryOrderList')->name('delivery_pending_lists');
+    Route::get('Take-Away-Pending-Order', 'Web\SaleController@getPendingTakeAwayOrderList')->name('delivery_pending_lists');
     Route::get('Pending-Order-Details/{id}', 'Web\SaleController@getPendingShopOrderDetails')->name('pending_order_details');
     Route::get('Delivery_Pending-Order-Details/{id}', 'Web\SaleController@getPendingDeliveryOrderDetails')->name('deli_pending_order_details');
     Route::get('Finished-Order', 'Web\SaleController@getFinishedOrderList')->name('finished_lists');
@@ -208,8 +208,14 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::post('Deli-Add-More-Item', 'Web\SaleController@deliaddMoreItem')->name('deli_add_item');
 
     Route::post('ShopVoucherStore', 'Web\SaleController@storeShopOrderVoucher')->name('shop.ordervoucher');
+
+    Route::post('TakeAwayVoucherStore', 'Web\SaleController@storeShopOrderVoucher');
+
     Route::post('DeliveryVoucherStore', 'Web\SaleController@storeDeliveryOrderVoucher')->name('delivery.ordervoucher');
     Route::post('DiscountForm', 'Web\SaleController@storeShopDiscountForm')->name('shop.discountform');
+
+    Route::post('TakeAwayDiscountForm', 'Web\SaleController@storeTakeAwayDiscountForm');
+
     Route::post('DeliveryDiscountForm', 'Web\SaleController@storeDeliveryDiscountForm')->name('shop.discountform');
     Route::get('Purchase', 'Web\PurchaseController@getPurchaseHistory')->name('purchase_list');
     Route::get('Purchase/Details/{id}', 'Web\PurchaseController@getPurchaseHistoryDetails')->name('purchase_details');
