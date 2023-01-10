@@ -87,20 +87,20 @@
                             </tr>
                         </thead>
                         <tbody id="sale_table">
-                            @foreach($voucher as $vouc)
+                            @foreach($vouchers as $vouc)
                             <tr class="text-center">
                                 <td>{{$vouc->voucher_code}}</td>
                                 <td>{{$vouc->total_price}}</td>
                                 <td>{{$vouc->total_quantity}}</td>
                                 @if ($vouc->type == 1)
-                                <td>{{$vouc->shopOrder->table->table_number}}</td>
+                                <td>{{isset($vouc->shopOrder->table->table_number)? $vouc->shopOrder->table->table_number: "Take Away"}}</td>
                                 @else
-                                <td>Delivery Order</td>
+                                <td>Take Away</td>
                                 @endif
                                 <td>{{$vouc->date}}</td>
                                 <td>
                                     @if ($vouc->type == 2)
-                                    <a href="{{route('delivery_order_voucher',$vouc->order->id)}}" class="btn btn-info">Check Voucher</a>
+                                    <a href="{{route('shop_voucher',$vouc->id)}}" class="btn btn-info">Check Voucher</a>
                                         @if ($vouc->status == 0)
                                         <a class="btn btn-danger text-white" onclick="cancelvoucher({{$vouc->id}})" id="hide_{{$vouc->id}}">Cancel</a>
                                         <span id="cancel_{{$vouc->id}}" hidden>(CANCEL)</span>
@@ -108,7 +108,7 @@
                                         <span>(CANCEL)</span>
                                         @endif
                                     @else
-                                    <a href="{{route('shop_order_voucher',$vouc->shopOrder->id)}}" class="btn btn-info">Check Voucher</a>
+                                    <a href="{{route('shop_voucher1',$vouc->id)}}" class="btn btn-info">Check Voucher</a>
                                         @if ($vouc->status == 0)
                                         <a class="btn btn-danger text-white" onclick="cancelvoucher({{$vouc->id}})" id="hide_{{$vouc->id}}">Cancel</a>
                                         <span id="cancel_{{$vouc->id}}" hidden>(CANCEL)</span>
@@ -163,7 +163,7 @@
 
                     else{
                         html += `
-                        <td>Delivery Order</td>
+                        <td>Take Away</td>
                         `;
                     }
                     html += `

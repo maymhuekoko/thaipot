@@ -74,7 +74,11 @@
                                 <tbody>
                                     @foreach ($option_lists as $option)
                                         <tr>
-                                            <td>Extra</td>
+                                            @if($take_away == 1)
+                                                <td>Take Away</td>
+                                            @else
+                                                <td>Extra</td>
+                                            @endif
                                             <td>{{$option->item_name}}</td>
                                             <td>{{$option->order_qty}}</td>
                                         </tr>
@@ -109,12 +113,12 @@
 
                     </button>
                     @if ($tablenoo == 1)
-                    <a href="{{route('delivery_pending_lists')}}" id="goto" class="btn btn-outline-danger" type="button">
+                    <a href="/Take-Away-Pending-Order" id="goto" class="btn btn-outline-danger" type="button">
                         <span><i class="fa fa-info"></i> To Pending Voucher Lists </span>
 
                     </a>
                     @else
-                    <a href="{{route('gotopendinglist')}}" id="goto" class="btn btn-outline-danger" type="button">
+                    <a href="/Take-Away-Pending-Order" id="goto" class="btn btn-outline-danger" type="button">
                         <span><i class="fa fa-info"></i> To Pending Voucher Lists </span>
 
                     </a>

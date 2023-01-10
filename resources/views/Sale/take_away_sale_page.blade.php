@@ -147,7 +147,6 @@
             </div>
 
             <div class="tab-pane" id="9" role="tabpanel">
-
                 <div class="row mt-3">
                 @foreach($items as $item)
                 @if($item->cuisine_type_id == 9)
@@ -170,7 +169,6 @@
             </div>
 
             <div class="tab-pane" id="10" role="tabpanel">
-
                 <div class="row mt-3">
                 @foreach($items as $item)
                 @if($item->cuisine_type_id == 10)
@@ -193,7 +191,6 @@
             </div>
 
             <div class="tab-pane" id="11" role="tabpanel">
-
                 <div class="row mt-3">
                 @foreach($items as $item)
                 @if($item->cuisine_type_id == 11)
@@ -300,7 +297,6 @@
                         <thead>
                             <tr>
                                 <th class="font-weight-bold text-info">Menu Item</th>
-                                <th class="font-weight-bold text-info">Option</th>
                                 <th class="font-weight-bold text-info">Quantity</th>
                                 <th class="font-weight-bold text-info">Price</th>
                                 <th class="font-weight-bold text-info">Note</th>
@@ -699,7 +695,6 @@ else{
                     var count_name = v.unit_name
                     html+=`<tr>
                             <td class="text-success font-weight-bold">${item}</td>
-                            <td class="text-success font-weight-bold">${count_name}</td>
                             <td>
                                 <i class="fa fa-plus-circle btnplus" onclick="plus(${id})" id="${id}"></i>
                                 ${qty}
@@ -792,8 +787,9 @@ else{
                 icon:"info",
             });
         }else{
-            
+
             $("#t_away").attr('value', 1);
+
             $("#item").attr('value', mycart);
             $('#cus_complain').attr('value',myremark);
             $('#take_away_price').attr('value', mycart);
