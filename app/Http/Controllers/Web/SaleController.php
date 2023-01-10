@@ -57,9 +57,11 @@ class SaleController extends Controller
 
     protected function getPendingDeliveryOrderList(){
 
-		$pending_lists = Order::where('status', 2)->get();
-        // dd('hello');
-		return view('Sale.delivery_pending_lists', compact('pending_lists'));
+		$pending_lists = ShopOrder::where('status', 1)->where('take_away_flag', 1)->get();
+
+        $promotion = Promotion::all();
+
+		return view('Sale.take_away_pending_lists', compact('pending_lists','promotion'));
 	}
 
     protected function notification(Request $request){
@@ -142,9 +144,10 @@ class SaleController extends Controller
 		$meal_types = Meal::where('name', $currentUrl)->first();
         $codes =Code::all();
 
-		$cuisine_types = CuisineType::where('meal_id', $meal_types->id)->get();
+		$cuisine_types = CuisineType::where('meal_id', $meal_types->id)->with('items')->get();
 
 		$ygn_towns = Town::where('state_id',17)->get();
+		// dd($cuisine_types);
 		return view('Sale.take_away_sale_page', compact('ygn_towns','codes','items','meal_types','cuisine_types','table_number','table'));
 	}
 
@@ -341,6 +344,7 @@ class SaleController extends Controller
 		 $user_name =  session()->get('user')->name;
 		//  dd($user_name);
 		$take_away = $request->take_away;
+
 		$table_number = $request->table_exists;
 
 		$option_lists = json_decode($request->option_lists);
@@ -362,7 +366,8 @@ class SaleController extends Controller
 		                'status' => 1,
                         'is_mobile'=> 1,
 						'take_away_flag'=>$take_away,
-						'sale_by' =>$user_name,										// Order Status = 1
+						'sale_by' =>$user_name,
+										// Order Status = 1
 		            ]);
                 // }
 					if($table_number == 0){
@@ -378,10 +383,13 @@ class SaleController extends Controller
 
 		            $order->save();
 
-		            // foreach ($option_lists as $option) {
+					dd($option_lists);
 
-					// 	$order->option()->attach($option->id, ['quantity' => $option->order_qty,'note' => null,'status' => 7]);
-					// }
+		            foreach ($option_lists as $option) {
+						DB::table('item_shop_order')->insert(
+							""
+						);
+					}
 
 				} else {
 
@@ -454,7 +462,6 @@ class SaleController extends Controller
 				  ->where('shop_order_id',$request->order_id)
 				  ->get();
 		  return view('Sale.take_away_kitchen_lists',compact('table_number', 'take_away','notte','orders','tableno','real_date','fromadd','tablenoo', 'option_lists', 'code_lists'));
-
 	}
 
 	public function toKitchenAddMore($id)
@@ -1050,6 +1057,35 @@ class SaleController extends Controller
 			'take_away' => $take_away,
         ]);
     }
+
+	protected function storeTakeAwayDiscountForm(Request $request){
+		try {
+
+			$shop_order = ShopOrder::where('id',$request->order_id)->where('status','1')->first();
+
+			if(empty($shop_order)){
+
+				return response()->json(['error' => 'Something Wrong! Cannot Checkbill again']);
+
+			}
+
+		} catch (\Exception $e) {
+
+			return response()->json(['error' => 'Something Wrong! Shop Order Cannot Be Found'], 404);
+
+		}
+        $total = 0 ;
+
+		$total_qty = 0 ;
+
+		// foreach ($shop_order->option as $option) {
+        //     $total += ($option->pivot->quantity * $option->sale_price);
+
+        //     $total_qty += $option->pivot->quantity;
+        // }
+
+        return response()->json($shop_order->price);
+	}
 
     protected function storeDeliveryDiscountForm(Request $request){
         try {

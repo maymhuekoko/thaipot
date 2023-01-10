@@ -216,6 +216,9 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::get('Purchase/Create', 'Web\PurchaseController@createPurchaseHistory')->name('create_purchase');
     Route::post('Purchase/Store', 'Web\PurchaseController@storePurchaseHistory')->name('store_purchase');
 
+    //take away
+    Route::get('TakeAwayDiscountForm', 'Web\SaleController@storeTakeAwayDiscountForm');
+
     //Customer
     /* Route::get('Customer', 'Web\AdminController@getCustomerList')->name('customer_list');
     Route::post('Customer/store', 'Web\AdminController@storeCustomer')->name('store_customer');
