@@ -768,7 +768,46 @@ class InventoryController extends Controller
             'amount'=> 'required',
             'unit' => 'required',
             'price' => 'required',
+            'stock_quantity' => 'required',
             'category' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // $user_code = $request->session()->get('user')->id;
+
+            $last_voucher = Pi::count();
+            if($last_voucher != null){
+                $purchase_number =  "PRN-" .date('y') . sprintf("%02s", (intval(date('m')) + 1)) . sprintf("%02s", ($last_voucher+ 1));
+            }else{
+                $purchase_number =  "PRN-" .date('y') . sprintf("%02s", (intval(date('m')) + 1)) .sprintf("%02s", 1);
+            }
+
+            $item = Pi::create([
+                'name' => $request->name,
+                'pi_category_id' => $request->category,
+                'purchase_no' => $purchase_number,
+                'amount' => $request->amount,
+                'unit' => $request->unit,
+                'price' => $request->price,
+                'stock_quantity' => $request->stock_quantity
+            ]);
+
+            return redirect('/purchase_item');
+    
+    }
+
+    protected function updatePurchaseItem($purchase_item_id){
+        $validator = Validator::make(request()->all(), [
+            'name' => 'required',
+            'pi_category_id' => 'required',
+            'amount' => 'required',
+            'unit' => 'required',
+            'price' => 'required',
+            'stock_quantity' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -781,12 +820,15 @@ class InventoryController extends Controller
 
         try {
 
-            $item = Pi::create([
-                'name' => $request->name,
-                'pi_category_id' => $request->category,
-                'amount' => $request->amount,
-                'unit' => $request->unit,
-                'price' => $request->price,
+            $purchase_item = Pi::where('id', $purchase_item_id)->first();
+
+            $purchase_item->update([
+                'name' => request('name'),
+                'pi_category_id' => request('pi_category_id'),
+                'amount' => request('amount'),
+                'unit' => request('unit'),
+                'price' => request('price'),
+                'stock_quantity' => request('stock_quantity')
             ]);
 
         } catch (\Exception $e) {
@@ -794,6 +836,11 @@ class InventoryController extends Controller
             alert()->error('Something Wrong! When Creating Meal.');
 
             return redirect()->back();
+        }
+
+
+    	alert()->success('Successfully Added');
+
+        return redirect()->route('purchase_item_list');
     }
-}
 }

@@ -22,6 +22,8 @@ use Illuminate\Http\Request;
 use App\Exports\ExportExpense;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Pi;
+use App\PiCategory;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
@@ -1222,4 +1224,31 @@ protected function checkPromotion(Request $request){
     ]);
 }
 
+    protected function getDailyPurchase(){
+        $purchase_items = Pi::all();
+        $categories = PiCategory::all();
+
+        return view('Admin.purchase_items',compact('purchase_items', 'categories'));
+    }
+
+    protected function createDailyPurchase(){
+        $categories = PiCategory::all();
+        $items = Pi::all();
+
+        return view('Admin.create_purchase_items', compact('categories', 'items'));
+    }
+
+    protected function purchaseSubCategorySearch(Request $request){
+        $cat_id = $request->category_id;
+        $items = Pi::where('pi_category_id',$cat_id)->get();
+
+        return response()->json($items);
+    }
+
+    protected function purchaseItemSearch(Request $request){
+        $item_id = $request->item_id;
+        $item = Pi::where('id', $item_id)->first();
+
+        return response()->json($item);
+    }
 }

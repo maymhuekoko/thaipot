@@ -249,6 +249,8 @@
                                 <li><a href="{{route('state_list')}}">State And Township List</a></li>
                                 <li><a href="{{route('getfinicial')}}">Financial</a></li>
                                 <li><a href="{{route('expense')}}">Purchase Expense List</a></li>
+                                <li><a href="{{route('daily_purchase')}}">Daily Purchase</a></li>
+                                <li><a href="#">Daily Consumption</a></li>
                                 <li><a href="{{route('sale_record')}}">Sale Count</a></li>
                                 <li><a href="{{route('promotion_create')}}">Promotion List</a></li>
                             </ul>

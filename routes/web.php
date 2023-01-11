@@ -235,9 +235,16 @@ Route::group(['middleware' => ['UserAuth']], function () {
 
     Route::get('purchase_item', 'Web\InventoryController@getPurchaseItemList')->name('purchase_item_list');
     Route::post('purchase_item/store', 'Web\InventoryController@storePurchaseItem')->name('purchase_item_store');
+    Route::post('purchase_item/update/{id}', 'Web\InventoryController@updatePurchaseItem')->name('purchase_item_update');
 
     //take away
     Route::get('TakeAwayDiscountForm', 'Web\SaleController@storeTakeAwayDiscountForm');
+
+    //daily purchase
+    Route::get('daily_purchase', 'Web\AdminController@getDailyPurchase')->name('daily_purchase');
+    Route::get('daily_purchase/create', 'Web\AdminController@createDailyPurchase');
+    Route::post('purchase_subcategory_search', 'Web\AdminController@purchaseSubCategorySearch');
+    Route::post('purchase_item_search', 'Web\AdminController@purchaseItemSearch');
 
     //Customer
     /* Route::get('Customer', 'Web\AdminController@getCustomerList')->name('customer_list');
