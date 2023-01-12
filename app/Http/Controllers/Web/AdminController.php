@@ -1239,7 +1239,7 @@ protected function checkPromotion(Request $request){
     }
 
     protected function purchaseSubCategorySearch(Request $request){
-        $cat_id = $request->category_id;
+        $cat_id = $request->cat_id;
         $items = Pi::where('pi_category_id',$cat_id)->get();
 
         return response()->json($items);
@@ -1250,5 +1250,38 @@ protected function checkPromotion(Request $request){
         $item = Pi::where('id', $item_id)->first();
 
         return response()->json($item);
+    }
+
+    protected function addDailyPurchase(Request $request){
+        $item = Pi::where('id', $request->item_name)->first();
+
+        if($item->price != $request->price){
+            return redirect()->back()->with([
+                "current_price" => $request->price,
+                "old_price" => $item->price,
+            ]);
+        }
+    }
+
+    protected function searchItem($id){
+        $item = Pi::where('id', $id)->first();
+        return response()->json($item);
+    }
+
+    public function purchasepriceUpdate(Request $request)
+    {   
+        dd($request->all());
+        try{
+            $counting_unit = CountingUnit::findOrfail($request->unit_id);
+        } catch (\Exception $e) {
+            return response()->json(0);
+        }
+        $counting_unit->update([
+            'purchase_price' => $request->purchase_price,
+            'order_price' => $request->normal_price,
+         ]);
+
+         return response()->json($counting_unit);
+
     }
 }

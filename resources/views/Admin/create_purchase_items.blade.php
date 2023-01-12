@@ -1,6 +1,18 @@
 @extends('master')
 
-@section('title','Create Purchase Item')
+@section('title','Daily Purchase')
+
+@section('place')
+
+{{-- <div class="col-md-5 col-8 align-self-center">
+    <h3 class="text-themecolor m-b-0 m-t-0">@lang('lang.purchase') @lang('lang.create')</h3>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{route('index')}}">@lang('lang.back_to_dashboard')</a></li>
+        <li class="breadcrumb-item active">Daily Purchase</li>
+    </ol>
+</div> --}}
+
+@endsection
 
 @section('content')
 @php
@@ -8,7 +20,7 @@ $from_id = 1;
 @endphp
 <div class="row page-titles">
     <div class="col-md-12 col-12 align-self-center">
-        <h4 class="font-weight-normal">Purchase Item Create Form</h4>
+        <h4 class="font-weight-normal">Create Daily Purchase Form</h4>
     </div>
 </div>
 
@@ -18,21 +30,33 @@ $from_id = 1;
             <div class="card-body">
                 
 
-                <form class="form-material m-t-40" method="post" action="" id="store_purchase">
+                <form class="form-material m-t-40" method="post" action="{{route('store_purchase')}}" id="store_purchase">
                     @csrf
                     <input type="hidden" name="type" id="type" value="1">
                     
                     <div class="form-group">
                         <label class="font-weight-bold">Purchase No.</label>
-                        <input type="text" name="purchase_number" class="form-control" id="purchase_no">
+                        <input type="text" name="purchase_number" class="form-control" value="" id="item_purchase_no">
                     </div>
 
                     <div class="form-group">
-                        <label class="font-weight-bold">Purchase Date</label>
+                        <label class="font-weight-bold">@lang('lang.purchase_date')</label>
                         <input type="date" name="purchase_date" class="form-control">
                     </div>
-                    <br>
 
+                    {{-- <div class="form-group">
+                        <input type="text" name="supp_name" class="form-control" placeholder="Enter Supplier Name">
+                    </div> --}}
+                    <!-- <div class="form-group">
+                    <label class="font-weight-bold">@lang('lang.supplier_name')</label>
+                    <select class="select_sup form-control" name="supp_name" id="supp_name" >
+                        <option></option>
+                        @foreach($categories as $category)
+                        <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endforeach
+                    </select>
+                    </div> -->
+                    
                     <!-- <div class="form-group">
                         <label class="font-weight-bold">Remark</label>
                         <input type="text" name="purchase_remark" class="form-control">
@@ -133,49 +157,76 @@ $from_id = 1;
         <div class="card shadow text-black">
             <input type="hidden" name="total_amount" id="tot_amt" value="0">
             
-            <div class="form-group m-2">
-                <label class="font-weight-bold">Category</label>
-                <select  name="category" class="p-4 select-cat form-control" id="category" onchange="searchSubCategory(this.value)">
-                    @foreach($categories as $cat)
-                        <option value="{{$cat->id}}">{{$cat->name}}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group m-2">
-                <label class="font-weight-bold">Item Name</label>
-                <select name="item_name" id="item_name" class="form-control" onchange="searchSpecificItem(this.value)">
-                    @foreach($items as $item)
-                    <option value="{{$item->id}}">{{$item->name}}</option>
-                    @endforeach
-                </select>
-                <!-- <input type="text" id="item_name" class="form-control" onkeyup="calculate_total(this.value)"> -->
-            </div>
-
-            <div class="form-group m-2">
-                <label class="font-weight-bold">Amount</label>
-                <input type="text" id="item_amount" class="form-control">
-            </div>
-
-            <div class="form-group m-2">
-                <label class="font-weight-bold">Unit</label>
-                <input type="text" id="item_unit" class="form-control">
-            </div>
-
-            <div class="form-group m-2">
-                <label class="font-weight-bold">Stock Quantity</label>
-                <input type="text" id="item_stock_quantity" class="form-control">
-            </div>
+            
+            
+            
             
             <div class="form-group m-2">
-                <label class="font-weight-bold">Price</label>
-                <input type="text" id="item_price" class="form-control">
+                 <label class="font-weight-bold">Category Name</label>
+                <select id="purchase_type" class=" p-4 select-type form-control" style="font-size: 14px" onchange="searchCategory(this.value)">
+                   <!-- <option value="">Select Category</option> -->
+                    @foreach($categories as $category)
+                    <option value="{{$category->id}}">{{$category->name}}</option>
+                    @endforeach
+                </select>
             </div>
+            
+            
+            <div class="form-group m-2">
+                <label class="font-weight-bold">Name</label>
+                <select  name="item_name" class="p-4 select-cat form-control" id="counting_unit_select" onchange="searchSubCategory(this.value)">
+                <!-- <option value="">Select Item Name</option> -->
+                    @foreach($items as $item)
+                        <option value="{{$item->id}}" data-unitname="{{$item->name}}" data-id="$item->id">{{$item->name}}</option>
+                    @endforeach
+                    
+                </select>
+            </div>
+            <div class="from-group m-2">
+                <label class="font-weight-bold">Amount</label>
+                <input type="text" value="" id="item_amount" name="amount" class="form-control">
+                <!-- <select  name="subcategory" class="p-4 select-subcat form-control" id="subcategory" onchange="searchCountingUnit(this.value)">
+                </select> -->
+            </div>
+            <div class="form-group m-2">
+                <label class="font-weight-bold">Unit</label>
+                <input type="text" value="" id="item_unit" name="unit" class="form-control">
+            </div>
+            <div class="form-group m-2">
+                <label class="font-weight-bold">Stock Quantity</label>
+                <input type="number" id="qty" class="form-control" onkeyup="calculate_total(this.value)">
+            </div>
+            <div class="form-group m-2">
+                <label class="font-weight-bold">Price</label>
+                <input type="text" value="" id="price" name="price" class="form-control">
+            </div>
+            
+            
+            <!-- <div class="form-group m-2">
+                <label class="font-weight-bold">@lang('lang.item')</label>
+                <select class="p-4 select form-control" name="item" id="counting_unit_select" >
+                    <option></option>
+                    
+                    counting unit foreach loop goes here 
+
+                </select>
+            </div> -->
+
+           
+
+
+
+
+
+            <!-- <div class="form-group m-2">
+                <label class="font-weight-bold">@lang('lang.enter_purchase_price')</label>
+                <input type="number" id="price" class="form-control">
+            </div> -->
 
             <div class="form-actions m-2">
-              {{-- <button type="submit" class="btn btn-success float-right" id="add">
+              <!-- {{-- <button type="submit" class="btn btn-success float-right" id="add">
                 <i class="fa fa-check"> </i> @lang('lang.add')
-            </button> --}}
+            </button> --}} -->
             <a href="#" class="btn btn-success float-right px-4" id="addpurchase">Add</a>
 
             </div>
@@ -205,20 +256,20 @@ $from_id = 1;
                         <div class="col-md-6">
                             <h3 class="font-weight-bold text-center">ယခင်စျေး</h3>
                             <div class="form-group row mt-4">
-                                <label class="control-label text-right col-md-3">@lang('lang.purchase_price')</label>
+                                <!-- <label class="control-label text-right col-md-3">@lang('lang.purchase_price')</label> -->
                                 <div class="col-md-9">
                                     <input type="number" class="form-control" name="purchase_price" id="old_purchase_price">
 
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label class="control-label text-right col-md-3">@lang('lang.normal_sale_price')</label>
                                 <div class="col-md-9">
                                     <input type="number" class="form-control" name="old_normal_sale_price" id="old_normal_sale_price">
 
                                 </div>
-                            </div>
+                            </div> -->
                             <!--<div class="form-group row">-->
                             <!--    <label class="control-label text-right col-md-3">@lang('lang.whole_sale_price')</label>-->
                             <!--    <div class="col-md-9">-->
@@ -237,20 +288,20 @@ $from_id = 1;
                         <div class="col-md-6">
                             <h3 class="font-weight-bold text-center">ယခုစျေး</h3>
                             <div class="form-group row mt-4">
-                                <label class="control-label text-right col-md-3">@lang('lang.purchase_price')</label>
+                                <!-- <label class="control-label text-right col-md-3">@lang('lang.purchase_price')</label> -->
                                 <div class="col-md-9">
                                     <input type="number" class="form-control" value="0" name="purchase_price" id="purchase_price">
 
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label class="control-label text-right col-md-3">@lang('lang.normal_sale_price')</label>
                                 <div class="col-md-9">
                                     <input type="number" value="0"  class="form-control" name="normal_sale_price" id="normal_sale_price">
 
                                 </div>
-                            </div>
+                            </div> -->
                             <!--<div class="form-group row">-->
                             <!--    <label class="control-label text-right col-md-3">@lang('lang.whole_sale_price')</label>-->
                             <!--    <div class="col-md-9">-->
@@ -269,7 +320,7 @@ $from_id = 1;
                     </div>
 
 
-                    <input type="submit" name="" id="change_price"  class="btnsubmit float-right btn btn-primary" value="@lang('lang.save')">
+                    <input type="submit" name="" id="change_price"  class="btnsubmit float-right btn btn-primary" value="Save">
 
                 </form>
             </div>
@@ -283,16 +334,14 @@ $from_id = 1;
 @section('js')
 
 <script type="text/javascript">
-
     $(document).ready(function(){
-
         $(".select2").select2();
         $(".select-type").select2({
-            placeholder:"Select Type",
+            placeholder:"Select Category",
         });
         
         $(".select-cat").select2({
-            placeholder:"Select Category",
+            placeholder:"Select Item",
         });
         $(".select-subcat").select2({
             placeholder:"Select Subcategory",
@@ -317,11 +366,18 @@ $from_id = 1;
         
     });
 
+    /*** */
+    // $('#change_price').click(function(){
+    //     $('add_purchase_modal').modal('hide');
+    //     // addpurchase();
+    // });
 
     $('#addpurchase').click(function(){
+        
         var now_price = $('#price').val();
-        var id=  $( "#counting_unit_select option:selected" ).data('id');
-        var type = $('#purchase_type').find(":selected").val();
+        // alert(now_price);
+        var id=  $( "#counting_unit_select" ).val();
+        // var type = $('#purchase_type').find(":selected").val();
     
         var purchaseprice=  $( "#counting_unit_select option:selected" ).data('purchaseprice');
     
@@ -332,74 +388,71 @@ $from_id = 1;
         var normalfixed=  $( "#counting_unit_select option:selected" ).data('normalfixed');
         // var wholefixed=  $( "#counting_unit_select option:selected" ).data('wholefixed');
         // var orderfixed=  $( "#counting_unit_select option:selected" ).data('orderfixed');
-
         var normalfixedflash=  $( "#counting_unit_select option:selected" ).data('normalfixedflash');
         // var wholefixedflash=  $( "#counting_unit_select option:selected" ).data('wholefixedflash');
         // var orderfixedflash=  $( "#counting_unit_select option:selected" ).data('orderfixedflash');
         }
 
-       if(now_price!=purchaseprice){
-           if(normalfixedflash){
-             var n_price =( parseInt(now_price)+ (parseInt(now_price)*normalfixed/100) );
-             $('#normal_sale_price').val(n_price);
-           }
-        //   if(wholefixedflash){
-        //      var w_price =( parseInt(now_price)+ (parseInt(now_price)*wholefixed/100) );
-        //      $('#whole_sale_price').val(w_price);
-        //   }
-        //   if(orderfixedflash){
-        //      var o_price =( parseInt(now_price)+ (parseInt(now_price)*orderfixed/100) );
-        //      $('#order_sale_price').val(o_price);
-        //   }
+        //ajax goes here
+        $.ajax({
+            type:'GET',
+            url:'/search_item/'+id,
+            data:{
+                "_token":"{{csrf_token()}}",
+                // "item_id": id,
+            },
+            success:function(data){
+               
+               $('#old_purchase_price').val(data.price);
+                      if(now_price != data.price){
 
-           $('#unit_id').val(id);
-           $('#purchase_price').val(now_price);
-           $('#old_purchase_price').val(purchaseprice);
-           $('#old_normal_sale_price').val(normalprice);
-        //   $('#old_whole_sale_price').val(wholeprice);
-        //   $('#old_order_price').val(orderprice);
-           addpurchase();
+                        if(normalfixedflash){
+                            var n_price =( parseInt(now_price)+ (parseInt(now_price)*normalfixed/100) );
+                            $('#normal_sale_price').val(n_price);
+                        }
 
-        $('#add_purchase_modal').modal('show');
-       }else{
-           addpurchase();
-       }
+                        $('#add_purchase_modal').modal('show');
+                        addpurchase();
+                        $('#unit_id').val(id);
+                        $('#purchase_price').val(now_price);
+                        $('#old_purchase_price').val(data.price);
+                        $('#old_normal_sale_price').val(normalprice);
+                        
+                      }else{
+                        addpurchase();
+                      }
+            
+            },
+        });
+
     })
-
     $('#change_price').click(function(e){
         e.preventDefault();
           var unit_id=  $('#unit_id').val();
           var purchase_price= $('#purchase_price').val();
-          var normal_price=  $('#normal_sale_price').val();
+        //   var normal_price=  $('#normal_sale_price').val();
+
           //var whole_price=   $('#whole_sale_price').val();
          // var order_price=   $('#order_price').val();
-          console.log(unit_id,purchase_price,normal_price);
-
-          if($.trim(unit_id) == '' || $.trim(purchase_price) <= 0 || $.trim(normal_price) <= 0)
-    {
-        swal({
-            title:"Failed!",
-            text:"Please fill all basic unit field",
-            icon:"error",
-            timer: 3000,
-        });
-
-    }else{
+    //       if($.trim(unit_id) == '' || $.trim(purchase_price) <= 0 || $.trim(normal_price) <= 0)
+    // {
+    //     swal({
+    //         title:"Failed!",
+    //         text:"Please fill all basic unit field",
+    //         icon:"error",
+    //         timer: 3000,
+    //     });
+    // }else{
         $.ajax({
-
             type:'POST',
-
             url:'/purchaseprice/update',
-
             data:{
                 "_token":"{{csrf_token()}}",
                 "unit_id": unit_id,
                 "purchase_price": purchase_price,
                 "normal_price": normal_price,
             },
-
             success:function(data){
-
                if(data){
                 modalformclear();
                 $('#add_purchase_modal').modal('hide');
@@ -411,42 +464,30 @@ $from_id = 1;
                     timer: 3000,
                 });
                }else{
-                swal({
-                    title:"Failed!",
-                    text:"Please fill all basic unit field",
-                    icon:"error",
-                    timer: 3000,
-                });
+                alert('fail');
+                // swal({
+                //     title:"Failed!",
+                //     text:"Please fill all basic unit field",
+                //     icon:"error",
+                //     timer: 3000,
+                // });
                }
             },
-
-
         });
-
-    }
-
+    // }
         //   $.ajax({
-
         //     type:'POST',
-
         //     url:'/getCustomerInfo',
-
         //     data:{
         //         "_token":"{{csrf_token()}}",
         //         "customer_id":value,
         //     },
-
         //     success:function(data){
-
         //         $("#phone").val(data.phone);
-
         //         $("#address").val(data.address);
         //     },
-
-
         //     });
     })
-
     function modalformclear (){
         $('#purchase_price').val(null);
         $('#old_purchase_price').val(null);
@@ -454,44 +495,31 @@ $from_id = 1;
         $('#whole_sale_price').val(null);
         $('#order_price').val(null);
     }
-
     var count = 0
-
     function addpurchase(){
-
     // event.preventDefault();
     var counting_unit_select=  $( "#counting_unit_select option:selected" ).data('unitname');
+    alert(counting_unit_select);
     var html = "";
-
     count + 1;
-
     var qty = $('#qty').val();
-
     var unit_id =  $( "#counting_unit_select option:selected" ).data('id');
-
     var unit_name =   $( "#counting_unit_select option:selected" ).data('unitname');
-
     //var item =$( "#counting_unit_select option:selected" ).data('itemname');
-
     var price = $('#price').val();
-
     var total = price * qty;
-
     var hid_total = $('#tot_amt').val();
-
     var last = parseInt(total) + parseInt(hid_total);
-
     var sub = parseInt(price)*qty;
-
     if($.trim(qty) == '' || $.trim(unit_id) == '' || $.trim(unit_id) =='')
     {
-        swal({
-            title:"Failed!",
-            text:"Please fill all basic unit field",
-            icon:"info",
-            timer: 3000,
-        });
-
+        alert('fail');
+        // swal({
+        //     title:"Failed!",
+        //     text:"Please fill all basic unit field",
+        //     icon:"info",
+        //     timer: 3000,
+        // });
     }else{
         var cal_total = total;
         var total_qty = 0;
@@ -501,36 +529,23 @@ $from_id = 1;
         var myprcart = localStorage.getItem('myprcart');
         var my_pr_total = localStorage.getItem('prTotal');
         if(myprcart == null ){
-
             myprcart = '[]';
-
             var myprcartobj = JSON.parse(myprcart);
-
             myprcartobj.push(item);
-
             localStorage.setItem('myprcart',JSON.stringify(myprcartobj));
-
             }else{
-
             var myprcartobj = JSON.parse(myprcart);
-
             var hasid = false;
-
             $.each(myprcartobj,function(i,v){
-
                 if(v.id == unit_id ){
-
                     hasid = true;
                     v.sub_total = parseInt(v.price) * parseInt(v.qty);
                     console.log(v.each_sub);
                 }
             })
-
             if(!hasid){
-
                 myprcartobj.push(item);
             }
-
             localStorage.setItem('myprcart',JSON.stringify(myprcartobj));
         }
         if(my_pr_total == null ){
@@ -553,36 +568,23 @@ $from_id = 1;
         // $('#total_place').html(last);
         // $('#show_total').html(last);
        
-
         formClear();
     }
     }
-
 //     $.ajax({
-
 // type:'POST',
-
 // url:'/getCustomerInfo',
-
 // data:{
 //     "_token":"{{csrf_token()}}",
 //     "customer_id":value,
 // },
-
 // success:function(data){
-
 //     $("#phone").val(data.phone);
-
 //     $("#address").val(data.address);
 // },
-
-
 // });
-
     function remove_education_fields(rid) {
-
         console.log(rid);
-
         // $('#removeclass_' + rid).remove();
         var myprcart = localStorage.getItem('myprcart');
         var my_pr_total = localStorage.getItem('prTotal');
@@ -596,21 +598,13 @@ $from_id = 1;
         localStorage.setItem('myprcart',JSON.stringify(myprcartobj));
         localStorage.setItem('prTotal',JSON.stringify(pr_total_obj));
         showmodal();
-
     }
-
     function formClear() {
-
         $('#item').empty();
-
         $('#unit').empty();
-
         $( "#item" ).prop( "disabled", true );
-
         $( "#unit" ).prop( "disabled", true );
-
         $("#qty").val("");
-
         $("#price").val("");
     }
 function cal_credit(pay)
@@ -619,7 +613,6 @@ function cal_credit(pay)
     var credit = parseInt(total_amt) - parseInt(pay);
     $('#credit_amount').val(credit);
 }
-
 function credit(value)
 {
     $('#credit_all').show();
@@ -652,7 +645,6 @@ function showmodal()
                         <div class="col-md-2">
                             <div class="form-group">
                             <p>${jj++}</p>
-
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -723,41 +715,35 @@ function change_amt(id,qty)
     // localStorage.setItem('prTotal',JSON.stringify(pr_total_obj));
     
     showmodal();
-
-
 }
-
 function searchCategory(value){
-                    let type = value;
+                    let cat_id = value;
                     
-                    $("#type").val(type);
+                    // $("#type").val(cat_id);
                     
                     
                     // alert(cat_id);
                     
-                    $('#category').empty();
-
+                    $('#counting_unit_select').empty();
                     $.ajax({
                         type: 'POST',
-                        url: '/purchase_category_search',
+                        url: '/purchase_subcategory_search',
                         dataType: 'json',
                         data: {
                             "_token": "{{ csrf_token() }}",
-                            "type" : type,
+                            "cat_id" : cat_id,
                         },
-
                         success: function(data) {
                             console.log(data);
                             if(data.length > 0){
-                                $('#category').append($('<option>').text('Category'));
+                                $('#counting_unit_select').append($('<option>').text('Item Name'));
                                 $.each(data, function(i, value) {
-                                    $('#category').append($('<option>').text(value.category_name).attr('value', value.id));
+                                    $('#counting_unit_select').append($('<option >').text(value.name).attr('value', value.id).attr('data-unitname', value.name).attr('data-id', value.id));
                                 });
                             }else{
-                                $('#category').append($('<option>').text('No Category'));
+                                $('#category').append($('<option>').text('No Item Name'));
                             }
                         },
-
                         error: function(status) {
                             swal({
                                 title: "Something Wrong!",
@@ -765,89 +751,42 @@ function searchCategory(value){
                                 icon: "error",
                             });
                         }
-
                     });
-
                 }
-
 function searchSubCategory(value){
-    let cat_id = value;
-    // var type = $('#purchase_type').find(":selected").val();
-    // alert(cat_id);
-    
-    $('#item_name').empty();
-
-    $.ajax({
-        type: 'POST',
-        url: '/purchase_subcategory_search',
-        dataType: 'json',
-        data: {
-            "_token": "{{ csrf_token() }}",
-            "category_id": cat_id,
-        },
-
-        success: function(data) {
-            if(data.length > 0){
-                // $('#item_name').append($('<option>').text('Subcategory'));
-            $.each(data, function(i, value) {
-                $('#item_name').append($('<option>').text(value.name).attr('value', value.id));
-            });
-        }else{
-            $('#subcategory').append($('<option>').text('No Subcategory'));
-        }
-    },
-
-        error: function(status) {
-            swal({
-                title: "Something Wrong!",
-                text: "Error in subcategory search",
-                icon: "error",
-            });
-        }
-
-    });
-
-}
-
-    function searchSpecificItem(value){
-        let item_id = value;
-        
-        $('#item_amount').val('');
-        $('#item_unit').val('');
-        $('#item_unit').val('');
-        $('#item_price').val('');
-        $('#item_stock_quantity').val('');
-
-        $.ajax({
-            type: 'POST',
-            url: '/purchase_item_search',
-            dataType: 'json',
-            data: {
-                "_token": "{{ csrf_token() }}",
-                "item_id": item_id,
-            },
-
-            success: function(data) {
-                $('#item_amount').val(data.amount);
-                $('#item_unit').val(data.unit);
-                $('#item_price').val(data.price);
-                $('#item_stock_quantity').val(data.stock_quantity);
-                $('#purchase_no').val(data.purchase_no);
-            },
-
-            error: function(status) {
-                swal({
-                    title: "Something Wrong!",
-                    text: "Error in subcategory search",
-                    icon: "error",
-                });
-            }
-
-        });
-    }
+                    let item_id = value;
+                    var type = $('#item_amount').val('');
+                    // alert(cat_id);
+                    
+                    // $('#subcategory').empty();
+                    $.ajax({
+                        type: 'POST',
+                        url: '/purchase_item_search',
+                        dataType: 'json',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "item_id": item_id,
+                            // "type" : type,
+                        },
+                        success: function(data) {
+                            // console.log(data);
+                               $('#item_amount').val(data.amount);
+                               $('#item_unit').val(data.unit);
+                               $('#qty').val(data.stock_quantity);
+                               $("#price").val(data.price);
+                               $("#item_purchase_no").val(data.purchase_no);
+                        },
+                        error: function(status) {
+                            swal({
+                                title: "Something Wrong!",
+                                text: "Error in subcategory search",
+                                icon: "error",
+                            });
+                        }
+                    });
+                }
                 
                 function searchCountingUnit(value){
-
                     let sub_id = value;
                     let cat_id = $('#category').val();
                     var type = $('#purchase_type').find(":selected").val();
@@ -862,7 +801,6 @@ function searchSubCategory(value){
                             "subcategory_id": sub_id,
                             "type" : type,
                         },
-
                         success: function(data) {
                             console.log(data);
                             $('#counting_unit_select').append($('<option>').text('units'));
@@ -880,7 +818,6 @@ function searchSubCategory(value){
                                 }
                             })
                         },
-
                         error: function(status) {
                             swal({
                                 title: "Something Wrong!",
@@ -888,10 +825,8 @@ function searchSubCategory(value){
                                 icon: "error",
                             });
                         }
-
                     });
                 }
-
 </script>
 
 

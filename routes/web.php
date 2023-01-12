@@ -245,6 +245,10 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::get('daily_purchase/create', 'Web\AdminController@createDailyPurchase');
     Route::post('purchase_subcategory_search', 'Web\AdminController@purchaseSubCategorySearch');
     Route::post('purchase_item_search', 'Web\AdminController@purchaseItemSearch');
+    //add daily purchase
+    Route::post('add_daily_purchase', 'Web\AdminController@addDailyPurchase')->name('add_daily_purchase');
+    Route::get('search_item/{id}', 'Web\AdminController@searchItem');
+    Route::post('purchaseprice/update', 'Web\AdminController@purchasepriceUpdate')->name('purchasepriceupdate');
 
     //Customer
     /* Route::get('Customer', 'Web\AdminController@getCustomerList')->name('customer_list');
