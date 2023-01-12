@@ -86,7 +86,7 @@
 	            	</div>
 
 
-	                <h4 class="text-center text-dark font-weight-bold mt-3">Pending Delivery Order List</h4>
+	                <h4 class="text-center text-dark font-weight-bold mt-3">Pending Take Away Order List</h4>
 
 	            </div>
 	        </div>

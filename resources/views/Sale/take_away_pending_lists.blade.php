@@ -20,7 +20,7 @@
     <div class="col-md-12">
         <div class="card shadow">
             <div class="card-header">
-                <h4 class="font-weight-bold mt-2">Pending Shop Order List</h4>
+                <h4 class="font-weight-bold mt-2">Pending Take Away Order List</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -322,7 +322,7 @@ function change_price(){
 
         type:'POST',
 
-        url:'/ShopVoucherStore',
+        url:'/TakeAwayVoucherStore',
 
         data:{
         "_token":"{{csrf_token()}}",
@@ -356,7 +356,7 @@ function change_price(){
                 icon : "success",
             });
 
-            var url = '{{ route("shop_order_voucher", ":order_id") }}';
+            var url = '{{ route("take_away_order_voucher", ":order_id") }}';
 
             url = url.replace(':order_id', data.id);
 

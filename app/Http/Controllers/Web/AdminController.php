@@ -22,6 +22,8 @@ use Illuminate\Http\Request;
 use App\Exports\ExportExpense;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Pi;
+use App\PiCategory;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
@@ -1222,4 +1224,64 @@ protected function checkPromotion(Request $request){
     ]);
 }
 
+    protected function getDailyPurchase(){
+        $purchase_items = Pi::all();
+        $categories = PiCategory::all();
+
+        return view('Admin.purchase_items',compact('purchase_items', 'categories'));
+    }
+
+    protected function createDailyPurchase(){
+        $categories = PiCategory::all();
+        $items = Pi::all();
+
+        return view('Admin.create_purchase_items', compact('categories', 'items'));
+    }
+
+    protected function purchaseSubCategorySearch(Request $request){
+        $cat_id = $request->cat_id;
+        $items = Pi::where('pi_category_id',$cat_id)->get();
+
+        return response()->json($items);
+    }
+
+    protected function purchaseItemSearch(Request $request){
+        $item_id = $request->item_id;
+        $item = Pi::where('id', $item_id)->first();
+
+        return response()->json($item);
+    }
+
+    protected function addDailyPurchase(Request $request){
+        $item = Pi::where('id', $request->item_name)->first();
+
+        if($item->price != $request->price){
+            return redirect()->back()->with([
+                "current_price" => $request->price,
+                "old_price" => $item->price,
+            ]);
+        }
+    }
+
+    protected function searchItem($id){
+        $item = Pi::where('id', $id)->first();
+        return response()->json($item);
+    }
+
+    public function purchasepriceUpdate(Request $request)
+    {   
+        dd($request->all());
+        try{
+            $counting_unit = CountingUnit::findOrfail($request->unit_id);
+        } catch (\Exception $e) {
+            return response()->json(0);
+        }
+        $counting_unit->update([
+            'purchase_price' => $request->purchase_price,
+            'order_price' => $request->normal_price,
+         ]);
+
+         return response()->json($counting_unit);
+
+    }
 }

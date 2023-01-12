@@ -8,6 +8,8 @@ use App\Option;
 use App\MenuItem;
 use App\Ingredient;
 use App\CuisineType;
+use App\PiCategory;
+use App\Pi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -676,5 +678,169 @@ class InventoryController extends Controller
         $stock->instock_quantity = $request->stock;
         $stock->save();
         return back();
+    }
+
+    //purchase item
+    protected function getPiCategoryList(Request $request){
+		$categories =  PiCategory::all();
+        return view('Inventory.pi_category_list', compact('categories'));
+    }
+
+    protected function storePiCategory(Request $request)
+	{
+		$validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+
+        // $user_code = $request->session()->get('user')->id;
+
+        try {
+
+            $category = PiCategory::create([
+                'name' => $request->name,
+            ]);
+
+        } catch (\Exception $e) {
+
+            alert()->error('Something Wrong! When Creating Meal.');
+
+            return redirect()->back();
+        }
+
+
+    	alert()->success('Successfully Added');
+
+        return redirect()->route('pi_category_list');
+	}
+
+    protected function updatePiCategory($category_id)
+	{
+		$validator = Validator::make(request()->all(), [
+            'name' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+
+        // $user_code = $request->session()->get('user')->id;
+
+        try {
+
+            $category = PiCategory::where('id', $category_id)->first();
+
+            $category->update([
+                'name' => request('name')
+            ]);
+
+        } catch (\Exception $e) {
+
+            alert()->error('Something Wrong! When Creating Meal.');
+
+            return redirect()->back();
+        }
+
+
+    	alert()->success('Successfully Added');
+
+        return redirect()->route('pi_category_list');
+	}
+
+    protected function getPurchaseItemList(Request $request){
+        $items =  Pi::all();
+        $categories =  PiCategory::all();
+
+        return view('Inventory.purchase_item_list', compact('items', 'categories'));
+    }
+
+    protected function storePurchaseItem(Request $request){
+        
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'amount'=> 'required',
+            'unit' => 'required',
+            'price' => 'required',
+            'stock_quantity' => 'required',
+            'category' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // $user_code = $request->session()->get('user')->id;
+
+            $last_voucher = Pi::count();
+            if($last_voucher != null){
+                $purchase_number =  "PRN-" .date('y') . sprintf("%02s", (intval(date('m')) + 1)) . sprintf("%02s", ($last_voucher+ 1));
+            }else{
+                $purchase_number =  "PRN-" .date('y') . sprintf("%02s", (intval(date('m')) + 1)) .sprintf("%02s", 1);
+            }
+
+            $item = Pi::create([
+                'name' => $request->name,
+                'pi_category_id' => $request->category,
+                'purchase_no' => $purchase_number,
+                'amount' => $request->amount,
+                'unit' => $request->unit,
+                'price' => $request->price,
+                'stock_quantity' => $request->stock_quantity
+            ]);
+
+            return redirect('/purchase_item');
+    
+    }
+
+    protected function updatePurchaseItem($purchase_item_id){
+        $validator = Validator::make(request()->all(), [
+            'name' => 'required',
+            'pi_category_id' => 'required',
+            'amount' => 'required',
+            'unit' => 'required',
+            'price' => 'required',
+            'stock_quantity' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+
+        // $user_code = $request->session()->get('user')->id;
+
+        try {
+
+            $purchase_item = Pi::where('id', $purchase_item_id)->first();
+
+            $purchase_item->update([
+                'name' => request('name'),
+                'pi_category_id' => request('pi_category_id'),
+                'amount' => request('amount'),
+                'unit' => request('unit'),
+                'price' => request('price'),
+                'stock_quantity' => request('stock_quantity')
+            ]);
+
+        } catch (\Exception $e) {
+
+            alert()->error('Something Wrong! When Creating Meal.');
+
+            return redirect()->back();
+        }
+
+
+    	alert()->success('Successfully Added');
+
+        return redirect()->route('purchase_item_list');
     }
 }
