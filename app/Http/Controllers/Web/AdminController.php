@@ -1270,18 +1270,155 @@ protected function checkPromotion(Request $request){
 
     public function purchasepriceUpdate(Request $request)
     {   
-        dd($request->all());
         try{
-            $counting_unit = CountingUnit::findOrfail($request->unit_id);
+            $counting_unit = Pi::findOrfail($request->unit_id);
         } catch (\Exception $e) {
             return response()->json(0);
         }
         $counting_unit->update([
-            'purchase_price' => $request->purchase_price,
-            'order_price' => $request->normal_price,
+            'price' => $request->purchase_price,
          ]);
 
          return response()->json($counting_unit);
 
+    }
+
+    protected function storePurchaseHistory(Request $request){
+        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'purchase_number' => 'required',
+            // 'purchase_date' => 'required',
+            // 'purchase_remark' => 'required',
+            // 'supp_name' => 'required',
+            'unit' => 'required',
+            'price' => 'required',
+            'qty' => 'required',
+        ]);
+
+        // if ($validator->fails()) {
+
+        //     alert()->error("Something Wrong! Validation Error");
+
+        //     return redirect()->back();
+        // }
+
+        // $user_code = $request->session()->get('user')->id;
+
+        $unit = $request->unit;
+
+        $price = $request->price;
+
+        $qty = $request->qty;
+        
+        $type = $request->type;
+
+        $purchase_no = $request->purchase_number;
+
+        $total_qty = 0;
+
+        $total_price = 0;
+
+        $psub_total = 0;
+
+        $date = date('Y-m-d H:i:s');
+
+        // foreach($price as $p){
+        //     foreach($qty as $q){
+        //         $psub_total = $p * $q;
+        //         $total_price += $psub_total;
+        //     }
+        // }
+        
+        for($count = 0; $count < count($unit); $count++){
+            $psub_total = $price[$count] * $qty[$count];
+            $total_price += $psub_total;
+        }
+
+        foreach ($qty as $q) {
+
+            $total_qty += $q;
+        }
+        // $supplier = Supplier::find($request->supp_name);
+        // if($request->pay_method == 1)
+        // {
+
+        // $supplier->credit_amount +=  $request->credit_amount;
+        // $supplier->save();
+        // }
+        try {
+
+            // $purchase = Purchase::create([
+            //     'purchase_number' => $request->purchase_number,
+            //     'supplier_name' => $supplier->name,
+            //     'supplier_id' => $request->supp_name,
+            //     'total_quantity' => $total_qty,
+            //     'total_price' => $total_price,
+            //     'purchase_date' => $request->purchase_date,
+            //     'purchase_remark' => $request->purchase_remark,
+            //     'purchase_type' => $type,
+            //     'purchase_by' => $user_code,
+            //     'credit_amount' => $request->credit_amount,
+            // ]);
+
+            // if($request->pay_method == 1)
+            // {
+
+            //     $supplier_credit = SupplierCreditList::create([
+            //         'supplier_id' => $request->supp_name,
+            //         'purchase_id' => $purchase->id,
+            //         'credit_amount' => $request->credit_amount,
+            //         'repay_date' => $request->repay_date,
+            //     ]);
+            // }
+
+
+            for($count = 0; $count < count($unit); $count++){
+
+                if($type == 1){
+                // $purchase->counting_unit()->attach($unit[$count], ['quantity' => $qty[$count], 'price' => $price[$count]]);
+
+                 $counting_unit = Pi::find($unit[$count]);
+                 
+                //$stockcount = Stockcount::where('from_id',1)->where('counting_unit_id',$unit[$count])->first();
+
+                $balance_qty = ($counting_unit->current_quantity + $qty[$count]);
+                
+                // $stockcount->stock_qty = $balance_qty;
+
+                // $stockcount->save();
+                 $counting_unit->stock_quantity = $counting_unit->stock_quantity + $balance_qty;
+
+                 $counting_unit->price = $request->price[$count];
+
+                 $counting_unit->save();
+                }else if($type == 2){
+                    //  $purchase->factory_item()->attach($unit[$count], ['quantity' => $qty[$count], 'price' => $price[$count]]);
+
+                //  $factory_item = FactoryItem::find($unit[$count]);
+                 
+                //$stockcount = Stockcount::where('from_id',1)->where('counting_unit_id',$unit[$count])->first();
+
+                // $balance_qty = ($factory_item->instock_qty + $qty[$count]);
+
+                // $stockcount->stock_qty = $balance_qty;
+
+                // $stockcount->save();
+                //  $factory_item->instock_qty = $balance_qty;
+
+                //  $factory_item->save();
+                }
+
+            }
+
+        } catch (\Exception $e) {
+
+            alert()->error('Something Wrong! When Purchase Store.');
+
+            return redirect()->back();
+        }
+
+        alert()->success("Success");
+
+        return redirect('/daily_purchase');
     }
 }

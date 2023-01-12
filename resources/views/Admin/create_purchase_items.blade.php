@@ -40,7 +40,7 @@ $from_id = 1;
                     </div>
 
                     <div class="form-group">
-                        <label class="font-weight-bold">@lang('lang.purchase_date')</label>
+                        <label class="font-weight-bold">Date</label>
                         <input type="date" name="purchase_date" class="form-control">
                     </div>
 
@@ -632,6 +632,7 @@ function submit_store()
 }
 function showmodal()
 {
+    // alert($('#qtynull').val());
     var html = "";
     var myprcart = localStorage.getItem('myprcart');
     var my_pr_total = localStorage.getItem('prTotal');
