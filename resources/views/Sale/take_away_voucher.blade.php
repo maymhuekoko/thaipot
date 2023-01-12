@@ -1,11 +1,11 @@
 @extends('master')
 
-@section('title','Shop Order Voucher')
+@section('title','Take Away Order Voucher')
 
 @section('place')
 
 <div class="col-md-5 col-8 align-self-center">
-    <h3 class="text-themecolor m-b-0 m-t-0">Shop Order Voucher</h3>
+    <h3 class="text-themecolor m-b-0 m-t-0">Take Away Order Voucher</h3>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{route('index')}}">Back to Dashborad</a></li>
         <li class="breadcrumb-item active">Shop Order Voucher</li>
@@ -43,7 +43,7 @@
                             <div class="col-md-12">
                                 <div  style="text-align:center;">
                                     <address>
-                                        <strong style="font-size:17px;font-weight:bold;">THAI POT</strong><br>
+                                        <strong style="font-size:17px;font-weight:bold;">Law Ka Nat</strong><br>
                                             <strong style="font-size:17px;font-weight:bold;"> Restaurant</strong><br>
                                             <strong style="font-size:17px;font-weight:bold;"> No (767), YayLe` Road, Maubin</strong><br>
                                             <strong style="font-size:17px;font-weight:bold;">Ayeyarwady Region, Myanmar</strong><br>
@@ -53,7 +53,7 @@
                                 <div class="pull-right text-left" style="margin-top:20px;">
                                     <strong style="font-size:16px;font-weight:bold;">Cashier Name: {{$voucher->sale_by}}</strong><br>
                                         <strong style="font-size:16px;font-weight:bold;">Date : <i class="fa fa-calendar"></i> {{$voucher->voucher_date}}</strong><br>
-                                        <strong style="font-size:16px;font-weight:bold;">Table Number : {{isset($voucher->shopOrder->table->table_number)? $voucher->shopOrder->table->table_number: 'Take Away'}}</strong><br>
+                                        <strong style="font-size:16px;font-weight:bold;">Table Number : {{isset($voucher->shopOrder->table->table_number)?$voucher->shopOrder->table->table_number." (Take Away)": "Take Away"}}</strong><br>
                                         <strong style="font-size:16px;font-weight:bold;">Voucher Number : {{$voucher->voucher_code}}</strong><br>
 
                                 </div>
@@ -63,70 +63,42 @@
                                     <table class="table">
                                         <thead>
                                             <tr style="text-align:left;">
-                                                <th ><strong>Person</strong></th>
-                                                <th ><strong>Price & Qty</strong></th>
+                                                <th ><strong>Menu Name</strong></th>
+                                                <th ><strong>Price</strong></th>
+                                                <th ><strong>Quantity</strong></th>
                                                 <th ><strong>Total</strong></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if ($order->adult_qty != 0)
-                                            <tr style="text-align:left;">
-                                                <th >Adult</th>
-                                                <th >20900 * <span>{{$order->adult_qty}}</span></th>
-                                                <th>{{$order->adult_qty * 20900}}</th>
+                                            @foreach($items as $item)
+                                            <tr style="font-size:13px;">
+                                                @foreach($names as $name)
+                                                    @if($item->item_id == $name->id)
+                                                        <td >{{$name->item_name}}</td>
+                                                    @endif
+                                                @endforeach
+                                                <td >{{$item->price}}</td>
+                                                <td >{{$item->quantity}}</td>
+                                                <td >{{$item->price * $item->quantity}}</td>
                                             </tr>
-                                            @endif
-                                            @if ($order->child_qty != 0)
-                                            <tr style="text-align:left;">
-                                                <th >Children</th>
-                                                <th >11000 * <span>{{$order->child_qty}}</span></th>
-                                                <th>{{$order->child_qty * 11000}}</th>
-                                            </tr>
-                                            @endif
-                                            @if ($order->kid_qty != 0)
-                                            <tr style="text-align:left;">
-                                                <th >Kids</th>
-                                                <th >9000 * <span>{{$order->kid_qty}}</span></th>
-                                                <th>{{$order->kid_qty * 9000}}</th>
-                                            </tr>
-                                            @endif
-                                            @if ($order->extrapot_qty != 0)
-                                            <tr style="text-align:left;">
-                                                <th >Extra Pot</th>
-                                                <th >3000 * <span>{{$order->extrapot_qty}}</span></th>
-                                                <th>{{$order->extrapot_qty * 3000}}</th>
-                                            </tr>
-                                            @endif
-                                            @if($voucher->extra_gram != 0)
-                                            <tr style="text-align:left;">
-                                                <th >Extra Gram</th>
-                                                <th >{{$voucher->extra_gram}}(g)</span></th>
-                                                <th>{{$voucher->extra_amount}}</th>
-                                            </tr>
-                                            @endif
+                                            @endforeach
                                         </tbody>
                                     </table>
                                     @if($voucher->discount_type == null)
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
-                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
-                                         <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
+                                         <strong>Voucher Total - {{$voucher->total_price}}</strong><br>
                                          @if ($voucher->promotion == 'Cash Back' || $voucher->promotion == 'Discount Percentage')
                                          <strong>{{$voucher->promotion}} - {{$voucher->promotion_value}}</strong><br>
                                           @if (explode(' ',$voucher->promotion_value)[1] == '%')
-                                          <strong>Total - {{$voutotal-($voutotal*(explode(' ',$voucher->promotion_value)[0])/100)}}</strong><br>
+                                          <strong>Total - {{$voucher->total_price-($voucher->total_price*(explode(' ',$voucher->promotion_value)[0])/100)}}</strong><br>
                                           <strong>Pay - {{$voucher->pay_value}}</strong><br>
-                                          <strong>Change - {{$voucher->pay_value - $voutotal-(($voutotal*(explode(' ',$voucher->promotion_value)[0])/100))}}</strong><br>
+                                          <strong>Change - {{$voucher->pay_value - ($voucher->total_price-($voucher->total_price*(explode(' ',$voucher->promotion_value)[0])/100))}}</strong><br>
                                           @else
-                                          <strong>Total - {{$voutotal - $voucher->promotion_value}}</strong><br>
+                                          <strong>Total - {{$voucher->total_price - $voucher->promotion_value}}</strong><br>
                                           <strong>Pay - {{$voucher->pay_value}}</strong><br>
-                                          <strong>Change - {{$voucher->pay_value - ($voutotal - $voucher->promotion_value)}}</strong><br>
+                                          <strong>Change - {{$voucher->pay_value - ($voucher->total_price - $voucher->promotion_value)}}</strong><br>
                                           @endif
                                           @else
-                                          @if ($order->birth_qty != 0)
-                                          <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong><br>
-                                          <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4390)}}</strong><br>
-                                          @endif
-                                          <strong>Total - {{$voutotal + $servicecharges}}</strong><br>
                                           <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                           <strong>Change - {{$voucher->change_value}}</strong><br>
                                          @endif
@@ -137,40 +109,27 @@
                                     </div>
                                     @elseif ($voucher->discount_type == 1)
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
-                                        <strong>Voucher Total - {{$voutotal}}</strong><br>
-                                        <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
-                                        <strong>Discount - FOC(1 person)</strong><br>
-                                        @if ($order->birth_qty != 0)
-                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong>
-                                        @endif
-                                        <strong>Total - {{$voutotal+ $servicecharges - 20900 - ($order->birth_qty * 4390)}}</strong><br>
-                                        <strong>Pay - {{$voucher->pay_value}}</strong><br>
-                                        <strong>Change - {{$voucher->change_value}}</strong><br>
+                                        <strong>Voucher Total - {{$voucher->total_price}}</strong><br>
+                                        <strong>Discount - FOC</strong><br>
+                                        <strong>Total - 0</strong><br>
+                                        <strong>Pay - 0</strong><br>
+                                         <strong>Change - 0</strong><br>
                                    </div>
                                    @elseif ($voucher->discount_type == 2)
-                                   <?php $total = $voutotal - ($voucher->discount_value/100) * $voutotal ; ?>
+                                   <?php $total = $voucher->total_price - ($voucher->discount_value/100) * $voucher->total_price ; ?>
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
-                                        <strong>Voucher Total - {{$voutotal}}</strong><br>
-                                        <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
+                                        <strong>Voucher Total - {{$voucher->total_price}}</strong><br>
                                         <strong>Discount - {{$voucher->discount_value}} %</strong><br>
-                                        @if ($order->birth_qty != 0)
-                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong>
-                                        @endif
-                                        <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4390)}}</strong><br>
+                                        <strong>Total - {{$total}}</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                          <strong>Change - {{$voucher->change_value}}</strong><br>
                                    </div>
                                    @elseif ($voucher->discount_type == 3)
-                                   <?php $total = $voutotal - $voucher->discount_value; ?>
+                                   <?php $total = $voucher->total_price - $voucher->discount_value; ?>
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
-                                        <strong>Voucher Total - {{$voutotal}}</strong><br>
-                                        <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
+                                        <strong>Voucher Total - {{$voucher->total_price}}</strong><br>
                                         <strong>Discount - {{$voucher->discount_value}} </strong><br>
-                                        @if ($order->birth_qty != 0)
-                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong>
-                                        @endif
-                                        <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4390)}}</strong><br>
-                                        {{-- <strong>Total - {{$total}}</strong><br> --}}
+                                        <strong>Total - {{$total}}</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                          <strong>Change - {{$voucher->change_value}}</strong><br>
                                    </div>

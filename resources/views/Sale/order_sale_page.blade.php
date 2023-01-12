@@ -73,35 +73,33 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-            @foreach($cuisine_types as $cui)
-            <div class="tab-pane active" id="{{$cui->id}}" role="tabpanel">
+        <div class="tab-pane active" id="1" role="tabpanel">
 
-                <div class="row mt-3">
-                @foreach($items as $item)
-                @if($item->cuisine_type_id == $cui->id)
+        <div class="row mt-3">
+            @foreach($items as $item)
+            @if($item->cuisine_type_id == 1)
 
-                <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
-                    <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
-                    <div style="height:40px;">
-                        <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
-                        <input type="hidden" id="item_name{{$item->id}}" value="{{$item->item_name}}">
-                    </div>
-
-
-                    <i class="btn btn-sm btn-success" onclick="tgPanel({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
-
+            <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
+                <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>
+                <div style="height:40px;">
+                    <h6 class="card-title text-center font-weight bold" style="font-size:12px;">{{$item->item_name}}</h6>
+                    <input type="hidden" id="item_name{{$item->id}}" value="{{$item->item_name}}">
                 </div>
-                @endif
-                @endforeach
-                </div>
+
+
+                <i class="btn btn-sm btn-success" onclick="tgPanel({{$item->id}})"><i class="fas fa-plus"></i>Sale</i>
+
             </div>
+            @endif
             @endforeach
+        </div>
+        </div>
 
-            <div class="tab-pane" id="7" role="tabpanel">
+            <div class="tab-pane" id="2" role="tabpanel">
 
                 <div class="row mt-3">
                     @foreach($items as $item)
-                    @if($item->cuisine_type_id == 7)
+                    @if($item->cuisine_type_id == 2)
 
                     <div class="card col-md-3" style="width: 18rem;margin-left:42px;">
                         <img src="{{asset('/image/photo.jpg')}}" class="card-img-top mb-3 mt-2" height="125rem" alt="..." style='object-fit: cover;'>

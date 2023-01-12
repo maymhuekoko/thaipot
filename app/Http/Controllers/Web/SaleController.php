@@ -48,18 +48,20 @@ class SaleController extends Controller
 
 	protected function getPendingShopOrderList(){
 
-		$pending_lists = ShopOrder::where('status', 1)->get();
+		$pending_lists = ShopOrder::where('status', 1)->where('take_away_flag', 0)->get();
 
         $promotion = Promotion::all();
 
 		return view('Sale.pending_lists', compact('pending_lists','promotion'));
 	}
 
-    protected function getPendingDeliveryOrderList(){
+    protected function getPendingTakeAwayOrderList(){
 
-		$pending_lists = Order::where('status', 2)->get();
-        // dd('hello');
-		return view('Sale.delivery_pending_lists', compact('pending_lists'));
+		$pending_lists = ShopOrder::where('status', 1)->where('take_away_flag', 1)->get();
+
+        $promotion = Promotion::all();
+
+		return view('Sale.take_away_pending_lists', compact('pending_lists','promotion'));
 	}
 
     protected function notification(Request $request){
@@ -142,9 +144,10 @@ class SaleController extends Controller
 		$meal_types = Meal::where('name', $currentUrl)->first();
         $codes =Code::all();
 
-		$cuisine_types = CuisineType::where('meal_id', $meal_types->id)->get();
+		$cuisine_types = CuisineType::where('meal_id', $meal_types->id)->with('items')->get();
 
 		$ygn_towns = Town::where('state_id',17)->get();
+		// dd($cuisine_types);
 		return view('Sale.take_away_sale_page', compact('ygn_towns','codes','items','meal_types','cuisine_types','table_number','table'));
 	}
 
@@ -325,6 +328,7 @@ class SaleController extends Controller
     //end
 
 	protected function storeShopOrder(Request $request){
+
 		// dd($request->all());
 		$validator = Validator::make($request->all(), [
 			// 'table_id' => 'required',
@@ -340,6 +344,7 @@ class SaleController extends Controller
 		 $user_name =  session()->get('user')->name;
 		//  dd($user_name);
 		$take_away = $request->take_away;
+
 		$table_number = $request->table_exists;
 
 		$option_lists = json_decode($request->option_lists);
@@ -352,6 +357,7 @@ class SaleController extends Controller
 			if($table_number != 0){
 				$table = Table::where('id', $request->table_id)->first();
 			}
+			$card_total = 0;
 
 			if (empty($table)) {
                     // if($is_desktop == true || $is_mobile == true){
@@ -360,9 +366,16 @@ class SaleController extends Controller
 		                'status' => 1,
                         'is_mobile'=> 1,
 						'take_away_flag'=>$take_away,
-						'sale_by' =>$user_name,										// Order Status = 1
+						'sale_by' =>$user_name,
+										// Order Status = 1
 		            ]);
                 // }
+					if($take_away == 1){
+						foreach(json_decode($request->price) as $card){
+							$card_total += $card->order_qty * $card->selling_price;
+						}
+						$order->price = $card_total;
+					}
 					if($table_number != 0){
 						$order->table_id = $table_number;
 					}
@@ -370,10 +383,14 @@ class SaleController extends Controller
 
 		            $order->save();
 
-		            // foreach ($option_lists as $option) {
-
-					// 	$order->option()->attach($option->id, ['quantity' => $option->order_qty,'note' => null,'status' => 7]);
-					// }
+		            foreach ($option_lists as $option) {
+						DB::table('item_shop_order')->insert([
+							"shop_order_id" => $order->id,
+							"item_id" => $option->id,
+							"quantity" => $option->order_qty,
+							"price" => $option->selling_price
+						]);
+					}
 
 				} else {
 
@@ -446,7 +463,6 @@ class SaleController extends Controller
 				  ->where('shop_order_id',$request->order_id)
 				  ->get();
 		  return view('Sale.take_away_kitchen_lists',compact('table_number', 'take_away','notte','orders','tableno','real_date','fromadd','tablenoo', 'option_lists', 'code_lists'));
-
 	}
 
 	public function toKitchenAddMore($id)
@@ -800,7 +816,6 @@ class SaleController extends Controller
 	protected function storeShopOrderVoucher(Request $request){
 
 		// dd($request->all());
-
 		try {
 
 			$shop_order = ShopOrder::where('id',$request->order_id)->where('status','1')->first();
@@ -886,6 +901,141 @@ class SaleController extends Controller
 
             return response()->json($shop_order);
     }
+
+	
+	protected function storeTakeAwayVoucher(Request $request){
+		// dd($request->all());
+
+		try {
+
+			$shop_order = ShopOrder::where('id',$request->order_id)->where('status','1')->where('take_away_flag', 1)->first();
+
+			if(empty($shop_order)){
+
+				return response()->json(['error' => 'Something Wrong! Cannot Checkbill again']);
+
+			}
+
+		} catch (\Exception $e) {
+
+			return response()->json(['error' => 'Something Wrong! Shop Order Cannot Be Found'], 404);
+
+		}
+
+		$table = Table::where('id', $shop_order->table_id)->first();
+
+		if (!empty($table)) {
+
+			$table->status = 1;
+
+    		$table->save();
+
+		}
+
+		$user_code = $request->session()->get('user')->name;
+
+		$total = 0 ;
+
+		$total_qty = 0 ;
+
+		$date = new DateTime('Asia/Yangon');
+
+		$real_date = $date->format('Y-m-d H:i:s');
+
+        $re_date = $date->format('Y-m-d');
+
+		// foreach ($shop_order->option as $option) {
+        //     $total += ($option->pivot->quantity * $option->sale_price);
+
+        //     $total_qty += $option->pivot->quantity;
+        // }
+        //  dd($request->change_amount_dis);
+
+		$total_qty = 0;
+
+		$quantities = DB::table('item_shop_order')->where('shop_order_id', $shop_order->id)->get();
+
+		foreach($quantities as $qty){
+			$total_qty += $qty->quantity;
+		}
+
+        $voucher = Voucher::create([
+            'sale_by' => $user_code,
+            'total_price' =>  $shop_order->price,
+            'total_quantity' => $total_qty,
+            'voucher_date' => $real_date,
+            'type' => 2,
+            'status' => 0,
+            'date' => $re_date,
+        ]);
+
+		DB::table('shop_order_voucher')->insert([
+			'shop_order_id' => $request->order_id,
+			'voucher_id' => $voucher->id
+		]);
+
+        if($request->discount_type !=null && $request->discount_value != null){
+            $voucher->discount_type = $request->discount_type;
+            $voucher->discount_value = $request->discount_value;
+            $voucher->pay_value = $request->pay_amount;
+            $voucher->change_value = $request->change_amount;
+        }else{
+            $voucher->pay_value = $request->pay_amount_dis;
+            $voucher->change_value = $request->change_amount_dis;
+        }
+        if($request->promotion !=0 && $request->promotionvalue !=0){
+            $voucher->promotion = $request->promotion;
+            $voucher->promotion_value = $request->promotionvalue;
+        }
+
+    	$voucher->voucher_code = "VOU-".date('dmY')."-".sprintf("%04s", $voucher->id);
+
+        $voucher->save();
+
+     	// foreach ($shop_order->option as $option) {
+
+        // 	$voucher->option()->attach($option->id, ['quantity' => $option->pivot->quantity,'price' => $option->sale_price, 'date' => $re_date]);
+
+		// 	$moption = Option::findorFail($option->id);
+		// 	// dd($moption->id);
+		// 	$amount = DB::table('ingredient_option')
+
+		// 	->where('option_id',$moption->id)
+		// 	->get();
+		// 	//   dd($amount);
+		// 	foreach($amount as $amt)
+		// 	$amountt = json_encode($amt->amount);
+		// 	// dd($amountt);
+
+		// 	// dd($amountt);
+		// 	$ingredien = DB::table('ingredient_option')
+		// 	// ->select('ingredient_id')
+		// 	->where('option_id',$moption->id)
+		// 	->get();
+		// 	if($ingredien == null)
+		// 	{
+		// 	foreach($ingredien as $ingred)
+		// 	// dd($ingredien);
+		// 	$ingreID = $ingred->ingredient_id;
+		// 	// dd($ingreID);
+
+        //     $ingredient_update = Ingredient::findorFail($ingreID);
+		// 	$balance_qty = $ingredient_update->instock_quantity - $amountt;
+		// 	$ingredient_update->instock_quantity = $balance_qty;
+		// 	// dd("Hello");
+		// 	$ingredient_update->save();
+		// 	}
+        //     }
+    //  dd("Helllo");
+            $shop_order->voucher_id = $voucher->id;
+
+            $shop_order->status = 2;
+
+            $shop_order->save();
+
+            return response()->json($shop_order);
+    }
+
 
     //Delivery Voucher
     protected function storeDeliveryOrderVoucher(Request $request){
@@ -1012,11 +1162,16 @@ class SaleController extends Controller
         try {
 
 			$shop_order = ShopOrder::where('id',$request->order_id)->where('status','1')->first();
+			$take_away = 0;
 
 			if(empty($shop_order)){
 
 				return response()->json(['error' => 'Something Wrong! Cannot Checkbill again']);
 
+			}
+
+			if($shop_order->table_id == NULL){
+				$take_away = 1;
 			}
 
 		} catch (\Exception $e) {
@@ -1033,15 +1188,14 @@ class SaleController extends Controller
 
         return response()->json([
             'vtot' => $tota,
-            'stot' => $total
+            'stot' => $total,
+			'take_away' => $take_away,
         ]);
     }
 
-    protected function storeDeliveryDiscountForm(Request $request){
-        try {
-
-			$shop_order = Order::where('id',$request->order_id)->where('status','2')->first();
-
+	protected function storeTakeAwayDiscountForm(Request $request){
+		try {
+			$shop_order = ShopOrder::where('id',$request->order_id)->where('status','1')->where('take_away_flag', 1)->first();
 			if(empty($shop_order)){
 
 				return response()->json(['error' => 'Something Wrong! Cannot Checkbill again']);
@@ -1053,41 +1207,43 @@ class SaleController extends Controller
 			return response()->json(['error' => 'Something Wrong! Shop Order Cannot Be Found'], 404);
 
 		}
-        $total = 0 ;
+        return response()->json($shop_order->price);
+	}
 
-		$total_qty = 0 ;
+    // protected function storeDeliveryDiscountForm(Request $request){
+    //     try {
 
-		foreach ($shop_order->option as $option) {
-            $total += ($option->pivot->quantity * $option->sale_price);
+	// 		$shop_order = Order::where('id',$request->order_id)->where('status','2')->first();
 
-            $total_qty += $option->pivot->quantity;
-        }
-        return response()->json(['total'=>$total,'order'=>$shop_order]);
-    }
+	// 		if(empty($shop_order)){
+
+	// 			return response()->json(['error' => 'Something Wrong! Cannot Checkbill again']);
+
+	// 		}
+
+	// 	} catch (\Exception $e) {
+
+	// 		return response()->json(['error' => 'Something Wrong! Shop Order Cannot Be Found'], 404);
+
+	// 	}
+    //     $total = 0 ;
+
+	// 	$total_qty = 0 ;
+
+	// 	foreach ($shop_order->option as $option) {
+    //         $total += ($option->pivot->quantity * $option->sale_price);
+
+    //         $total_qty += $option->pivot->quantity;
+    //     }
+    //     return response()->json(['total'=>$total,'order'=>$shop_order]);
+    // }
 
 	protected function getFinishedOrderList(){
 
 		$order_lists = ShopOrder::where('status', 2)->get();
+    	$vouchers = Voucher::with('shopOrder')->get();
 
-		// dd($order_lists[200]);
-		$deli_order_lists = Order::where('status', 3)->get();
-		// dd($deli_order_lists[34]);
-        // try {
-
-        // 	$order = ShopOrder::findOrFail($order_id);
-
-   		// } catch (\Exception $e) {
-
-        // 	alert()->error("Shop Order Not Found!")->persistent("Close!");
-
-        //     return redirect()->back();
-
-    	// }
-
-    	$voucher = Voucher::where('type', 1)->orWhere('type',2)->with('shopOrder')->with('order')->get();
-
-// dd($voucher[5]->order->id);
-		return view('Sale.finished_lists', compact('order_lists','deli_order_lists','voucher'));
+		return view('Sale.finished_lists', compact('order_lists','vouchers'));
 	}
 
     protected function getFilterFinishedOrderList(Request $request){
@@ -1121,11 +1277,11 @@ class SaleController extends Controller
     	return view('Sale.voucher', compact('voucher','order','voutotal','servicecharges'));
 	}
 
-    protected function getDeliOrderVoucher($order_id){
+    protected function getTakeAwayOrderVoucher($order_id){
 
 		try {
 
-        	$order = Order::findOrFail($order_id);
+        	$order = ShopOrder::findOrFail($order_id);
 
    		} catch (\Exception $e) {
 
@@ -1137,7 +1293,17 @@ class SaleController extends Controller
 
     	$voucher = Voucher::where('id', $order->voucher_id)->first();
 
-    	return view('Sale.voucher', compact('voucher'));
+		$items = DB::table('item_shop_order')->where('shop_order_id', $order_id)->get();
+
+		// $names = [];
+
+		// foreach($items as $item){
+			$names = MenuItem::all();
+		// 	array_push($names , $n);
+		// }
+
+    	return view('Sale.take_away_voucher', compact('voucher', 'items', 'names'));
+
 	}
 
     protected function getDeliveryOrderVoucher($order_id){
@@ -1296,4 +1462,56 @@ class SaleController extends Controller
             'data' => 'success'
         ],200);
     }
+
+	//voucher history
+	protected function getShopVoucherDetail($voucher_id){
+		try {
+			$shop_order = DB::table('shop_order_voucher')->where('voucher_id', $voucher_id)->first();
+
+        	$order = ShopOrder::findOrFail($shop_order->shop_order_id);
+
+   		} catch (\Exception $e) {
+
+        	alert()->error("Shop Order Not Found!")->persistent("Close!");
+
+            return redirect()->back();
+
+    	}
+
+    	$voucher = Voucher::where('id', $order->voucher_id)->first();
+
+		$items = DB::table('item_shop_order')->where('shop_order_id', $order->id)->get();
+
+		// $names = [];
+
+		// foreach($items as $item){
+			$names = MenuItem::all();
+		// 	array_push($names , $n);
+		// }
+
+    	return view('Sale.take_away_voucher', compact('voucher', 'items', 'names'));
+	}
+
+	protected function getShopVoucherDetail1($voucher_id){
+		try {
+			$shop_order = DB::table('shop_order_voucher')->where('voucher_id', $voucher_id)->first();
+
+        	$order = ShopOrder::findOrFail($shop_order->shop_order_id);
+
+   		} catch (\Exception $e) {
+
+        	alert()->error("Shop Order Not Found!")->persistent("Close!");
+
+            return redirect()->back();
+
+    	}
+
+    	$voucher = Voucher::where('id', $order->voucher_id)->first();
+
+        $voutotal = ($order->adult_qty * 20900)+($order->child_qty * 11000)+ ($order->kid_qty * 9000)+ ($order->extrapot_qty *3000) + $voucher->extra_amount;
+
+        $servicecharges =($voutotal/100 * 5);
+
+    	return view('Sale.voucher', compact('voucher','order','voutotal','servicecharges'));
+	}
 }

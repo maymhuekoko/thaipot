@@ -20,7 +20,7 @@
     <div class="col-md-12">
         <div class="card shadow">
             <div class="card-header">
-                <h4 class="font-weight-bold mt-2">Pending Shop Order List</h4>
+                <h4 class="font-weight-bold mt-2">Pending Take Away Order List</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -44,14 +44,14 @@
                                     <td>
                                     	<a href="{{route('pending_order_details', $order->id)}}" class="btn btn-info">Check Order Details</a>
 
-                                    	<a href="{{route('add_more_item', $order->id)}}" class="btn btn-success">Extra Meal</a>
+                                    	<a href="{{route('add_more_item', $order->id)}}" class="btn btn-success">Add More Item</a>
                                     	@if($user == 3)
                                     	    <button class="btn" style="background-color:lightgreen;color:white;" onclick="done({{$order->table_id}})">Done</button>
                                             {{-- <button class="btn btn-danger" style="color:white;" onclick="cancel({{$order->id}})">Cancel</button> --}}
-                                            {{-- <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a> --}}
+                                            <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a>
                                     	@else
-                                    	        <button class="btn btn-primary" onclick="storeVoucher({{$order->id}}, {{$order->price}})">Store Voucher</button>
-                                            {{-- <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a> --}}
+                                    	    <button class="btn btn-primary" onclick="storeVoucher({{$order->id}})">Store Voucher</button>
+                                            <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a>
                                     	@endif
 
 
@@ -86,16 +86,6 @@
                     <label class="font-weight-bold">Voucher Total</label>
                     <input type="text" class="form-control" readonly id="voucher_total" value="">
                 </div>
-                <div class="row">
-                    <div class="form-group  col-md-6" id="extra_gram1">
-                        <label class="font-weight-bold">Extra Gram</label>
-                        <input type="text" class="form-control"  id="no_extraamt1" value="0"  onkeyup="extragramadd1(this.value)">
-                    </div>
-                    <div class="form-group  col-md-6" id="extra_amt1">
-                        <label class="font-weight-bold">Extra Amount</label>
-                        <input type="text" class="form-control"  id="no_extra1" value="0" readonly>
-                    </div>
-                </div>
                 <div class="row text-center">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="radio_foc" onclick="foc_radio()">
@@ -118,7 +108,7 @@
                 </div>
                 <div class="form-group mt-3" id="dis_foc">
                     <label class="font-weight-bold">FOC</label>
-                    <input type="text" class="form-control"  value="20900">
+                    <input type="text" class="form-control"  value="0">
                 </div>
                 <div class="form-group mt-3" id="dis_percent">
                     <label class="font-weight-bold">Discount Percent</label>
@@ -130,7 +120,7 @@
                 </div>
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Current Voucher Total</label>
-                    <input type="text" class="form-control" readonly id="curr_voucher_total1" value="">
+                    <input type="text" class="form-control" readonly id="curr_voucher_total" value="">
                 </div>
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Pay Amount</label>
@@ -179,21 +169,6 @@
                 <label class="font-weight-bold">Voucher Total</label>
                 <input type="text" class="form-control" readonly id="voucher_total_dis" value="">
             </div>
-            <div class="row" id="extra_gram_display">
-                <div class="form-group col-md-6" id="extra_gram">
-                    <label class="font-weight-bold">Extra Gram</label>
-                    <input type="text" class="form-control"  id="no_extraamt" value="0"  onkeyup="extragramadd(this.value)">
-                </div>
-                <div class="form-group col-md-6" id="extra_amt">
-                    <label class="font-weight-bold">Extra Amount</label>
-                    <input type="text" class="form-control"  id="no_extra" value="0" readonly>
-                </div>
-            </div>
-            <div class="form-group mt-3" id="curr_extra_total">
-                <label class="font-weight-bold">Current Voucher Total</label>
-                <input type="text" class="form-control" readonly  value="" id="curr_voucher_total">
-            </div>
-
             <div class="form-group mt-3" id="dis_pay_amount">
                 <label class="font-weight-bold">Pay Amount</label>
                 <input type="text" class="form-control"  value="" id="pay_amount_dis" placeholder="Enter Pay Amount" onkeyup="pay_dis(this.value)">
@@ -203,7 +178,26 @@
                 <input type="text" class="form-control" readonly id="change_amount_dis" value="">
             </div>
             <div class="row">
-
+                <!-- <div class="col-3">
+                    <div class="form-group mt-3" id="promotion">
+                        <label class="control-label">Promotion</label>
+                           <div class="switch">
+                               <label>OFF
+                               <input type="checkbox"  name="customer_console" id="console" onchange="promotion_on()"><span class="lever"></span>ON</label>
+                            </div>
+                   </div>
+                </div> -->
+                <div class="col-9">
+                    <div class="form-group mt-3" id="promotion_name">
+                        <label class="font-weight-bold">Choose Promotion</label>
+                        <select class="form-control" name="purchaseitem" onchange="promotionchange(this.value)">
+                            <option value="" hidden>Select Promotion</option>
+                            @foreach ($promotion as $p)
+                            <option value="{{$p->id}}">{{$p->title}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="row" id="ispromotion">
 
@@ -216,7 +210,7 @@
         </div>
       </div>
     </div>
-</div>
+  </div>
 @endsection
 
 @section('js')
@@ -227,13 +221,12 @@
     $('#dis_foc').hide();
     $('#dis_percent').hide();
     $('#dis_amount').hide();
+
 })
 function yes_radio(){
     // alert('yes');
     $('#dis_radio_form').modal('hide');
     $('#voudiscount').modal('show');
-    $('#extra_gram1').show();
-    $('#extra_amt1').show();
 }
 function no_radio(){
     // alert('no');
@@ -242,32 +235,12 @@ function no_radio(){
     $('#dis_change_amount').show();
     $('#promotion').show();
     $('#dis_footer').show();
-    $('#curr_extra_total').show();
-    $('#extra_gram').show();
-    $('#extra_amt').show();
 }
-
-function extragramadd(val){
-    // alert(val);
-    $('#no_extra').val(val*35);
-    var tot = parseInt($('#voucher_total_dis').val()) + parseInt(val*35);
-    var vtot = tot + (tot/100 * 5);
-    $('#curr_voucher_total').val(vtot);
-}
-
-function extragramadd1(val){
-    // alert(val);
-    $('#no_extra1').val(val*35);
-    var total = parseInt($('#voucher_total').val()) + parseInt(val*35);
-    var vtotal = total + (total/100 * 5);
-    $('#curr_voucher_total1').val(vtotal);
-}
-
 function foc_radio(){
     $('#dis_foc').show();
     $('#dis_percent').hide();
     $('#dis_amount').hide();
-    var dis_value = $('#curr_voucher_total1').val(parseInt($('#curr_voucher_total1').val()) + parseInt($('#no_extra1').val())-20900);
+    var dis_value = $('#curr_voucher_total').val(0);
     $('#dis_type').val(1);
     $('#dis_val').val(0);
 }
@@ -284,20 +257,23 @@ function amount_radio(){
     $('#dis_type').val(3);
 }
 function percent_dis(val){
- var t = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
- var tot = t + (t/100 * 5);
-    $('#curr_voucher_total1').val(tot-(parseInt(tot/100 * val)));
+    // alert(val);
+    var v_total = $('#voucher_total').val();
+    // alert(v_total);
+    var per_amt = v_total - (val/100)*v_total;
+    $('#curr_voucher_total').val(per_amt);
     $('#dis_val').val(val);
 }
 function amount_dis(val){
-    var t = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
-   var tot = t + (t/100 * 5);
-    $('#curr_voucher_total1').val(tot - parseInt(val));
+    // alert(val);
+    var v_total = $('#voucher_total').val();
+    var per_amt = v_total-val;
+    $('#curr_voucher_total').val(per_amt);
     $('#dis_val').val(val);
 }
 function pay_amt(val){
     // alert(val);
-    var curr_amt = $('#curr_voucher_total1').val();
+    var curr_amt = $('#curr_voucher_total').val();
     $('#change_amount').val(val - curr_amt);
 }
 function pay_dis(val){
@@ -323,36 +299,48 @@ function change_price(){
     var change_value = $('#change_amount').val();
     var pay_value_dis = $('#pay_amount_dis').val();
     var change_value_dis = $('#change_amount_dis').val();
-    var extra_amt1 = $('#no_extra1').val();
-    var extra_amt = $('#no_extra').val();
-    var extra_gram1 = $('#no_extraamt1').val();
-    var extra_gram = $('#no_extraamt').val();
+    var ispromotion = $('#ispromotion').text();
+    if($('#console').prop("checked") == true){
+         var console = 1;
+        if(ispromotion == 'This promotion is expired.' || ispromotion == 'This voucher amount is less than promotion amount.'){
+          var promotion = 0;
+          var promotion_value = 0;
+        }else{
+          var p = ispromotion.split(":");
+          var promotion = p[0];
+          var promotion_value = p[1];
+        }
+    }else{
+       var console = 0;
+       var promotion = 0;
+       var promotion_value = 0;
+    }
+   
 
     if(change_value_dis>=0 && change_value>=0){
         $.ajax({
 
         type:'POST',
 
-        url:'/ShopVoucherStore',
+        url:'/TakeAwayVoucherStore',
 
         data:{
         "_token":"{{csrf_token()}}",
-        "order_id": order_id,
+        "order_id":order_id,
         "discount_type" : discount_type ,
         "discount_value" : discount_value,
         "pay_amount" : pay_value,
         "change_amount" : change_value,
         "pay_amount_dis" : pay_value_dis,
         "change_amount_dis" : change_value_dis,
-        "extragram1" : extra_gram1,
-        "extragram" : extra_gram,
-        "extraamt1" : extra_amt1,
-        "extraamt" : extra_amt,
+        "customer_console" : console,
+        "promotion" : promotion,
+        "promotionvalue" : promotion_value,
         },
 
         success:function(data){
-    // $('#voudiscount').modal('show');
-    if(data.error){
+            // alert(data);
+            if(data.error){
                 swal({
                 title: "Failed!",
                 text : "Something Wrong!",
@@ -362,7 +350,13 @@ function change_price(){
             else{
 
 
-            var url = '{{ route("shop_order_voucher", ":order_id") }}';
+            swal({
+                title: "Success!",
+                text : "Successfully Stored!",
+                icon : "success",
+            });
+
+            var url = '{{ route("take_away_order_voucher", ":order_id") }}';
 
             url = url.replace(':order_id', data.id);
 
@@ -373,8 +367,8 @@ function change_price(){
             }, 1000);
             }
         }
-        })
 
+    });
     }
   else{
     swal({
@@ -387,13 +381,13 @@ function change_price(){
 }
 
 
-    function storeVoucher(order_id, price){
+    function storeVoucher(order_id){
         //
         $.ajax({
 
             type:'POST',
 
-            url:'/DiscountForm',
+            url:'/TakeAwayDiscountForm',
 
             data:{
             "_token":"{{csrf_token()}}",
@@ -405,19 +399,8 @@ function change_price(){
                 $('#hid_order_id').val(order_id);
                 $('#dis_type').val();
                 $('#dis_val').val();
-                if(price == 0){
-                    $('#voucher_total_dis').val(data.vtot);
-                    $('#voucher_total').val(data.vtot);
-                    $('#curr_voucher_total1').val(data.stot);
-                    $('#curr_voucher_total').val(data.stot);
-                }else{
-                    $('#voucher_total_dis').val(price);
-                    $('#voucher_total').val(price);
-                    $('#curr_voucher_total1').val(price);
-                    $('#curr_voucher_total').val(price);
-                    $('#extra_gram_display').hide();
-
-                }
+                $('#voucher_total_dis').val(data);
+                $('#voucher_total').val(data);
             }
         })
         $('#dis_radio_form').modal('show');
@@ -427,9 +410,6 @@ function change_price(){
         $('#promotion').hide();
         $('#promotion_name').hide();
         $('#dis_footer').hide();
-        $('#curr_extra_total').hide();
-        $('#extra_gram').hide();
-        $('#extra_amt').hide();
         //
     }
 

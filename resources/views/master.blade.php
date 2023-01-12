@@ -189,6 +189,8 @@
                                 <li><a href="{{route('meal_list')}}">Meal List</a></li>
                                 <li><a href="{{route('cuisine_type_list')}}">Cuisine Type List</a></li>
                                 <li><a href="{{route('menu_item_list')}}">Menu Item List</a></li>
+                                <li><a href="{{route('pi_category_list')}}">PI Category</a></li>
+                                <li><a href="{{route('purchase_item_list')}}">Purchase Item</a></li>
                                 {{-- <li><a href="{{route('ingredient_list')}}">Ingredient List</a></li> --}}
                                 <li><a href="{{route('customer_complain_list')}}">Code List</a></li>
                                 {{-- <li><a href="{{route('reorder_list')}}">Reorder List</a></li> --}}
@@ -225,7 +227,7 @@
                                 <li><a href="{{route('shop_order_panel')}}">Shop Order Panel</a></li>
                                 <li><a href="{{route('sale_page')}}">Shop Order</a></li>
                                 <li><a href="{{route('pending_lists')}}">Pending Shop Order List</a></li>
-                                <li><a href="{{route('delivery_pending_lists')}}">Pending Delivery Order List</a></li>
+                                <li><a href="{{route('delivery_pending_lists')}}">Pending Take Away Order List</a></li>
                                 <li><a href="{{route('finished_lists')}}">Order Voucher List</a></li>
                             </ul>
                         </li>
@@ -247,6 +249,8 @@
                                 <li><a href="{{route('state_list')}}">State And Township List</a></li>
                                 <li><a href="{{route('getfinicial')}}">Financial</a></li>
                                 <li><a href="{{route('expense')}}">Purchase Expense List</a></li>
+                                <li><a href="{{route('daily_purchase')}}">Daily Purchase</a></li>
+                                <li><a href="#">Daily Consumption</a></li>
                                 <li><a href="{{route('sale_record')}}">Sale Count</a></li>
                                 <li><a href="{{route('promotion_create')}}">Promotion List</a></li>
                             </ul>
