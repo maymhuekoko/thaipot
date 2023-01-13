@@ -250,9 +250,15 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::get('search_item/{id}', 'Web\AdminController@searchItem');
     Route::post('purchaseprice/update', 'Web\AdminController@purchasepriceUpdate')->name('purchasepriceupdate');
     Route::post('Purchase/Store', 'Web\AdminController@storePurchaseHistory')->name('store_purchase');
-
     //daily purchase detail
     Route::get('Purchase/Details/{id}', 'Web\AdminController@getPurchaseHistoryDetails')->name('purchase_details');
+
+    //daily consumption
+    Route::get('daily_consumption', 'Web\AdminController@getDailyConsumption')->name('daily_consumption');
+    Route::get('daily_consumption/create', 'Web\AdminController@createDailyConsumption');
+    Route::post('Consumption/Store', 'Web\AdminController@storeConsumptionHistory')->name('store_consumption');
+    //daily purchase detail
+    Route::get('Consumption/Details/{id}', 'Web\AdminController@getConsumptionHistoryDetails')->name('consumption_details');
 
     //Customer
     /* Route::get('Customer', 'Web\AdminController@getCustomerList')->name('customer_list');

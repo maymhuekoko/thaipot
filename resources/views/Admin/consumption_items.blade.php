@@ -1,14 +1,14 @@
 @extends('master')
 
-@section('title','Daily Purchase Page')
+@section('title','Daily Consumption Page')
 
 @section('place')
 
 <div class="col-md-5 col-8 align-self-center">
-    <h3 class="text-themecolor m-b-0 m-t-0">Purchase Item List Page</h3>
+    <h3 class="text-themecolor m-b-0 m-t-0">Consumption Item List Page</h3>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{route('index')}}">Back to Dashborad</a></li>
-        <li class="breadcrumb-item active">Purchase Item List Page</li>
+        <li class="breadcrumb-item active">Consumption Item List Page</li>
     </ol>
 </div>
 
@@ -19,8 +19,8 @@
     <div class="col-md-12">
         <div class="card shadow">
             <div class="card-header d-flex justify-content-between">
-                <h4 class="font-weight-bold mt-2">Purchase Item List</h4>
-                <a class="btn btn-outline-primary fw-bold" href="/daily_purchase/create">+ Add New Daily Purchase</a>
+                <h4 class="font-weight-bold mt-2">Consumption Item List</h4>
+                <a class="btn btn-outline-primary fw-bold" href="/daily_consumption/create">+ Add New Daily Consumption</a>
             </div>
             <div class="card-body">
                 <div class="row form-group">
@@ -48,7 +48,7 @@
                             </tr>
                         </thead>
                         <tbody id="sale_table">
-                            @foreach($purchases as $index=>$item)  
+                            @foreach($consumptions as $index=>$item)  
                             <tr class="text-center">
                                 <td>{{$index+1}}</td>  
                                 <td>{{date_format($item->created_at, "d-m-Y")}}</td>
@@ -56,7 +56,7 @@
                                 <td>{{$item->price}}</td>
                                 <!-- date_format($date,"Y/m/d H:i:s") -->
                                 <td>
-                                    <a href="{{route('purchase_details',$item->id)}}" class="btn btn-outline-primary">Check Details</a>
+                                    <a href="{{route('consumption_details',$item->id)}}" class="btn btn-outline-primary">Check Details</a>
                                 </td>
                             </tr>
                             @endforeach

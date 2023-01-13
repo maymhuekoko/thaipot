@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\ConsumptionHistory;
 use App\Town;
 use App\User;
 use DateTime;
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Pi;
 use App\PiCategory;
+use App\TotalConsumption;
 use App\TotalPurchase;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
@@ -1341,7 +1343,7 @@ protected function checkPromotion(Request $request){
             //         'repay_date' => $request->repay_date,
             //     ]);
             // }
-            $purchase_total = TotalPurchase::create([
+            $consumption_total = TotalPurchase::create([
                 "total_quantity" =>  $total_qty,
                 "price" => $total_price,
             ]);
@@ -1431,6 +1433,118 @@ protected function checkPromotion(Request $request){
         }
 
         return view('Admin.purchase_details', compact('purchase', 'items'));
+
+    }
+
+    protected function getDailyConsumption(){
+        $consumptions = TotalConsumption::all();
+
+        return view('Admin.consumption_items',compact('consumptions'));
+    }
+
+    protected function createDailyConsumption(){
+        $categories = PiCategory::all();
+        $items = Pi::all();
+
+        return view('Admin.create_consumption_items', compact('categories', 'items'));
+    }
+
+    protected function storeConsumptionHistory(Request $request){
+        $validator = Validator::make($request->all(), [
+            'purchase_number' => 'required',
+            'unit' => 'required',
+            'price' => 'required',
+            'qty' => 'required',
+        ]);
+
+        $unit = $request->unit;
+
+        $price = $request->price;
+
+        $qty = $request->qty;
+        
+        $type = $request->type;
+
+        $purchase_no = $request->purchase_number;
+
+        $total_qty = 0;
+
+        $total_price = 0;
+
+        $psub_total = 0;
+
+        $date = date('Y-m-d H:i:s');
+
+        for($count = 0; $count < count($unit); $count++){
+            $psub_total = $price[$count] * $qty[$count];
+            $total_price += $psub_total;
+        }
+
+        
+
+        foreach ($qty as $q) {
+
+            $total_qty += $q;
+        }
+
+        try {
+
+            $consumption_total = TotalConsumption::create([
+                "total_quantity" =>  $total_qty,
+                "price" => $total_price,
+            ]);
+
+            for($count = 0; $count < count($unit); $count++){
+
+                $counting_unit = Pi::find($unit[$count]);
+                 
+                // $balance_qty = ($counting_unit->current_quantity + $qty[$count]);
+                
+                $counting_unit->stock_quantity = $counting_unit->stock_quantity - $request->qty[$count];
+
+                $counting_unit->save();
+
+
+                $consumption = ConsumptionHistory::create([
+                    "total_consumption_id" => $consumption_total->id,
+                    'pi_category_id' => $counting_unit->pi_category_id,
+                    'purchase_item_id' => $counting_unit->id,
+                    'name' => $counting_unit->name,
+                    'consumption_no' => $request->purchase_number,
+                    'unit' => $counting_unit->unit,
+                    'stock_quantity' => $request->qty[$count],
+                ]);
+
+            }
+
+        } catch (\Exception $e) {
+
+            alert()->error('Something Wrong! When Purchase Store.');
+
+            return redirect()->back();
+        }
+
+        alert()->success("Success");
+
+        return redirect('/daily_consumption');
+    }
+
+    protected function getConsumptionHistoryDetails($id){
+
+        try {
+
+            $consumption = TotalConsumption::findOrFail($id);
+            $items = ConsumptionHistory::where('total_consumption_id', $consumption->id)->get();
+            $purchase_items = Pi::all();
+
+        } catch (\Exception $e) {
+
+            alert()->error('Something Wrong! Purchase Cannot be Found.');
+
+            return redirect()->back();
+        }
+
+        return view('Admin.consumption_details', compact('consumption', 'items', 'purchase_items'));
 
     }
 }
