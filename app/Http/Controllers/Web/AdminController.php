@@ -16,6 +16,7 @@ use App\Purchase;
 use App\Promotion;
 use App\ShopOrder;
 use App\TableType;
+use App\PurchaseHistory;
 use Carbon\Carbon;
 use App\CuisineType;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Pi;
 use App\PiCategory;
+use App\TotalPurchase;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
@@ -1225,10 +1227,9 @@ protected function checkPromotion(Request $request){
 }
 
     protected function getDailyPurchase(){
-        $purchase_items = Pi::all();
-        $categories = PiCategory::all();
+        $purchases = TotalPurchase::all();
 
-        return view('Admin.purchase_items',compact('purchase_items', 'categories'));
+        return view('Admin.purchase_items',compact('purchases'));
     }
 
     protected function createDailyPurchase(){
@@ -1284,25 +1285,12 @@ protected function checkPromotion(Request $request){
     }
 
     protected function storePurchaseHistory(Request $request){
-        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'purchase_number' => 'required',
-            // 'purchase_date' => 'required',
-            // 'purchase_remark' => 'required',
-            // 'supp_name' => 'required',
             'unit' => 'required',
             'price' => 'required',
             'qty' => 'required',
         ]);
-
-        // if ($validator->fails()) {
-
-        //     alert()->error("Something Wrong! Validation Error");
-
-        //     return redirect()->back();
-        // }
-
-        // $user_code = $request->session()->get('user')->id;
 
         $unit = $request->unit;
 
@@ -1322,22 +1310,18 @@ protected function checkPromotion(Request $request){
 
         $date = date('Y-m-d H:i:s');
 
-        // foreach($price as $p){
-        //     foreach($qty as $q){
-        //         $psub_total = $p * $q;
-        //         $total_price += $psub_total;
-        //     }
-        // }
-        
         for($count = 0; $count < count($unit); $count++){
             $psub_total = $price[$count] * $qty[$count];
             $total_price += $psub_total;
         }
 
+        
+
         foreach ($qty as $q) {
 
             $total_qty += $q;
         }
+
         // $supplier = Supplier::find($request->supp_name);
         // if($request->pay_method == 1)
         // {
@@ -1346,19 +1330,6 @@ protected function checkPromotion(Request $request){
         // $supplier->save();
         // }
         try {
-
-            // $purchase = Purchase::create([
-            //     'purchase_number' => $request->purchase_number,
-            //     'supplier_name' => $supplier->name,
-            //     'supplier_id' => $request->supp_name,
-            //     'total_quantity' => $total_qty,
-            //     'total_price' => $total_price,
-            //     'purchase_date' => $request->purchase_date,
-            //     'purchase_remark' => $request->purchase_remark,
-            //     'purchase_type' => $type,
-            //     'purchase_by' => $user_code,
-            //     'credit_amount' => $request->credit_amount,
-            // ]);
 
             // if($request->pay_method == 1)
             // {
@@ -1370,11 +1341,19 @@ protected function checkPromotion(Request $request){
             //         'repay_date' => $request->repay_date,
             //     ]);
             // }
+            $purchase_total = TotalPurchase::create([
+                "total_quantity" =>  $total_qty,
+                "price" => $total_price,
+            ]);
 
+            // $purchase_total = DB::table('total_purchases')->insert([
+            //     "total_quantity" =>  $total_qty,
+            //     "price" => $total_price,
+            // ]);
 
             for($count = 0; $count < count($unit); $count++){
 
-                if($type == 1){
+                // if($type == 1){
                 // $purchase->counting_unit()->attach($unit[$count], ['quantity' => $qty[$count], 'price' => $price[$count]]);
 
                  $counting_unit = Pi::find($unit[$count]);
@@ -1391,7 +1370,22 @@ protected function checkPromotion(Request $request){
                  $counting_unit->price = $request->price[$count];
 
                  $counting_unit->save();
-                }else if($type == 2){
+
+
+                 $purchase = PurchaseHistory::create([
+                    "total_purchase_id" => $purchase_total->id,
+                    'pi_category_id' => $counting_unit->pi_category_id,
+                    'purchase_item_id' => $counting_unit->id,
+                    'name' => $counting_unit->name,
+                    'purchase_no' => $request->purchase_number,
+                    'amount' => $counting_unit->amount,
+                    'unit' => $counting_unit->unit,
+                    'price' => $request->price[$count],
+                    'stock_quantity' => $request->qty[$count],
+                ]);
+
+
+                // }else if($type == 2){
                     //  $purchase->factory_item()->attach($unit[$count], ['quantity' => $qty[$count], 'price' => $price[$count]]);
 
                 //  $factory_item = FactoryItem::find($unit[$count]);
@@ -1406,7 +1400,7 @@ protected function checkPromotion(Request $request){
                 //  $factory_item->instock_qty = $balance_qty;
 
                 //  $factory_item->save();
-                }
+                // }
 
             }
 
@@ -1420,5 +1414,23 @@ protected function checkPromotion(Request $request){
         alert()->success("Success");
 
         return redirect('/daily_purchase');
+    }
+
+    protected function getPurchaseHistoryDetails($id){
+
+        try {
+
+            $purchase = TotalPurchase::findOrFail($id);
+            $items = PurchaseHistory::where('total_purchase_id', $purchase->id)->get();
+
+        } catch (\Exception $e) {
+
+            alert()->error('Something Wrong! Purchase Cannot be Found.');
+
+            return redirect()->back();
+        }
+
+        return view('Admin.purchase_details', compact('purchase', 'items'));
+
     }
 }

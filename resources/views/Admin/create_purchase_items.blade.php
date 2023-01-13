@@ -182,12 +182,12 @@ $from_id = 1;
                     
                 </select>
             </div>
-            <div class="from-group m-2">
-                <label class="font-weight-bold">Amount</label>
-                <input type="text" value="" id="item_amount" name="amount" class="form-control">
+            <!-- <div class="from-group m-2"> -->
+                <!-- <label class="font-weight-bold">Amount</label> -->
+                <input type="hidden" value="" id="item_amount" name="amount" class="form-control">
                 <!-- <select  name="subcategory" class="p-4 select-subcat form-control" id="subcategory" onchange="searchCountingUnit(this.value)">
                 </select> -->
-            </div>
+            <!-- </div> -->
             <div class="form-group m-2">
                 <label class="font-weight-bold">Unit</label>
                 <input type="text" value="" id="item_unit" name="unit" class="form-control">
@@ -773,9 +773,9 @@ function searchSubCategory(value){
                             // console.log(data);
                                $('#item_amount').val(data.amount);
                                $('#item_unit').val(data.unit);
-                               $('#qty').val(data.stock_quantity);
-                               $("#price").val(data.price);
-                               $("#item_purchase_no").val(data.purchase_no);
+                               $('#qty').val();
+                               $("#price").val();
+                               $("#item_purchase_no").val();
                         },
                         error: function(status) {
                             swal({

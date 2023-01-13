@@ -20,7 +20,7 @@
         <div class="card shadow">
             <div class="card-header d-flex justify-content-between">
                 <h4 class="font-weight-bold mt-2">Purchase Item List</h4>
-                <a class="btn btn-outline-primary fw-bold" href="/daily_purchase/create">+ Add New Purchase Item</a>
+                <a class="btn btn-outline-primary fw-bold" href="/daily_purchase/create">+ Add New Daily Purchase</a>
             </div>
             <div class="card-body">
                 <div class="row form-group">
@@ -41,32 +41,22 @@
                         <thead>
                             <tr class="text-center">
                                 <th>#</th>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Amount</th>
-                                <th>Price</th>
-                                <th>Stock Quantity</th>
+                                <th>Purchase Date</th>
+                                <th>Total Quantity</th>
+                                <th>Total Price</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="sale_table">
-                                <!-- @php 
-                                    $i = 0;
-                                @endphp  -->
-                            @foreach($purchase_items as $index=>$item)  
+                            @foreach($purchases as $index=>$item)  
                             <tr class="text-center">
-                                <td>{{$index+1}}</td>         
-                                <td>{{$item->name}}</td>   
-                                    @foreach($categories as $category)
-                                        @if($category->id == $item->pi_category_id)
-                                            <td>{{$category->name}}</td>        
-                                        @endif          
-                                    @endforeach
-                                <td>{{$item->amount}}</td>
+                                <td>{{$index+1}}</td>  
+                                <td>{{date_format($item->created_at, "d-m-Y")}}</td>
+                                <td>{{$item->total_quantity}}</td>   
                                 <td>{{$item->price}}</td>
-                                <td>{{$item->stock_quantity}}</td>
+                                <!-- date_format($date,"Y/m/d H:i:s") -->
                                 <td>
-                                    <a href="#" class="btn btn-outline-primary">Check Details</a>
+                                    <a href="{{route('purchase_details',$item->id)}}" class="btn btn-outline-primary">Check Details</a>
                                 </td>
                             </tr>
                             @endforeach
