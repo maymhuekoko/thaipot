@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 use App\Exports\ExportExpense;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Income;
 use App\Pi;
 use App\PiCategory;
 use App\TotalConsumption;
@@ -1547,4 +1548,100 @@ protected function checkPromotion(Request $request){
         return view('Admin.consumption_details', compact('consumption', 'items', 'purchase_items'));
 
     }
+
+    protected function getFilterFinishedOrderList(Request $request){
+        return response()->json('hello');
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+
+        $purchases = TotalPurchase::where(DB::raw('CAST(created_at as date)'), '>=', $start_date) ->where(DB::raw(' CAST(created_at as date) '), '<=', $end_date)->get();
+        
+        return response()->json('hello');
+    }
+
+    protected function incomeList(request $request){
+	    $incomes = Income::all();
+
+	    return view('Admin.income', compact('incomes'));
+	}
+
+    protected function storeIncome(request $request){
+
+        $validator = Validator::make($request->all(), [
+         "type" => "required",
+         "title" => "required",
+         "description" => "required",
+         "amount" => "required",
+         "profit_loss_flag" => "required",
+     ]);
+
+     if($validator->fails()){
+
+         alert()->error('အချက်အလက် များ မှားယွင်း နေပါသည်။');
+
+         return redirect()->back();
+     }
+
+     $item = Income::create([
+             'type' => $request->type,
+             'period' => $request->period,
+             'date' => $request->date,
+             'title' => $request->title,
+             'description' => $request->description,
+             'amount' => $request->amount,
+             'profit_loss_flag' => $request->profit_loss_flag,
+     ]);
+
+     return redirect()->back();
+ }
+
+protected function updateIncome($id, Request $request)
+	{
+		try {
+
+        	$income = Income::findOrFail($id);
+
+   		} catch (\Exception $e) {
+
+        	alert()->error("Income Not Found!")->persistent("Close!");
+
+            return redirect()->back();
+
+    	}
+
+        $income->type = $request->type;
+
+        $income->period = $request->period;
+        
+        $income->date = $request->date;
+
+        $income->title = $request->title;
+        
+        $income->description = $request->description;
+        
+        $income->amount = $request->amount;
+        
+        $income->profit_loss_flag = $request->profit_loss_flag;
+        
+        $income->save();
+
+        alert()->success('Successfully Updated!');
+
+        return redirect()->route('incomes');
+	}
+	
+    protected function deleteIncome(Request $request)
+	{
+        $income = Income::find($request->income_id);
+        
+        $income->delete();
+
+        $incomes = Income::all();
+
+        // alert()->success('Successfully Deleted!');
+
+        // return redirect()->route('incomes');
+        return response()->json($incomes);
+	}
 }

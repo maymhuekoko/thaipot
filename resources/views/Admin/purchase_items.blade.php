@@ -85,9 +85,9 @@
         "end_date":end_date,
         },
         success:function(data){
+            console.log("Something"+ data);
             let html = '';
             $.each(data, function(i,v){
-                console.log(data)
                 let url1 = "{{url('/Shop-Order-Voucher/')}}/"+v.shop_order.id;
                 let url2 = "{{url('/delivery_order_voucher/')}}/"+v.shop_order.id;
                 html +=`
