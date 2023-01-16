@@ -570,130 +570,130 @@ class AdminController extends Controller
         return view('Admin.financial_panel');
     }
 
-    protected function getTotalSaleReport(Request $request){
+//     protected function getTotalSaleReport(Request $request){
 
-        $shopOrdelivery = $request->shopOrdelivery;
-        $type = $request->type;
-        $total_sale_price=0;
-        $total_est_cost_price=0;
-        if($shopOrdelivery==3){
-            $expenses_daily_amount=0;
-            $expenses_weekly_amount=0;
-            $expenses_monthly_amount=0;
-            $expenses_indate_amount=0;
-            $shop_total_sale_price=0;
-            $delivery_total_sale_price=0;
-            $shop_total_est_price=0;
-            $delivery_total_est_price=0;
+//         $shopOrdelivery = $request->shopOrdelivery;
+//         $type = $request->type;
+//         $total_sale_price=0;
+//         $total_est_cost_price=0;
+//         if($shopOrdelivery==3){
+//             $expenses_daily_amount=0;
+//             $expenses_weekly_amount=0;
+//             $expenses_monthly_amount=0;
+//             $expenses_indate_amount=0;
+//             $shop_total_sale_price=0;
+//             $delivery_total_sale_price=0;
+//             $shop_total_est_price=0;
+//             $delivery_total_est_price=0;
 
-            if($type == 1){
+//             if($type == 1){
 
-                $daily = date('Y-m-d', strtotime($request->value));
-                    $shop_voucher_lists = Voucher::where('type',1)->whereDate('voucher_date',$daily)->get();
-                    $delivery_voucher_lists = Voucher::where('type',2)->whereDate('voucher_date',$daily)->get();
-                    $indate= Expense::whereDate('date',$request->value)->get();
-                    foreach($indate as $exp_indate){
-                        $expenses_indate_amount+=$exp_indate->amount;
-                    }
-            }elseif ($type == 7){
-                $shop_voucher_lists = Voucher::where('type',1)->whereBetween('date', [$request->start_date, $request->end_date])->get();
-                $delivery_voucher_lists = Voucher::where('type',2)->whereBetween('date', [$request->start_date, $request->end_date])->get();
-                $indate= Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
-                foreach($indate as $exp_indate){
-                    $expenses_indate_amount+=$exp_indate->amount;
-                }
-            }
+//                 $daily = date('Y-m-d', strtotime($request->value));
+//                     $shop_voucher_lists = Voucher::where('type',1)->whereDate('voucher_date',$daily)->get();
+//                     $delivery_voucher_lists = Voucher::where('type',2)->whereDate('voucher_date',$daily)->get();
+//                     $indate= Expense::whereDate('date',$request->value)->get();
+//                     foreach($indate as $exp_indate){
+//                         $expenses_indate_amount+=$exp_indate->amount;
+//                     }
+//             }elseif ($type == 7){
+//                 $shop_voucher_lists = Voucher::where('type',1)->whereBetween('date', [$request->start_date, $request->end_date])->get();
+//                 $delivery_voucher_lists = Voucher::where('type',2)->whereBetween('date', [$request->start_date, $request->end_date])->get();
+//                 $indate= Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
+//                 foreach($indate as $exp_indate){
+//                     $expenses_indate_amount+=$exp_indate->amount;
+//                 }
+//             }
 
-            foreach($shop_voucher_lists as $shop_voucher_list){
-                $shop_total_sale_price += $shop_voucher_list->total_price;
+//             foreach($shop_voucher_lists as $shop_voucher_list){
+//                 $shop_total_sale_price += $shop_voucher_list->total_price;
 
-//                foreach($shop_voucher_list->option as $shop_option){
-//                    $shop_total_sale_price+=$shop_option->sale_price;
-//                    $shop_total_est_price+=$shop_option->est_cost_price;
-//                }
-            }
-            foreach($delivery_voucher_lists as $delivery_voucher_list){
-                $delivery_total_sale_price+=$delivery_voucher_list->total_price;
+// //                foreach($shop_voucher_list->option as $shop_option){
+// //                    $shop_total_sale_price+=$shop_option->sale_price;
+// //                    $shop_total_est_price+=$shop_option->est_cost_price;
+// //                }
+//             }
+//             foreach($delivery_voucher_lists as $delivery_voucher_list){
+//                 $delivery_total_sale_price+=$delivery_voucher_list->total_price;
 
-//                foreach($delivery_voucher_list->option as $delivery_option){
-//                    $delivery_total_sale_price+=$delivery_option->sale_price;
-//                    $delivery_total_est_price+=$delivery_option->est_cost_price;
-//                }
-            }
-            $total_fixed_expense= $expenses_daily_amount;
+// //                foreach($delivery_voucher_list->option as $delivery_option){
+// //                    $delivery_total_sale_price+=$delivery_option->sale_price;
+// //                    $delivery_total_est_price+=$delivery_option->est_cost_price;
+// //                }
+//             }
+//             $total_fixed_expense= $expenses_daily_amount;
 
-            return response()->json([
-                "allShopAndDeli"=>1,
-                "shop_total_sale"=> $shop_total_sale_price,
-                "delivery_total_sale"=> $delivery_total_sale_price,
-                "shop_total_est_price"=> $shop_total_est_price,
-                "delivery_total_est_price"=> $delivery_total_est_price,
-                "expenses_indate_amount"=> $expenses_indate_amount,
-                "total_fixed_expense"=> $total_fixed_expense,
-            ]);
-        }
-        else {
-            $expenses_indate_amount = 0;
-            if($type == 1){
+//             return response()->json([
+//                 "allShopAndDeli"=>1,
+//                 "shop_total_sale"=> $shop_total_sale_price,
+//                 "delivery_total_sale"=> $delivery_total_sale_price,
+//                 "shop_total_est_price"=> $shop_total_est_price,
+//                 "delivery_total_est_price"=> $delivery_total_est_price,
+//                 "expenses_indate_amount"=> $expenses_indate_amount,
+//                 "total_fixed_expense"=> $total_fixed_expense,
+//             ]);
+//         }
+//         else {
+//             $expenses_indate_amount = 0;
+//             if($type == 1){
 
-                $daily = date('Y-m-d', strtotime($request->value));
-                    if($shopOrdelivery==1){
-                        $shop_deli_type=1;
-                    }
-                    elseif($shopOrdelivery==2){
-                        $shop_deli_type=2;
-                    }
-                    $voucher_lists = Voucher::where('type',$shop_deli_type)->whereDate('voucher_date',$daily)->with('shopOrder.table')->get();
+//                 $daily = date('Y-m-d', strtotime($request->value));
+//                     if($shopOrdelivery==1){
+//                         $shop_deli_type=1;
+//                     }
+//                     elseif($shopOrdelivery==2){
+//                         $shop_deli_type=2;
+//                     }
+//                     $voucher_lists = Voucher::where('type',$shop_deli_type)->whereDate('voucher_date',$daily)->with('shopOrder.table')->get();
 
-                    foreach($voucher_lists as $voucher_list){
-                        foreach($voucher_list->option as $shop_option){
-                            $total_sale_price+=$shop_option->sale_price;
-                            $total_est_cost_price+=$shop_option->est_cost_price;
-                        }
-                    }
-                    $indate= Expense::whereDate('date',$request->value)->get();
+//                     foreach($voucher_lists as $voucher_list){
+//                         foreach($voucher_list->option as $shop_option){
+//                             $total_sale_price+=$shop_option->sale_price;
+//                             $total_est_cost_price+=$shop_option->est_cost_price;
+//                         }
+//                     }
+//                     $indate= Expense::whereDate('date',$request->value)->get();
 
-                    foreach($indate as $exp_indate){
-                        $expenses_indate_amount+=$exp_indate->amount;
-                    }
+//                     foreach($indate as $exp_indate){
+//                         $expenses_indate_amount+=$exp_indate->amount;
+//                     }
 
-            } elseif ($type == 7){
+//             } elseif ($type == 7){
 
-                if($shopOrdelivery==1){
-                    $shop_deli_type=1;
-                }
-                elseif($shopOrdelivery==2){
-                    $shop_deli_type=2;
-                }
-                $voucher_lists = Voucher::whereBetween('date', [$request->start_date, $request->end_date])->where('type',$shop_deli_type)->with('shopOrder.table')->get();
-                foreach($voucher_lists as $voucher_list){
-                    foreach($voucher_list->option as $shop_option){
-                        $total_sale_price+=$shop_option->sale_price;
-                        $total_est_cost_price+=$shop_option->est_cost_price;
-                    }
-                }
-                $indate = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
+//                 if($shopOrdelivery==1){
+//                     $shop_deli_type=1;
+//                 }
+//                 elseif($shopOrdelivery==2){
+//                     $shop_deli_type=2;
+//                 }
+//                 $voucher_lists = Voucher::whereBetween('date', [$request->start_date, $request->end_date])->where('type',$shop_deli_type)->with('shopOrder.table')->get();
+//                 foreach($voucher_lists as $voucher_list){
+//                     foreach($voucher_list->option as $shop_option){
+//                         $total_sale_price+=$shop_option->sale_price;
+//                         $total_est_cost_price+=$shop_option->est_cost_price;
+//                     }
+//                 }
+//                 $indate = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
 
-                foreach($indate as $exp_indate){
-                    $expenses_indate_amount+=$exp_indate->amount;
-                }
+//                 foreach($indate as $exp_indate){
+//                     $expenses_indate_amount+=$exp_indate->amount;
+//                 }
 
-            }
+//             }
 
 
 
-            return response()->json([
-                "allShopAndDeli"=>0,
-                "total_sales" => $total_sale_price,
-                "total_est_price" => $total_est_cost_price,
-//                "total_profit"=> $total_sale_price-$total_est_cost_price,
-                "total_profit"=> $total_sale_price-$expenses_indate_amount,
-                "voucher_lists" => $voucher_lists,
-                "expenses_indate_amount" => $expenses_indate_amount,
-            ]);
-        }
+//             return response()->json([
+//                 "allShopAndDeli"=>0,
+//                 "total_sales" => $total_sale_price,
+//                 "total_est_price" => $total_est_cost_price,
+// //                "total_profit"=> $total_sale_price-$total_est_cost_price,
+//                 "total_profit"=> $total_sale_price-$expenses_indate_amount,
+//                 "voucher_lists" => $voucher_lists,
+//                 "expenses_indate_amount" => $expenses_indate_amount,
+//             ]);
+//         }
 
-    }
+//     }
 
     public function getTotalExpense(Request $request)
     {
@@ -1325,58 +1325,28 @@ protected function checkPromotion(Request $request){
             $total_qty += $q;
         }
 
-        // $supplier = Supplier::find($request->supp_name);
-        // if($request->pay_method == 1)
-        // {
-
-        // $supplier->credit_amount +=  $request->credit_amount;
-        // $supplier->save();
-        // }
         try {
 
-            // if($request->pay_method == 1)
-            // {
-
-            //     $supplier_credit = SupplierCreditList::create([
-            //         'supplier_id' => $request->supp_name,
-            //         'purchase_id' => $purchase->id,
-            //         'credit_amount' => $request->credit_amount,
-            //         'repay_date' => $request->repay_date,
-            //     ]);
-            // }
             $consumption_total = TotalPurchase::create([
                 "total_quantity" =>  $total_qty,
                 "price" => $total_price,
             ]);
 
-            // $purchase_total = DB::table('total_purchases')->insert([
-            //     "total_quantity" =>  $total_qty,
-            //     "price" => $total_price,
-            // ]);
 
             for($count = 0; $count < count($unit); $count++){
 
-                // if($type == 1){
-                // $purchase->counting_unit()->attach($unit[$count], ['quantity' => $qty[$count], 'price' => $price[$count]]);
-
                  $counting_unit = Pi::find($unit[$count]);
                  
-                //$stockcount = Stockcount::where('from_id',1)->where('counting_unit_id',$unit[$count])->first();
-
-                $balance_qty = ($counting_unit->current_quantity + $qty[$count]);
+                 $balance_qty = ($counting_unit->current_quantity + $qty[$count]);
                 
-                // $stockcount->stock_qty = $balance_qty;
-
-                // $stockcount->save();
                  $counting_unit->stock_quantity = $counting_unit->stock_quantity + $balance_qty;
 
                  $counting_unit->price = $request->price[$count];
 
                  $counting_unit->save();
 
-
                  $purchase = PurchaseHistory::create([
-                    "total_purchase_id" => $purchase_total->id,
+                    "total_purchase_id" => $consumption_total->id,
                     'pi_category_id' => $counting_unit->pi_category_id,
                     'purchase_item_id' => $counting_unit->id,
                     'name' => $counting_unit->name,
@@ -1386,24 +1356,6 @@ protected function checkPromotion(Request $request){
                     'price' => $request->price[$count],
                     'stock_quantity' => $request->qty[$count],
                 ]);
-
-
-                // }else if($type == 2){
-                    //  $purchase->factory_item()->attach($unit[$count], ['quantity' => $qty[$count], 'price' => $price[$count]]);
-
-                //  $factory_item = FactoryItem::find($unit[$count]);
-                 
-                //$stockcount = Stockcount::where('from_id',1)->where('counting_unit_id',$unit[$count])->first();
-
-                // $balance_qty = ($factory_item->instock_qty + $qty[$count]);
-
-                // $stockcount->stock_qty = $balance_qty;
-
-                // $stockcount->save();
-                //  $factory_item->instock_qty = $balance_qty;
-
-                //  $factory_item->save();
-                // }
 
             }
 
@@ -1644,4 +1596,319 @@ protected function updateIncome($id, Request $request)
         // return redirect()->route('incomes');
         return response()->json($incomes);
 	}
+
+    //financial
+    protected function getTotalSalenAndProfit(Request $request){
+
+        return view('Admin.financial_panel');
+    }
+
+    protected function getTotalSaleReport(Request $request){
+
+        $type = $request->type;
+
+        $from_date = $request->from_date;
+
+        $to_date = $request->to_date;
+
+        $total_sales = 0;
+        
+        $total_order = 0;
+
+        $total_profit = 0;
+
+        $other_income = 0;
+
+        $other_expense = 0;
+        
+        $total_purchase = 0;
+        
+        $total_transaction = 0;
+
+        if($type == 1){
+
+            $daily = date('Y-m-d', strtotime($request->value));
+
+            $voucher_lists = Voucher::whereDate('voucher_date', $daily)->get();
+
+            $total_consumptions = TotalConsumption::whereDate('created_at',$daily)->get();
+
+            $total_purchases = TotalPurchase::whereDate('created_at',$daily)->get();
+
+            $total_expenses = Expense::whereDate('date', $daily)->get();
+
+            // foreach($other_incomes as $other){
+            //     if($other->type == 1 && $other->period == 1){
+            //         $other_income += $other->amount;
+            //     }
+            //     else if($other->type == 1 && $other->period == 2){
+            //         $other_income += (int)($other->amount/7);
+            //     }
+            //     else if($other->type == 1 && $other->period == 3){
+            //         $other_income += (int)($other->amount/30);
+            //     }
+            //     else{
+            //         $other_income += $other->amount;
+            //     }
+            // }
+
+            // $other_expenses = Expense::whereDate('date',$daily)
+            //                             ->orWhere('type', 1)->get();
+
+            // foreach($other_expenses as $other){
+            //     if($other->type == 1 && $other->period == 1){
+            //         $other_expense += $other->amount;
+            //     }
+            //     else if($other->type == 1 && $other->period == 2){
+            //         $other_expense += (int)($other->amount/7);
+            //     }
+            //     else if($other->type == 1 && $other->period == 3){
+            //         $other_expense += (int)($other->amount/30);
+            //     }
+            //     else{
+            //         $other_expense += $other->amount;
+            //     }
+            // }
+            
+            
+            // $purchase_lists = Purchase::whereDate('purchase_date',$daily)->where('purchase_type',2)->get();
+            
+            foreach($total_purchases as $purchase){
+                $total_purchase += $purchase->price;
+            }
+            
+            // $transaction_lists = Transaction::whereDate('tran_date',$daily)->get();
+            
+            // foreach($transaction_lists as $transaction){
+            //     $total_transaction += $transaction->pay_amount;
+            // }
+
+            $date_fil_lists = Voucher::whereBetween('voucher_date',[$from_date,$to_date])->get();
+
+        }
+        elseif($type == 2){
+
+            $week_count = $request->value;
+
+            $start_month = date('Y-m-d',strtotime('first day of this month'));
+
+            if ($week_count == 1) {
+
+                $end_date = date('Y-m-d', strtotime("+1 week" , strtotime($start_month)));
+
+                $voucher_lists = Voucher::whereBetween('voucher_date', [$start_month, $end_date])->get();
+                
+                $total_consumptions = TotalConsumption::whereBetween('created_at', [$start_month, $end_date])->get();
+
+                $total_purchases = TotalPurchase::whereBetween('created_at', [$start_month, $end_date])->get();
+
+                $total_expenses = Expense::whereBetween('date', [$start_month, $end_date])->get();
+                                            
+                $date_fil_lists = Voucher::whereBetween('voucher_date', [$start_month, $end_date])
+                                        ->whereBetween('voucher_date',[$from_date,$to_date])->get();
+                // $date_fil_lists = Voucher::whereBetween('voucher_date', [$from_date,$to_date])->get();
+
+            } elseif ($week_count == 2) {
+
+                $start_date = date('Y-m-d', strtotime("+1 week" , strtotime($start_month)));
+
+                $end_date = date('Y-m-d', strtotime("+2 week" , strtotime($start_month)));
+
+                $voucher_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])->get();
+                
+                $total_consumptions = TotalConsumption::whereBetween('created_at', [$start_date, $end_date])->get();
+
+                $total_purchases = TotalPurchase::whereBetween('created_at', [$start_date, $end_date])->orWhere('type', 1)->get();
+
+                $total_expenses = Expense::whereBetween('date', [$start_date, $end_date])->get();
+            
+                $date_fil_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])
+                                           ->whereBetween('voucher_date',[$from_date,$to_date])->get();
+
+            } elseif ($week_count == 3) {
+
+                $start_date = date('Y-m-d', strtotime("+2 week" , strtotime($start_month)));
+
+                $end_date = date('Y-m-d', strtotime("+3 week" , strtotime($start_month)));
+
+                $voucher_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])->get();
+                
+                $total_consumptions = TotalConsumption::whereBetween('created_at', [$start_date, $end_date])->get();
+
+                $total_purchases = TotalPurchase::whereBetween('created_at', [$start_date, $end_date])->orWhere('type', 1)->get();
+
+                $total_expenses = Expense::whereBetween('date', [$start_date, $end_date])->get();
+            
+                $date_fil_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])
+                                           ->whereBetween('voucher_date',[$from_date,$to_date])->get();
+
+
+            } else {
+
+                $start_date = date('Y-m-d', strtotime("+3 week" , strtotime($start_month)));
+
+                $end_date = date('Y-m-d',strtotime('last day of this month'));
+
+                $voucher_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])->get();
+                
+                $total_consumptions = TotalConsumption::whereBetween('created_at', [$start_date, $end_date])->get();
+
+                $total_purchases = TotalPurchase::whereBetween('created_at', [$start_date, $end_date])->orWhere('type', 1)->get();
+
+                $total_expenses = Expense::whereBetween('date', [$start_date, $end_date])->get();
+            
+                $date_fil_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])
+                                           ->whereBetween('voucher_date',[$from_date,$to_date])->get();
+
+            }
+
+            // foreach($other_incomes as $other){
+            //     if($other->type == 1 && $other->period == 1){
+            //         $other_income += $other->amount * 7;
+            //     }
+            //     else if($other->type == 1 && $other->period == 2){
+            //         $other_income += $other->amount;
+            //     }
+            //     else if($other->type == 1 && $other->period == 3){
+            //         $other_income += (int)($other->amount/4);
+            //     }
+            //     else{
+            //         $other_income += $other->amount;
+            //     }
+            // }
+
+            // foreach($other_expenses as $other){
+            //     if($other->type == 1 && $other->period == 1){
+            //         $other_expense += $other->amount * 7;
+            //     }
+            //     else if($other->type == 1 && $other->period == 2){
+            //         $other_expense += $other->amount;
+            //     }
+            //     else if($other->type == 1 && $other->period == 3){
+            //         $other_expense += (int)($other->amount/4);
+            //     }
+            //     else{
+            //         $other_expense += $other->amount;
+            //     }
+            // }
+            
+            foreach($total_purchases as $purchae){
+                $total_purchase += $purchae->price;
+            }
+            
+            
+            // foreach($transaction_lists as $transaction){
+            //     $total_transaction += $transaction->pay_amount;
+            // }
+
+        }
+        else{
+
+            $monthly = $request->value;
+
+            $voucher_lists = Voucher::whereMonth('voucher_date', $monthly)->get();
+            
+            $total_consumptions = TotalConsumption::whereMonth('created_at', $monthly)->get();
+
+            $total_purchases = TotalPurchase::whereMonth('created_at', $monthly)->get();
+
+            $total_expenses = Expense::whereMonth('created_at', $monthly)->get();
+            // foreach($other_incomes as $other){
+            //     if($other->type == 1 && $other->period == 1){
+            //         $other_income += $other->amount * 30;
+            //     }
+            //     else if($other->type == 1 && $other->period == 2){
+            //         $other_income += $other->amount * 4;
+            //     }
+            //     else if($other->type == 1 && $other->period == 3){
+            //         $other_income += $other->amount;
+            //     }
+            //     else{
+            //         $other_income += $other->amount;
+            //     }
+            // }
+
+            // $other_expenses = Expense::whereMonth('date', $monthly)
+            //                             ->orWhere('type', 1)->get();
+
+            // foreach($other_expenses as $other){
+            //     if($other->type == 1 && $other->period == 1){
+            //         $other_expense += $other->amount * 30;
+            //     }
+            //     else if($other->type == 1 && $other->period == 2){
+            //         $other_expense += $other->amount * 4;
+            //     }
+            //     else if($other->type == 1 && $other->period == 3){
+            //         $other_expense += $other->amount;
+            //     }
+            //     else{
+            //         $other_expense += $other->amount;
+            //     }
+            // }
+            
+            //  $purchase_lists = Purchase::whereMonth('purchase_date', $monthly)->where('purchase_type',2)->get();
+            
+            foreach($total_purchases as $purchae){
+                $total_purchase += $purchae->price;
+            }
+            
+            // $transaction_lists = Transaction::whereMonth('tran_date', $monthly)->get();
+            
+            // foreach($transaction_lists as $transaction){
+            //     $total_transaction += $transaction->pay_amount;
+            // }
+
+            $date_fil_lists = Voucher::whereBetween('voucher_date',[$from_date,$to_date])->get();
+        }
+
+
+        if($from_date == null){
+            foreach ($voucher_lists as $lists) {
+
+                $total_sales += $lists->total_price;
+
+                // foreach ($lists->counting_unit as $unit) {
+
+                //     $total_profit += ($unit->pivot->price * $unit->pivot->quantity) - ($unit->purchase_price * $unit->pivot->quantity);
+                // }
+
+            }
+
+
+        }else{
+            foreach ($date_fil_lists as $lists) {
+
+                $total_sales += $lists->total_price;
+
+                // foreach ($lists->counting_unit as $unit) {
+
+                //     $total_profit += ($unit->pivot->price * $unit->pivot->quantity) - ($unit->purchase_price * $unit->pivot->quantity);
+                // }
+
+            }
+
+        }
+        
+        // foreach($order_lists as $order){
+        //     $total_order += $order->est_price;
+        // }
+
+
+        return response()->json([
+            "total_sales" => $total_sales,
+            "total_consumptions" => $total_consumptions,
+            // "total_profit" => $total_profit,
+            "total_purchases" => $total_purchases,
+            "total_purchase" => $total_purchase,
+            "total_expenses" => $total_expenses,
+            "total_transaction" => $total_transaction,
+            "voucher_lists" => $voucher_lists,
+            // "order_lists" => $order_lists,
+            // "purchase_lists" => $purchase_lists,
+            // "transaction_lists" => $transaction_lists,
+            "other_incomes" => $other_income,
+            "other_expenses" => $other_expense,
+            "date_fil_lists" => $date_fil_lists,
+        ]);
+    }
 }

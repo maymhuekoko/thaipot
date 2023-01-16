@@ -145,7 +145,7 @@ Route::group(['middleware' => ['UserAuth']], function () {
 
     Route::post('Table-Type/update/{id}', 'Web\AdminController@updateTableType')->name('update_table_type');
 
-    Route::get('finicial', 'Web\AdminController@getFinicial')->name('getfinicial');
+    // Route::get('finicial', 'Web\AdminController@getFinicial')->name('getfinicial');
     Route::post('getTotalSaleReport', 'Web\AdminController@getTotalSaleReport');
     Route::post('getTotalExpense', 'Web\AdminController@getTotalExpense');
     Route::get('expense', 'Web\AdminController@getExpense')->name('expense');
@@ -266,6 +266,9 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::post('updateIncome/{id}', 'Web\AdminController@updateIncome')->name('update_income');
     Route::post('deleteIncome', 'Web\AdminController@deleteIncome')->name('delete_income');
     Route::post('getTotalSaleReport', 'Web\AdminController@getTotalSaleReport');
+
+    //financial 
+    Route::get('Financial', 'Web\AdminController@getTotalSalenAndProfit')->name('financial');
 
     //Customer
     /* Route::get('Customer', 'Web\AdminController@getCustomerList')->name('customer_list');
