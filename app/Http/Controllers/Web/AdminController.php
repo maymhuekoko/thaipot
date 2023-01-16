@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\ConsumptionHistory;
 use App\Town;
 use App\User;
 use DateTime;
@@ -16,14 +17,18 @@ use App\Purchase;
 use App\Promotion;
 use App\ShopOrder;
 use App\TableType;
+use App\PurchaseHistory;
 use Carbon\Carbon;
 use App\CuisineType;
 use Illuminate\Http\Request;
 use App\Exports\ExportExpense;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Income;
 use App\Pi;
 use App\PiCategory;
+use App\TotalConsumption;
+use App\TotalPurchase;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
@@ -1225,10 +1230,9 @@ protected function checkPromotion(Request $request){
 }
 
     protected function getDailyPurchase(){
-        $purchase_items = Pi::all();
-        $categories = PiCategory::all();
+        $purchases = TotalPurchase::all();
 
-        return view('Admin.purchase_items',compact('purchase_items', 'categories'));
+        return view('Admin.purchase_items',compact('purchases'));
     }
 
     protected function createDailyPurchase(){
@@ -1270,18 +1274,374 @@ protected function checkPromotion(Request $request){
 
     public function purchasepriceUpdate(Request $request)
     {   
-        dd($request->all());
         try{
-            $counting_unit = CountingUnit::findOrfail($request->unit_id);
+            $counting_unit = Pi::findOrfail($request->unit_id);
         } catch (\Exception $e) {
             return response()->json(0);
         }
         $counting_unit->update([
-            'purchase_price' => $request->purchase_price,
-            'order_price' => $request->normal_price,
+            'price' => $request->purchase_price,
          ]);
 
          return response()->json($counting_unit);
 
     }
+
+    protected function storePurchaseHistory(Request $request){
+        $validator = Validator::make($request->all(), [
+            'purchase_number' => 'required',
+            'unit' => 'required',
+            'price' => 'required',
+            'qty' => 'required',
+        ]);
+
+        $unit = $request->unit;
+
+        $price = $request->price;
+
+        $qty = $request->qty;
+        
+        $type = $request->type;
+
+        $purchase_no = $request->purchase_number;
+
+        $total_qty = 0;
+
+        $total_price = 0;
+
+        $psub_total = 0;
+
+        $date = date('Y-m-d H:i:s');
+
+        for($count = 0; $count < count($unit); $count++){
+            $psub_total = $price[$count] * $qty[$count];
+            $total_price += $psub_total;
+        }
+
+        
+
+        foreach ($qty as $q) {
+
+            $total_qty += $q;
+        }
+
+        // $supplier = Supplier::find($request->supp_name);
+        // if($request->pay_method == 1)
+        // {
+
+        // $supplier->credit_amount +=  $request->credit_amount;
+        // $supplier->save();
+        // }
+        try {
+
+            // if($request->pay_method == 1)
+            // {
+
+            //     $supplier_credit = SupplierCreditList::create([
+            //         'supplier_id' => $request->supp_name,
+            //         'purchase_id' => $purchase->id,
+            //         'credit_amount' => $request->credit_amount,
+            //         'repay_date' => $request->repay_date,
+            //     ]);
+            // }
+            $consumption_total = TotalPurchase::create([
+                "total_quantity" =>  $total_qty,
+                "price" => $total_price,
+            ]);
+
+            // $purchase_total = DB::table('total_purchases')->insert([
+            //     "total_quantity" =>  $total_qty,
+            //     "price" => $total_price,
+            // ]);
+
+            for($count = 0; $count < count($unit); $count++){
+
+                // if($type == 1){
+                // $purchase->counting_unit()->attach($unit[$count], ['quantity' => $qty[$count], 'price' => $price[$count]]);
+
+                 $counting_unit = Pi::find($unit[$count]);
+                 
+                //$stockcount = Stockcount::where('from_id',1)->where('counting_unit_id',$unit[$count])->first();
+
+                $balance_qty = ($counting_unit->current_quantity + $qty[$count]);
+                
+                // $stockcount->stock_qty = $balance_qty;
+
+                // $stockcount->save();
+                 $counting_unit->stock_quantity = $counting_unit->stock_quantity + $balance_qty;
+
+                 $counting_unit->price = $request->price[$count];
+
+                 $counting_unit->save();
+
+
+                 $purchase = PurchaseHistory::create([
+                    "total_purchase_id" => $purchase_total->id,
+                    'pi_category_id' => $counting_unit->pi_category_id,
+                    'purchase_item_id' => $counting_unit->id,
+                    'name' => $counting_unit->name,
+                    'purchase_no' => $request->purchase_number,
+                    'amount' => $counting_unit->amount,
+                    'unit' => $counting_unit->unit,
+                    'price' => $request->price[$count],
+                    'stock_quantity' => $request->qty[$count],
+                ]);
+
+
+                // }else if($type == 2){
+                    //  $purchase->factory_item()->attach($unit[$count], ['quantity' => $qty[$count], 'price' => $price[$count]]);
+
+                //  $factory_item = FactoryItem::find($unit[$count]);
+                 
+                //$stockcount = Stockcount::where('from_id',1)->where('counting_unit_id',$unit[$count])->first();
+
+                // $balance_qty = ($factory_item->instock_qty + $qty[$count]);
+
+                // $stockcount->stock_qty = $balance_qty;
+
+                // $stockcount->save();
+                //  $factory_item->instock_qty = $balance_qty;
+
+                //  $factory_item->save();
+                // }
+
+            }
+
+        } catch (\Exception $e) {
+
+            alert()->error('Something Wrong! When Purchase Store.');
+
+            return redirect()->back();
+        }
+
+        alert()->success("Success");
+
+        return redirect('/daily_purchase');
+    }
+
+    protected function getPurchaseHistoryDetails($id){
+
+        try {
+
+            $purchase = TotalPurchase::findOrFail($id);
+            $items = PurchaseHistory::where('total_purchase_id', $purchase->id)->get();
+
+        } catch (\Exception $e) {
+
+            alert()->error('Something Wrong! Purchase Cannot be Found.');
+
+            return redirect()->back();
+        }
+
+        return view('Admin.purchase_details', compact('purchase', 'items'));
+
+    }
+
+    protected function getDailyConsumption(){
+        $consumptions = TotalConsumption::all();
+
+        return view('Admin.consumption_items',compact('consumptions'));
+    }
+
+    protected function createDailyConsumption(){
+        $categories = PiCategory::all();
+        $items = Pi::all();
+
+        return view('Admin.create_consumption_items', compact('categories', 'items'));
+    }
+
+    protected function storeConsumptionHistory(Request $request){
+        $validator = Validator::make($request->all(), [
+            'purchase_number' => 'required',
+            'unit' => 'required',
+            'price' => 'required',
+            'qty' => 'required',
+        ]);
+
+        $unit = $request->unit;
+
+        $price = $request->price;
+
+        $qty = $request->qty;
+        
+        $type = $request->type;
+
+        $purchase_no = $request->purchase_number;
+
+        $total_qty = 0;
+
+        $total_price = 0;
+
+        $psub_total = 0;
+
+        $date = date('Y-m-d H:i:s');
+
+        for($count = 0; $count < count($unit); $count++){
+            $psub_total = $price[$count] * $qty[$count];
+            $total_price += $psub_total;
+        }
+
+        
+
+        foreach ($qty as $q) {
+
+            $total_qty += $q;
+        }
+
+        try {
+
+            $consumption_total = TotalConsumption::create([
+                "total_quantity" =>  $total_qty,
+                "price" => $total_price,
+            ]);
+
+            for($count = 0; $count < count($unit); $count++){
+
+                $counting_unit = Pi::find($unit[$count]);
+                 
+                // $balance_qty = ($counting_unit->current_quantity + $qty[$count]);
+                
+                $counting_unit->stock_quantity = $counting_unit->stock_quantity - $request->qty[$count];
+
+                $counting_unit->save();
+
+
+                $consumption = ConsumptionHistory::create([
+                    "total_consumption_id" => $consumption_total->id,
+                    'pi_category_id' => $counting_unit->pi_category_id,
+                    'purchase_item_id' => $counting_unit->id,
+                    'name' => $counting_unit->name,
+                    'consumption_no' => $request->purchase_number,
+                    'unit' => $counting_unit->unit,
+                    'stock_quantity' => $request->qty[$count],
+                ]);
+
+            }
+
+        } catch (\Exception $e) {
+
+            alert()->error('Something Wrong! When Purchase Store.');
+
+            return redirect()->back();
+        }
+
+        alert()->success("Success");
+
+        return redirect('/daily_consumption');
+    }
+
+    protected function getConsumptionHistoryDetails($id){
+
+        try {
+
+            $consumption = TotalConsumption::findOrFail($id);
+            $items = ConsumptionHistory::where('total_consumption_id', $consumption->id)->get();
+            $purchase_items = Pi::all();
+
+        } catch (\Exception $e) {
+
+            alert()->error('Something Wrong! Purchase Cannot be Found.');
+
+            return redirect()->back();
+        }
+
+        return view('Admin.consumption_details', compact('consumption', 'items', 'purchase_items'));
+
+    }
+
+    protected function getFilterFinishedOrderList(Request $request){
+        return response()->json('hello');
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+
+        $purchases = TotalPurchase::where(DB::raw('CAST(created_at as date)'), '>=', $start_date) ->where(DB::raw(' CAST(created_at as date) '), '<=', $end_date)->get();
+        
+        return response()->json('hello');
+    }
+
+    protected function incomeList(request $request){
+	    $incomes = Income::all();
+
+	    return view('Admin.income', compact('incomes'));
+	}
+
+    protected function storeIncome(request $request){
+
+        $validator = Validator::make($request->all(), [
+         "type" => "required",
+         "title" => "required",
+         "description" => "required",
+         "amount" => "required",
+         "profit_loss_flag" => "required",
+     ]);
+
+     if($validator->fails()){
+
+         alert()->error('အချက်အလက် များ မှားယွင်း နေပါသည်။');
+
+         return redirect()->back();
+     }
+
+     $item = Income::create([
+             'type' => $request->type,
+             'period' => $request->period,
+             'date' => $request->date,
+             'title' => $request->title,
+             'description' => $request->description,
+             'amount' => $request->amount,
+             'profit_loss_flag' => $request->profit_loss_flag,
+     ]);
+
+     return redirect()->back();
+ }
+
+protected function updateIncome($id, Request $request)
+	{
+		try {
+
+        	$income = Income::findOrFail($id);
+
+   		} catch (\Exception $e) {
+
+        	alert()->error("Income Not Found!")->persistent("Close!");
+
+            return redirect()->back();
+
+    	}
+
+        $income->type = $request->type;
+
+        $income->period = $request->period;
+        
+        $income->date = $request->date;
+
+        $income->title = $request->title;
+        
+        $income->description = $request->description;
+        
+        $income->amount = $request->amount;
+        
+        $income->profit_loss_flag = $request->profit_loss_flag;
+        
+        $income->save();
+
+        alert()->success('Successfully Updated!');
+
+        return redirect()->route('incomes');
+	}
+	
+    protected function deleteIncome(Request $request)
+	{
+        $income = Income::find($request->income_id);
+        
+        $income->delete();
+
+        $incomes = Income::all();
+
+        // alert()->success('Successfully Deleted!');
+
+        // return redirect()->route('incomes');
+        return response()->json($incomes);
+	}
 }

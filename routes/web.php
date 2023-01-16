@@ -249,6 +249,23 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::post('add_daily_purchase', 'Web\AdminController@addDailyPurchase')->name('add_daily_purchase');
     Route::get('search_item/{id}', 'Web\AdminController@searchItem');
     Route::post('purchaseprice/update', 'Web\AdminController@purchasepriceUpdate')->name('purchasepriceupdate');
+    Route::post('Purchase/Store', 'Web\AdminController@storePurchaseHistory')->name('store_purchase');
+    //daily purchase detail
+    Route::get('Purchase/Details/{id}', 'Web\AdminController@getPurchaseHistoryDetails')->name('purchase_details');
+
+    //daily consumption
+    Route::get('daily_consumption', 'Web\AdminController@getDailyConsumption')->name('daily_consumption');
+    Route::get('daily_consumption/create', 'Web\AdminController@createDailyConsumption');
+    Route::post('Consumption/Store', 'Web\AdminController@storeConsumptionHistory')->name('store_consumption');
+    //daily purchase detail
+    Route::get('Consumption/Details/{id}', 'Web\AdminController@getConsumptionHistoryDetails')->name('consumption_details');
+
+    //daily income list
+    Route::get('Incomes', 'Web\AdminController@incomeList')->name('incomes');
+    Route::post('storeIncome', 'Web\AdminController@storeIncome')->name('store_income');
+    Route::post('updateIncome/{id}', 'Web\AdminController@updateIncome')->name('update_income');
+    Route::post('deleteIncome', 'Web\AdminController@deleteIncome')->name('delete_income');
+    Route::post('getTotalSaleReport', 'Web\AdminController@getTotalSaleReport');
 
     //Customer
     /* Route::get('Customer', 'Web\AdminController@getCustomerList')->name('customer_list');
