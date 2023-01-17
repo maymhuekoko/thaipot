@@ -14,6 +14,8 @@ use App\TableType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\TotalConsumption;
+use App\TotalPurchase;
 use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
@@ -23,13 +25,62 @@ class LoginController extends Controller
         if (Session::has('user')) {
 
             if($request->session()->get('user')->role_flag == 1){
-                $table_lists = Table::orderBy('table_type_id', 'ASC')->get();
-        $table4n1 = Table::where('table_type_id', 2)->skip(0)->take(6)->get();
-        $table4n2 = Table::where('table_type_id', 2)->skip(6)->take(6)->get();
+        //         $table_lists = Table::orderBy('table_type_id', 'ASC')->get();
+        // $table4n1 = Table::where('table_type_id', 2)->skip(0)->take(6)->get();
+        // $table4n2 = Table::where('table_type_id', 2)->skip(6)->take(6)->get();
 
-		$table_types = TableType::all();
+		// $table_types = TableType::all();
 
-		return view('Sale.sale_page', compact('table_lists','table4n1','table4n2','table_types'));
+		// return view('Sale.sale_page', compact('table_lists','table4n1','table4n2','table_types'));
+
+        $voucher = Voucher::where('status',0)->get();
+            $purchase = Purchase::all();
+            $expense = Expense::all();
+            $total_sale = 0;$today_sale = 0;$total_inventory = 0;$total_expense=0;$total_profit= 0;
+            $today = date("Y-m-d");
+            foreach($voucher as $vou){
+                $total_sale += $vou->total_price;
+            }
+            $tod_voucher = Voucher::where('date',$today)->where('status',0)->get();
+               foreach($tod_voucher as $tod){
+                $today_sale += $tod->total_price;
+            }
+            foreach($purchase as $pur){
+                $total_inventory += $pur->total_price;
+            }
+            foreach($expense as $exp){
+                $total_expense += $exp->amount;
+            }
+            $daily_purchases = TotalPurchase::whereDate('created_at', date('Y-m-d'))->get();
+            $daily_consumptions = TotalConsumption::whereDate('created_at', date('Y-m-d'))->get();
+
+            $total_purchases = 0;
+            $total_consumptions = 0;
+
+            foreach($daily_purchases as $val){
+                $total_purchases += $val->price;
+            }
+
+            foreach($daily_consumptions as $val){
+                $total_consumptions += $val->price;
+            }
+
+            $shop_vouchers = Voucher::whereDate('voucher_date', date('Y-m-d'))->where('type', 1)->get();
+            $total_shop = 0;
+            $total_take_away = 0;
+
+            foreach($shop_vouchers as $val){
+                $total_shop += $val->total_price;
+            }
+
+            $take_away_vouchers = Voucher::whereDate('voucher_date', date('Y-m-d'))->where('type', 2)->get();
+ 
+            foreach($take_away_vouchers as $val){
+                $total_take_away += $val->total_price;
+            }
+
+            $menu = MenuItem::all()->count();
+            return view('report',compact('total_sale','today_sale','total_inventory','menu','total_expense', 'total_purchases', 'total_consumptions', 'total_shop', 'total_take_away'));
 
             }elseif ($request->session()->get('user')->role_flag == 4) {
 
@@ -84,27 +135,6 @@ class LoginController extends Controller
         if ($user->role_flag == 1 || $user->role_flag == 2 || $user->role_flag == 4 || $user->role_flag == 5 || $user->role_flag == 6) {
 
             alert()->success("Successfully Login");
-
-            $voucher = Voucher::where('status',0)->get();
-            $purchase = Purchase::all();
-            $expense = Expense::all();
-            $total_sale = 0;$today_sale = 0;$total_inventory = 0;$total_expense=0;$total_profit= 0;
-            $today = date("Y-m-d");
-            foreach($voucher as $vou){
-                $total_sale += $vou->total_price;
-            }
-            $tod_voucher = Voucher::where('date',$today)->where('status',0)->get();
-               foreach($tod_voucher as $tod){
-                $today_sale += $tod->total_price;
-            }
-            foreach($purchase as $pur){
-                $total_inventory += $pur->total_price;
-            }
-            foreach($expense as $exp){
-                $total_expense += $exp->amount;
-            }
-            $menu = MenuItem::all()->count();
-            return view('report',compact('total_sale','today_sale','total_inventory','menu','total_expense'));
         }
         elseif ($user->role_flag == 3) {
 

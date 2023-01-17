@@ -197,8 +197,25 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="col-md-4">
+                    <div class="card">
+                        <button class="btn light default" onclick="show_income()">
+                        <div class="card-body">
+                            <h4 class="text-center font-weight-bold">Total Income</h4>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="total_income_pro">0%</div>
+                        </div>
+                        <span class="font-weight-bold mt-1 float-right" id="total_income"></span>
+                        </div>
+                        </button>
+                    </div>
+                </div>
+                
+               
+               </div>
+               <div class="row mt-4">
+               <div class="col-md-4">
                     <div class="card">
                         <button class="btn light default" onclick="show_expense()">
                         <div class="card-body">
@@ -211,8 +228,6 @@
                         </button>
                     </div>
                 </div>
-               </div>
-               <div class="row mt-4">
                 <div class="col-md-4">
                     <div class="card">
                         <button class="btn light default" onclick="total_income()">
@@ -261,7 +276,7 @@
     </div>
 
     <div class="row" id="hide_date">
-        <div class="col-md-3">
+        <!-- <div class="col-md-3">
             <h4 class="text-success font-weight-bold">
                 From
                 <input type="date" name="from_date" id="from_date" class="border border-light text-secondary ml-2">
@@ -277,7 +292,7 @@
             <button class="btn btn-success" id="date_fil" onclick="fil_date()">
                 Search
             </button>
-        </div>
+        </div> -->
     </div>
         <div class="card mt-3" id="report">
         	<div class="card-body">
@@ -329,7 +344,7 @@
         <div class="card mt-3" id="order_report">
         	<div class="card-body">
         		<div class="row mt-2">
-	                <div class="col-md-6">
+                <div class="col-md-6">
 	                    <h4 class="text-success font-weight-bold">
 	                    	Total Sales -
 	                    	<span class="badge badge-pill badge-success" id="total_sales"></span>
@@ -341,6 +356,7 @@
 	                    	<span class="badge badge-pill badge-success" id="profit"></span>
 	                    </h4>
 	                </div>
+
 
 	                <div class="col-md-12 mt-3">
 	                    <table class="table" id="vou_table">
@@ -526,6 +542,45 @@
 	            </div>
         	</div>
         </div>
+
+        <div class="card mt-3" id="income">
+        	<div class="card-body">
+        		<div class="row mt-2">
+	                <div class="col-md-6">
+	                    <h4 class="text-success font-weight-bold">
+	                    	Total Sales -
+	                    	<span class="badge badge-pill badge-success" id="total_sales"></span>
+	                    </h4>
+	                </div>
+	                <div class="col-md-6">
+	                    <h4 class="text-success font-weight-bold float-right">
+	                    	Total Profit -
+	                    	<span class="badge badge-pill badge-success" id="profit"></span>
+	                    </h4>
+	                </div> 
+
+	                <div class="col-md-12 mt-3">
+	                    <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Income Type</th>
+                                    <th>Period</th>
+                                    <th>Date</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <!-- <th>Action</th>  -->
+                                </tr>
+                            </thead>
+                            <tbody id="income_table">
+
+                            </tbody>
+                        </table>
+	                </div>
+	            </div>
+        	</div>
+        </div>
         
         
     </div>
@@ -544,6 +599,7 @@
         $('#expense').hide();
 	    $('#transaction').hide();
         $('#hide_date').hide();
+        $('#income').hide();
 	});
 	function showDailySale() {
         $('#other_inc').empty();
@@ -564,6 +620,8 @@
         $('#total_profit').empty();
 		$('#sale_table').empty();
         $('#inc_exp_table').empty();
+        $('#total_income').empty();
+        $('#order_table').empty();
 		var  daily = $('#daily').val();
         // alert(daily);
 		var  type  = 1;
@@ -576,7 +634,6 @@
             "_token":"{{csrf_token()}}"
            },
            	success:function(data){
-            	console.log(data);
                 // alert(data.voucher_lists);
                 $('#inc_exp').hide();
 
@@ -585,6 +642,8 @@
                 $('#purchase').hide();
                 
                 $('#transaction').hide();
+
+                $('#income').hide();
                 
                 $('#order_report').hide();
                 var inv = data.total_sales - data.total_profit ;
@@ -599,14 +658,236 @@
                 var income_total = data.total_sales + data.other_incomes+data.total_transaction;
                 
                 var total_sales_percent =  (data.total_sales / income_total) * 100;
-                
-                //var order_money_percent = (data.total_order/income_total) * 100;
+
+                var consumption_percent = (data.consume / income_total) * 100;
+
+                var order_money_percent = (data.total_order/income_total) * 100;
                 
                 var other_inc_percent = (data.other_incomes / income_total) * 100;
                 
-                var other_exp_percent = (data.other_expenses / income_total) * 100;
+                var other_exp_percent = (data.expense / income_total) * 100;
                 
-                var order_trans_percent = (data.total_transaction / income_total) *100;
+                var order_trans_percent = (data.purchase / income_total) *100;
+                
+                var raw_purchase_percent = (data.total_purchase/income_total) * 100;
+                
+                
+                var net_profit_percent = (net_profit / income_total) *100;
+
+                var gross_profit = data.total_sales - data.purchase;
+
+                var total_income_percent = ( data.income / income_total ) *100;
+                
+                $('#inc_total').append(income_total).append($('<strong>').text('MMK'));
+                $('#net_profit').append(gross_profit - data.income).append($('<strong>').text('MMK'));
+                
+                 $('#nprofit_pro').width(net_profit_percent+"%").attr('aria-valuenow',net_profit_percent).text(net_profit_percent.toFixed(2)+ "%");
+                $('#inv_money').append(data.consume).append($('<strong>').text('MMK'));
+                
+                $('#inv_pro').width(consumption_percent+"%").attr('aria-valuenow',consumption_percent).text(consumption_percent.toFixed(2)+ "%");
+                $('#sale_money').append(data.total_sales).append($('<strong>').text('MMK'));
+                
+                $('#sale_money_pro').width(total_sales_percent+"%").attr('aria-valuenow',total_sales_percent).text(total_sales_percent.toFixed(2)+ "%");
+                
+                $('#order_money').append(data.total_order).append($('<strong>').text('MMK'));
+                
+                $('#order_money_pro').width(order_money_percent+"%").attr('aria-valuenow',order_money_percent).text(order_money_percent.toFixed(2)+ "%");
+                
+                $('#order_trans').append(data.purchase).append($('<strong>').text('MMK'));
+                
+                $('#order_trans_pro').width(order_trans_percent+"%").attr('aria-valuenow',order_trans_percent).text(order_trans_percent.toFixed(2)+ "%");
+                
+                
+                $('#raw_purchase').append(data.total_purchase).append($('<strong>').text('MMK'));
+                
+                $('#raw_purchase_pro').width(raw_purchase_percent+"%").attr('aria-valuenow',raw_purchase_percent).text(raw_purchase_percent.toFixed(2)+ "%");
+                
+                $('#total_sales').text(data.total_sales);
+                $('#order_report #total_sales').text(data.total_sales);
+                $('#inc_exp #total_sales').text(data.total_sales);
+                $('#purchase #total_sales').text(data.total_sales);
+                $('#transaction #total_sales').text(data.total_sales);                
+                $('#expense #total_sales').text(data.total_sales);
+                $('#income #total_sales').text(data.total_sales);
+                
+                $('#total_profit').append(gross_profit).append($('<strong>').text('MMK'));
+                
+                $('#tprofit_pro').width(total_profit_percent+"%").attr('aria-valuenow',total_profit_percent).text(total_profit_percent.toFixed(2)+ "%");
+                $('#other_inc').append(data.other_incomes).append($('<strong>').text('MMK'));
+                
+                $('#other_inc_pro').width(other_inc_percent+"%").attr('aria-valuenow',other_inc_percent).text(other_inc_percent.toFixed(2)+ "%");
+                $('#other_exp').append(data.expense).append($('<strong>').text('MMK'));
+                
+                $('#other_exp_pro').width(other_exp_percent+"%").attr('aria-valuenow',other_exp_percent).text(other_exp_percent.toFixed(2)+ "%");
+            	
+                $('#profit').text(data.total_profit);
+                $('#order_report #profit').text(data.total_profit);
+		        $('#inc_exp #profit').text(data.total_profit);
+		        $('#purchase #profit').text(data.total_profit);
+		        $('#transaction #profit').text(data.total_profit);
+		        $('#expense #profit').text(data.total_profit);
+                $('#income #profit').text(data.total_profit);
+
+                $('#total_income_pro').width(total_income_percent+"%").attr('aria-valuenow',total_income_percent).text(total_income_percent.toFixed(2)+ "%");
+                $('#total_income').append(data.income).append($('<strong>').text('MMK'));
+
+                $.each(data.voucher_lists,function(i,value){
+		            let url = "{{url('/shop_voucher1/')}}/"+value.id;
+		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    let url2 = "{{url('/shop_voucher/')}}/"+value.id;
+		            let button2 = `<a href="${url2}" class="btn btn-success">Detail</a>`
+
+                    let discount = value.discount_value ? value.discount_value: 0;
+
+                    if(value.type == 1){
+		                $('#sale_table').append($('<tr>')).append($('<td>').text(value.voucher_code)).append($('<td>').text(value.total_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(discount)).append($('<td>').text(value.voucher_date)).append($('<td>').append($(button)));
+                    }else{
+		                $('#sale_table').append($('<tr>')).append($('<td>').text(value.voucher_code)).append($('<td>').text(value.total_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(discount)).append($('<td>').text(value.voucher_date)).append($('<td>').append($(button2)));
+                    }
+		        });
+		        
+		        $.each(data.voucher_lists,function(i,value){
+		            let url = "{{url('/shop_voucher/')}}/"+value.id;
+		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    let discount = value.discount_value ? value.discount_value: 0;
+
+                    if(value.type==1)
+		                $('#order_table').append($('<tr>')).append($('<td>').text(value.voucher_code)).append($('<td>').text(value.total_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(discount)).append($('<td>').text(value.voucher_date)).append($('<td>').append($(button)));
+		        });
+		        
+		        //take away sale table
+		        $.each(data.voucher_lists,function(i,value){
+		            let url = "{{url('/shop_voucher1/')}}/"+value.id;
+		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    let discount = value.discount_value ? value.discount_value: 0;
+
+                    if(value.type==2){
+		                $('#inc_exp_table').append($('<tr>')).append($('<td>').text(value.voucher_code)).append($('<td>').text(value.total_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(discount)).append($('<td>').text(value.voucher_date)).append($('<td>').append($(button)));
+                    }                    
+                });
+
+                //consumption table
+                $.each(data.total_consumptions,function(i,value){
+		            let url = "{{url('/Consumption/Details/')}}/"+value.id;
+		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    var res = value.created_at;
+                    res = res.substring(0, 10);
+
+                    $('#purchase_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
+		        });
+
+                //purchase table  
+                $.each(data.total_purchases, function(i, value){
+                    let url = "{{url('/Purchase/Details/')}}/"+value.id;
+		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    var res = value.created_at;
+                    res = res.substring(0, 10);
+
+                    $('#transaction_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
+                });
+
+                //expense table
+                $.each(data.total_expenses, function(i, value){
+                    // let url = "{{url('/Purchase/Details/')}}/"+value.id;
+		            // let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    var res = value.created_at;
+                    res = res.substring(0, 10);
+
+                    $('#expense_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(value.title)).append($('<td>').text(res)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
+                });
+
+                //income table
+                $.each(data.total_incomes, function(i, value){
+                    // let url = "{{url('/Purchase/Details/')}}/"+value.id;
+		            // let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    // var res = value.created_at;
+                    // res = res.substring(0, 10);
+
+                    let type = value.type == 1? "Fixed": "Variable";
+
+                    let period = value.period == null? "Daily" : value.period;
+
+                    $('#income_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
+                });
+		        
+		        $('#report').show();
+            }
+        });
+	}
+	function showWeeklySale() {
+        $('#other_inc').empty();
+        $('#other_exp').empty();
+        $('#hide_date').show();
+		$('#total_sales').empty();
+		$('#total_sales').empty();
+        $('#sale_money').empty();
+        
+        $('#order_money').empty();
+         
+          $('#order_trans').empty();
+          
+           $('#raw_purchase').empty();
+        $('#inv_money').empty();
+        $('#total_profit').empty();
+        $('#inc_total').empty();
+        $('#net_profit').empty();
+		$('#sale_table').empty();
+        $('#inc_exp_table').empty();
+        $('#total_income').empty();
+        $('#income_table').empty();
+        $('#order_table').empty();
+		var  daily = $('#weekly').val();
+		var  type  = 2;
+		$.ajax({
+           type:'POST',
+           url:'/getTotalSaleReport',
+           data:{
+            "value": daily,
+            "type": type,
+            "_token":"{{csrf_token()}}"
+           },
+           	success:function(data){
+            	console.log(data);
+                $('#inc_exp').hide();
+                
+                $('#purchase').hide();
+
+                $('#expense').hide();
+                
+                $('#transaction').hide();
+
+                $('#income').hide();
+                
+                $('#order_report').hide();
+                var inv = data.total_sales - data.total_profit ;
+                
+                var inv_percent = (inv / data.total_sales) * 100;
+                
+                var total_profit_percent = (data.total_profit / data.total_sales) *100;
+                var net_profit = (data.total_profit + data.other_incomes + data.total_transaction) - (data.other_expenses-data.total_purchase);
+                
+                
+                
+                var income_total = data.total_sales + data.other_incomes+data.total_transaction;
+                
+                var total_sales_percent =  (data.total_sales / income_total) * 100;
+
+                var consumption_percent = (data.consume / income_total) * 100;
+
+                var order_money_percent = (data.total_order/income_total) * 100;
+                
+                var other_inc_percent = (data.other_incomes / income_total) * 100;
+                
+                var other_exp_percent = (data.expense / income_total) * 100;
+                
+                var order_trans_percent = (data.purchase / income_total) *100;
                 
                 var raw_purchase_percent = (data.total_purchase/income_total) * 100;
                 
@@ -614,40 +895,63 @@
                 var net_profit_percent = (net_profit / income_total) *100;
                 
                 
+                var gross_profit = data.total_sales - data.purchase;
+                
+                
+                var total_income_percent = ( data.income / income_total ) *100;
+                
                 $('#inc_total').append(income_total).append($('<strong>').text('MMK'));
-                $('#net_profit').append(net_profit).append($('<strong>').text('MMK'));
+                $('#net_profit').append(gross_profit - data.income).append($('<strong>').text('MMK'));
                 
                  $('#nprofit_pro').width(net_profit_percent+"%").attr('aria-valuenow',net_profit_percent).text(net_profit_percent.toFixed(2)+ "%");
-                $('#inv_money').append(inv).append($('<strong>').text('MMK'));
+                $('#inv_money').append(data.consume).append($('<strong>').text('MMK'));
                 
-                 $('#inv_pro').width(inv_percent+"%").attr('aria-valuenow',inv_percent).text(inv_percent.toFixed(2)+ "%");
+                $('#inv_pro').width(consumption_percent+"%").attr('aria-valuenow',consumption_percent).text(consumption_percent.toFixed(2)+ "%");
                 $('#sale_money').append(data.total_sales).append($('<strong>').text('MMK'));
                 
                 $('#sale_money_pro').width(total_sales_percent+"%").attr('aria-valuenow',total_sales_percent).text(total_sales_percent.toFixed(2)+ "%");
                 
                 $('#order_money').append(data.total_order).append($('<strong>').text('MMK'));
                 
-                //$('#order_money_pro').width(order_money_percent+"%").attr('aria-valuenow',order_money_percent).text(order_money_percent.toFixed(2)+ "%");
+                $('#order_money_pro').width(order_money_percent+"%").attr('aria-valuenow',order_money_percent).text(order_money_percent.toFixed(2)+ "%");
                 
-                $('#order_trans').append(data.total_transaction).append($('<strong>').text('MMK'));
+                $('#order_trans').append(data.purchase).append($('<strong>').text('MMK'));
                 
                 $('#order_trans_pro').width(order_trans_percent+"%").attr('aria-valuenow',order_trans_percent).text(order_trans_percent.toFixed(2)+ "%");
                 
                 
                 $('#raw_purchase').append(data.total_purchase).append($('<strong>').text('MMK'));
                 
-                 $('#raw_purchase_pro').width(raw_purchase_percent+"%").attr('aria-valuenow',raw_purchase_percent).text(raw_purchase_percent.toFixed(2)+ "%");
+                $('#raw_purchase_pro').width(raw_purchase_percent+"%").attr('aria-valuenow',raw_purchase_percent).text(raw_purchase_percent.toFixed(2)+ "%");
+                
                 $('#total_sales').text(data.total_sales);
-                $('#total_profit').append(data.total_profit).append($('<strong>').text('MMK'));
+                $('#order_report #total_sales').text(data.total_sales);
+                $('#inc_exp #total_sales').text(data.total_sales);
+                $('#purchase #total_sales').text(data.total_sales);
+                $('#transaction #total_sales').text(data.total_sales);                
+                $('#expense #total_sales').text(data.total_sales);
+                $('#income #total_sales').text(data.total_sales);
+                
+                $('#total_profit').append(gross_profit).append($('<strong>').text('MMK'));
                 
                 $('#tprofit_pro').width(total_profit_percent+"%").attr('aria-valuenow',total_profit_percent).text(total_profit_percent.toFixed(2)+ "%");
                 $('#other_inc').append(data.other_incomes).append($('<strong>').text('MMK'));
                 
                 $('#other_inc_pro').width(other_inc_percent+"%").attr('aria-valuenow',other_inc_percent).text(other_inc_percent.toFixed(2)+ "%");
-                $('#other_exp').append(data.other_expenses).append($('<strong>').text('MMK'));
+                $('#other_exp').append(data.expense).append($('<strong>').text('MMK'));
                 
                 $('#other_exp_pro').width(other_exp_percent+"%").attr('aria-valuenow',other_exp_percent).text(other_exp_percent.toFixed(2)+ "%");
-            	$('#profit').text(data.total_profit);
+            	
+                $('#profit').text(data.total_profit);
+                $('#order_report #profit').text(data.total_profit);
+		        $('#inc_exp #profit').text(data.total_profit);
+		        $('#purchase #profit').text(data.total_profit);
+		        $('#transaction #profit').text(data.total_profit);
+		        $('#expense #profit').text(data.total_profit);
+                $('#income #profit').text(data.total_profit);
+
+                $('#total_income_pro').width(total_income_percent+"%").attr('aria-valuenow',total_income_percent).text(total_income_percent.toFixed(2)+ "%");
+                $('#total_income').append(data.income).append($('<strong>').text('MMK'));
 		        $.each(data.voucher_lists,function(i,value){
 		            let url = "{{url('/shop_voucher1/')}}/"+value.id;
 		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
@@ -719,122 +1023,21 @@
                     $('#expense_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(value.title)).append($('<td>').text(res)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
                 });
 		        
-		        $('#report').show();
-            }
-        });
-	}
-	function showWeeklySale() {
-        $('#other_inc').empty();
-        $('#other_exp').empty();
-        $('#hide_date').show();
-		$('#total_sales').empty();
-		$('#total_sales').empty();
-        $('#sale_money').empty();
-        
-        $('#order_money').empty();
-         
-          $('#order_trans').empty();
-          
-           $('#raw_purchase').empty();
-        $('#inv_money').empty();
-        $('#total_profit').empty();
-        $('#inc_total').empty();
-        $('#net_profit').empty();
-		$('#sale_table').empty();
-        $('#inc_exp_table').empty();
-		var  daily = $('#weekly').val();
-		var  type  = 2;
-		$.ajax({
-           type:'POST',
-           url:'/getTotalSaleReport',
-           data:{
-            "value": daily,
-            "type": type,
-            "_token":"{{csrf_token()}}"
-           },
-           	success:function(data){
-            	console.log(data);
-                $('#inc_exp').hide();
-                
-                $('#purchase').hide();
+		        //income table
+                $.each(data.total_incomes, function(i, value){
+                    // let url = "{{url('/Purchase/Details/')}}/"+value.id;
+		            // let button = `<a href="${url}" class="btn btn-success">Detail</a>`
 
-                $('#expense').hide();
-                
-                $('#transaction').hide();
-                
-                $('#order_report').hide();
-                var inv = data.total_sales - data.total_profit ;
-                var inv_percent = (inv / data.total_sales) * 100;
-                
-                var total_profit_percent = (data.total_profit / data.total_sales) *100;
-                var net_profit = (data.total_profit + data.other_incomes + data.total_transaction) - (data.other_expenses-data.total_purchase);
-                
-                
-                
-                var income_total = data.total_sales + data.other_incomes+data.total_transaction;
-                
-                var total_sales_percent =  (data.total_sales / income_total) * 100;
-                
-               // var order_money_percent = (data.total_order/income_total) * 100;
-                
-                var other_inc_percent = (data.other_incomes / income_total) * 100;
-                
-                var other_exp_percent = (data.other_expenses / income_total) * 100;
-                
-                var order_trans_percent = (data.total_transaction / income_total) *100;
-                
-                var raw_purchase_percent = (data.total_purchase/income_total) * 100;
-                
-                
-                var net_profit_percent = (net_profit / income_total) *100;                
-                $('#inc_total').append(income_total).append($('<strong>').text('MMK'));
-                $('#net_profit').append(net_profit).append($('<strong>').text('MMK'));
-                
-                 $('#nprofit_pro').width(net_profit_percent+"%").attr('aria-valuenow',net_profit_percent).text(net_profit_percent.toFixed(2)+ "%");
-                $('#inv_money').append(inv).append($('<strong>').text('MMK'));
-                
-                 $('#inv_pro').width(inv_percent+"%").attr('aria-valuenow',inv_percent).text(inv_percent.toFixed(2)+ "%");
-                $('#sale_money').append(data.total_sales).append($('<strong>').text('MMK'));
-                
-                $('#sale_money_pro').width(total_sales_percent+"%").attr('aria-valuenow',total_sales_percent).text(total_sales_percent.toFixed(2)+ "%");
-                
-                $('#order_money').append(data.total_order).append($('<strong>').text('MMK'));
-                
-               // $('#order_money_pro').width(order_money_percent+"%").attr('aria-valuenow',order_money_percent).text(order_money_percent.toFixed(2)+ "%");
-                
-                $('#order_trans').append(data.total_transaction).append($('<strong>').text('MMK'));
-                
-                $('#order_trans_pro').width(order_trans_percent+"%").attr('aria-valuenow',order_trans_percent).text(order_trans_percent.toFixed(2)+ "%");
-                
-                
-                $('#raw_purchase').append(data.total_purchase).append($('<strong>').text('MMK'));
-                
-                 $('#raw_purchase_pro').width(raw_purchase_percent+"%").attr('aria-valuenow',raw_purchase_percent).text(raw_purchase_percent.toFixed(2)+ "%");
-                $('#total_sales').text(data.total_sales);
-                $('#total_profit').append(data.total_profit).append($('<strong>').text('MMK'));
-                
-                $('#tprofit_pro').width(total_profit_percent+"%").attr('aria-valuenow',total_profit_percent).text(total_profit_percent.toFixed(2)+ "%");
-                $('#other_inc').append(data.other_incomes).append($('<strong>').text('MMK'));
-                
-                $('#other_inc_pro').width(other_inc_percent+"%").attr('aria-valuenow',other_inc_percent).text(other_inc_percent.toFixed(2)+ "%");
-                $('#other_exp').append(data.other_expenses).append($('<strong>').text('MMK'));
-                
-                $('#other_exp_pro').width(other_exp_percent+"%").attr('aria-valuenow',other_exp_percent).text(other_exp_percent.toFixed(2)+ "%");
-            	$('#profit').text(data.total_profit);
-		        $.each(data.voucher_lists,function(i,value){
-		            let url = "{{url('/Sale/Voucher-Details')}}/"+value.id;
-		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+                    // var res = value.created_at;
+                    // res = res.substring(0, 10);
 
-                    let discount = value.discount_value? value.discount_value: 0;
+                    let type = value.type == 1? "Fixed": "Variable";
 
-		             $('#sale_table').append($('<tr>')).append($('<td>').text(value.voucher_code)).append($('<td>').text(value.total_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(discount)).append($('<td>').text(value.voucher_date)).append($('<td>').append($(button)));
-		        });
-		        
-		        $.each(data.order_lists,function(i,value){
-		            let url = "{{url('/Order/orderVoucherDetails')}}/"+value.id;
-		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
-		             $('#order_table').append($('<tr>')).append($('<td>').text(value.order_number)).append($('<td>').text(value.showroom)).append($('<td>').text(value.name)).append($('<td>').text(value.phone ?? '-')).append($('<td>').text(value.est_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.total_discount_value)).append($('<td>').text(value.advance_pay)).append($('<td>').text(value.collect_amount)).append($('<td>').text(value.order_date)).append($('<td>').append($(button)));
-		        });
+                    let period = value.period == null? "Daily" : value.period;
+
+                    $('#income_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
+                });
+
 		        $('#report').show();
             }
         });
@@ -858,6 +1061,9 @@
         $('#net_profit').empty();
 		$('#sale_table').empty();
         $('#inc_exp_table').empty();
+        $('#total_income').empty();
+        $('#income_table').empty();
+        $('#order_table').empty();
 		var  daily = $('#monthly').val();
 		var  type  = 3;
 		$.ajax({
@@ -875,6 +1081,8 @@
                 $('#purchase').hide();
 
                 $('#expense').hide();
+
+                $('#income').hide();
                 
                 $('#transaction').hide();
                 
@@ -891,14 +1099,16 @@
                 var income_total = data.total_sales + data.other_incomes+data.total_transaction;
                 
                 var total_sales_percent =  (data.total_sales / income_total) * 100;
-                
-                //var order_money_percent = (data.total_order/income_total) * 100;
+
+                var consumption_percent = (data.consume / income_total) * 100;
+
+                var order_money_percent = (data.total_order/income_total) * 100;
                 
                 var other_inc_percent = (data.other_incomes / income_total) * 100;
                 
-                var other_exp_percent = (data.other_expenses / income_total) * 100;
+                var other_exp_percent = (data.expense / income_total) * 100;
                 
-                var order_trans_percent = (data.total_transaction / income_total) *100;
+                var order_trans_percent = (data.purchase / income_total) *100;
                 
                 var raw_purchase_percent = (data.total_purchase/income_total) * 100;
                 
@@ -906,51 +1116,148 @@
                 var net_profit_percent = (net_profit / income_total) *100;
                 
                 
+                var gross_profit = data.total_sales - data.purchase;
+                
+                
+                var total_income_percent = ( data.income / income_total ) *100;
+                
                 $('#inc_total').append(income_total).append($('<strong>').text('MMK'));
-                $('#net_profit').append(net_profit).append($('<strong>').text('MMK'));
+                $('#net_profit').append(gross_profit - data.income).append($('<strong>').text('MMK'));
                 
                  $('#nprofit_pro').width(net_profit_percent+"%").attr('aria-valuenow',net_profit_percent).text(net_profit_percent.toFixed(2)+ "%");
-                $('#inv_money').append(inv).append($('<strong>').text('MMK'));
+                $('#inv_money').append(data.consume).append($('<strong>').text('MMK'));
                 
-                 $('#inv_pro').width(inv_percent+"%").attr('aria-valuenow',inv_percent).text(inv_percent.toFixed(2)+ "%");
+                $('#inv_pro').width(consumption_percent+"%").attr('aria-valuenow',consumption_percent).text(consumption_percent.toFixed(2)+ "%");
                 $('#sale_money').append(data.total_sales).append($('<strong>').text('MMK'));
                 
                 $('#sale_money_pro').width(total_sales_percent+"%").attr('aria-valuenow',total_sales_percent).text(total_sales_percent.toFixed(2)+ "%");
                 
                 $('#order_money').append(data.total_order).append($('<strong>').text('MMK'));
                 
-                //$('#order_money_pro').width(order_money_percent+"%").attr('aria-valuenow',order_money_percent).text(order_money_percent.toFixed(2)+ "%");
+                $('#order_money_pro').width(order_money_percent+"%").attr('aria-valuenow',order_money_percent).text(order_money_percent.toFixed(2)+ "%");
                 
-                $('#order_trans').append(data.total_transaction).append($('<strong>').text('MMK'));
+                $('#order_trans').append(data.purchase).append($('<strong>').text('MMK'));
                 
                 $('#order_trans_pro').width(order_trans_percent+"%").attr('aria-valuenow',order_trans_percent).text(order_trans_percent.toFixed(2)+ "%");
                 
                 
                 $('#raw_purchase').append(data.total_purchase).append($('<strong>').text('MMK'));
                 
-                 $('#raw_purchase_pro').width(raw_purchase_percent+"%").attr('aria-valuenow',raw_purchase_percent).text(raw_purchase_percent.toFixed(2)+ "%");
+                $('#raw_purchase_pro').width(raw_purchase_percent+"%").attr('aria-valuenow',raw_purchase_percent).text(raw_purchase_percent.toFixed(2)+ "%");
+                
                 $('#total_sales').text(data.total_sales);
-                $('#total_profit').append(data.total_profit).append($('<strong>').text('MMK'));
+                $('#order_report #total_sales').text(data.total_sales);
+                $('#inc_exp #total_sales').text(data.total_sales);
+                $('#purchase #total_sales').text(data.total_sales);
+                $('#transaction #total_sales').text(data.total_sales);                
+                $('#expense #total_sales').text(data.total_sales);
+                $('#income #total_sales').text(data.total_sales);
+                
+                $('#total_profit').append(gross_profit).append($('<strong>').text('MMK'));
                 
                 $('#tprofit_pro').width(total_profit_percent+"%").attr('aria-valuenow',total_profit_percent).text(total_profit_percent.toFixed(2)+ "%");
                 $('#other_inc').append(data.other_incomes).append($('<strong>').text('MMK'));
                 
                 $('#other_inc_pro').width(other_inc_percent+"%").attr('aria-valuenow',other_inc_percent).text(other_inc_percent.toFixed(2)+ "%");
-                $('#other_exp').append(data.other_expenses).append($('<strong>').text('MMK'));
+                $('#other_exp').append(data.expense).append($('<strong>').text('MMK'));
                 
                 $('#other_exp_pro').width(other_exp_percent+"%").attr('aria-valuenow',other_exp_percent).text(other_exp_percent.toFixed(2)+ "%");
-            	$('#profit').text(data.total_profit);
+            	
+                $('#profit').text(data.total_profit);
+                $('#order_report #profit').text(data.total_profit);
+		        $('#inc_exp #profit').text(data.total_profit);
+		        $('#purchase #profit').text(data.total_profit);
+		        $('#transaction #profit').text(data.total_profit);
+		        $('#expense #profit').text(data.total_profit);
+                $('#income #profit').text(data.total_profit);
+
+                $('#total_income_pro').width(total_income_percent+"%").attr('aria-valuenow',total_income_percent).text(total_income_percent.toFixed(2)+ "%");
+                $('#total_income').append(data.income).append($('<strong>').text('MMK'));
 		        $.each(data.voucher_lists,function(i,value){
-		            let url = "{{url('/Sale/Voucher-Details')}}/"+value.id;
-		            let button = `<a href="${url}" class="btn btn-success">@lang('lang.details')</a>`
-		            $('#sale_table').append($('<tr>')).append($('<td>').text(value.voucher_code)).append($('<td>').text(value.sales_customer_name)).append($('<td>').text(value.sales_customer_phone)).append($('<td>').text(value.total_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.discount_value)).append($('<td>').text(value.voucher_date)).append($('<td>').append($(button)));
+		            let url = "{{url('/shop_voucher1/')}}/"+value.id;
+		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    let url2 = "{{url('/shop_voucher/')}}/"+value.id;
+		            let button2 = `<a href="${url2}" class="btn btn-success">Detail</a>`
+
+                    let discount = value.discount_value ? value.discount_value: 0;
+
+                    if(value.type == 1){
+		                $('#sale_table').append($('<tr>')).append($('<td>').text(value.voucher_code)).append($('<td>').text(value.total_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(discount)).append($('<td>').text(value.voucher_date)).append($('<td>').append($(button)));
+                    }else{
+		                $('#sale_table').append($('<tr>')).append($('<td>').text(value.voucher_code)).append($('<td>').text(value.total_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(discount)).append($('<td>').text(value.voucher_date)).append($('<td>').append($(button2)));
+                    }
 		        });
 		        
-		        $.each(data.order_lists,function(i,value){
-		            let url = "{{url('/Order/orderVoucherDetails')}}/"+value.id;
-		            let button = `<a href="${url}" class="btn btn-success">@lang('lang.details')</a>`
-		             $('#order_table').append($('<tr>')).append($('<td>').text(value.order_number)).append($('<td>').text(value.showroom)).append($('<td>').text(value.name)).append($('<td>').text(value.phone ?? '-')).append($('<td>').text(value.est_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.total_discount_value)).append($('<td>').text(value.advance_pay)).append($('<td>').text(value.collect_amount)).append($('<td>').text(value.order_date)).append($('<td>').append($(button)));
+		        $.each(data.voucher_lists,function(i,value){
+		            let url = "{{url('/shop_voucher/')}}/"+value.id;
+		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    let discount = value.discount_value ? value.discount_value: 0;
+
+                    if(value.type==1)
+		                $('#order_table').append($('<tr>')).append($('<td>').text(value.voucher_code)).append($('<td>').text(value.total_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(discount)).append($('<td>').text(value.voucher_date)).append($('<td>').append($(button)));
 		        });
+		        
+		        //take away sale table
+		        $.each(data.voucher_lists,function(i,value){
+		            let url = "{{url('/shop_voucher1/')}}/"+value.id;
+		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    let discount = value.discount_value ? value.discount_value: 0;
+
+                    if(value.type==2){
+		                $('#inc_exp_table').append($('<tr>')).append($('<td>').text(value.voucher_code)).append($('<td>').text(value.total_price)).append($('<td>').text(value.total_quantity)).append($('<td>').text(discount)).append($('<td>').text(value.voucher_date)).append($('<td>').append($(button)));
+                    }                    
+                });
+
+                //consumption table
+                $.each(data.total_consumptions,function(i,value){
+		            let url = "{{url('/Consumption/Details/')}}/"+value.id;
+		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    var res = value.created_at;
+                    res = res.substring(0, 10);
+
+                    $('#purchase_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
+		        });
+
+                //purchase table  
+                $.each(data.total_purchases, function(i, value){
+                    let url = "{{url('/Purchase/Details/')}}/"+value.id;
+		            let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    var res = value.created_at;
+                    res = res.substring(0, 10);
+
+                    $('#transaction_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
+                });
+
+                //expense table
+                $.each(data.total_expenses, function(i, value){
+                    // let url = "{{url('/Purchase/Details/')}}/"+value.id;
+		            // let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    var res = value.created_at;
+                    res = res.substring(0, 10);
+
+                    $('#expense_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(value.title)).append($('<td>').text(res)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
+                });
+
+                 //income table
+                 $.each(data.total_incomes, function(i, value){
+                    // let url = "{{url('/Purchase/Details/')}}/"+value.id;
+		            // let button = `<a href="${url}" class="btn btn-success">Detail</a>`
+
+                    // var res = value.created_at;
+                    // res = res.substring(0, 10);
+
+                    let type = value.type == 1? "Fixed": "Variable";
+
+                    let period = value.period == null? "Daily" : value.period;
+
+                    $('#income_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
+                });
                 
 		        $('#report').show();
             }
@@ -967,6 +1274,8 @@ function fil_date(){
         $('#inc_total').empty();
         $('#net_profit').empty();
 		$('#sale_table').empty();
+        $('#income_table').empty();
+        $('#order_table').empty();
     if($('.nav-tabs .active').text() == 'Weekly'){
         // alert('nav2');
         var type = 2;
@@ -1068,6 +1377,7 @@ function other_income(){
                 $('#purchase').hide();
                 $('#expense').hide();
                 $('#transaction').hide();
+                $('#income').hide();
                 $('#inc_exp').show();
                 if(data.time == 1){
                 $.each(data.income_lists,function(i,value){
@@ -1327,6 +1637,7 @@ function show_purchase(){
                 $('#transaction').hide();
                 $('#expense').hide();
                 $('#purchase').show();
+                $('#income').hide();
                 
                 $.each(data.purchase_lists,function(i,value){
                     // if(type == 1){
@@ -1341,11 +1652,12 @@ function show_purchase(){
 }
 function show_order(){
     $('#report').hide();
-                $('#inc_exp').hide();
-                $('#purchase').hide();
-                $('#transaction').hide();
-                $('#order_report').show();
-                $('#expense').hide();
+    $('#inc_exp').hide();
+    $('#purchase').hide();
+    $('#transaction').hide();
+    $('#order_report').show();
+    $('#expense').hide();
+    $('#income').hide();
 }
 
 function show_take_away(){
@@ -1355,6 +1667,7 @@ function show_take_away(){
     $('#transaction').hide();
     $('#order_report').hide();
     $('#expense').hide();
+    $('#income').hide();
 }
 
 function daily_consumption(){
@@ -1364,6 +1677,7 @@ function daily_consumption(){
     $('#transaction').hide();
     $('#order_report').hide();
     $('#expense').hide();
+    $('#income').hide();
 }
 
 function show_purchase(){
@@ -1373,6 +1687,7 @@ function show_purchase(){
     $('#transaction').show();
     $('#order_report').hide();
     $('#expense').hide();
+    $('#income').hide();
 }
 
 function show_expense(){
@@ -1382,6 +1697,17 @@ function show_expense(){
     $('#transaction').hide();
     $('#order_report').hide();
     $('#expense').show();
+    $('#income').hide();
+}
+
+function show_income(){
+    $('#report').hide();
+    $("#inc_exp").hide();
+    $('#purchase').hide();
+    $('#transaction').hide();
+    $('#order_report').hide();
+    $('#expense').hide();
+    $('#income').show();
 }
 
 function show_transaction(){
