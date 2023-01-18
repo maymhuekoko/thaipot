@@ -39,7 +39,7 @@
                                     @if($order->table_id == 0)
                                     <td>Take Away</td>
                                     @else
-                                    <td>{{$order->table->table_number}}</td>
+                                    <td>{{$order->table->table_number}} (Take Away)</td>
                                     @endif
                                     <td>
                                     	<a href="{{route('pending_order_details', $order->id)}}" class="btn btn-info">Check Order Details</a>
@@ -51,7 +51,7 @@
                                             <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a>
                                     	@else
                                     	    <button class="btn btn-primary" onclick="storeVoucher({{$order->id}})">Store Voucher</button>
-                                            <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a>
+                                            {{-- <a href="{{route('cancelorder', $order->id)}}" class="btn btn-danger">Cancel</a> --}}
                                     	@endif
 
 
