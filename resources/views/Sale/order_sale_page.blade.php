@@ -931,7 +931,7 @@ if(!mycart){
     $('#note').val('');
     var table_id = $('#real_table_id').val();
 
-    alert(table_id);
+    // alert(table_id);
 
     $('#switch_btn').on('click', function(e){
         window.location.href = "/Add-More/take_away/"+table_id;
