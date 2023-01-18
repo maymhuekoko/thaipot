@@ -21,6 +21,8 @@ use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\TotalConsumption;
+use App\TotalPurchase;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -1247,11 +1249,23 @@ class SaleController extends Controller
 	}
 
     protected function getFilterFinishedOrderList(Request $request){
+		
+    	$purchases = TotalPurchase::whereDate('created_at', '>=', $request->start_date)->whereDate('created_at', '<=', $request->end_date)->get();
 
-    	$voucher = Voucher::whereBetween('date', [$request->start_date, $request->end_date])->with('shopOrder')->with('order')->get();
-        // dd($voucher[0]->shopOrder->id);
-        // dd($deli);
-		return response()->json($voucher);
+		return response()->json($purchases);
+	}
+
+	protected function getFilteredVoucher(Request $request){
+		$vouchers = Voucher::whereDate('voucher_date', '>=', $request->start_date)->whereDate('voucher_date', '<=', $request->end_date)->with('shopOrder')->get();
+		
+		return response()->json($vouchers);
+	}
+
+	protected function getFilterFinishedConsumptionList(Request $request){
+		// $consumptions = TotalConsumption::whereBetween('created_at', [$request->start_date, $request->end_date])->get();
+		$consumptions = TotalConsumption::whereDate('created_at', '>=', $request->start_date)->whereDate('created_at', '<=', $request->end_date)->get();
+
+		return response()->json($consumptions);
 	}
 
 	protected function getShopOrderVoucher($order_id){

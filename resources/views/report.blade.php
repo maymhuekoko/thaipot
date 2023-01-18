@@ -51,7 +51,7 @@
             <div class="card card-stats mb-4 mb-xl-0">
                 <div class="card-body">
                     <p class="mt-1 mb-0 text-success font-weight-normal text-sm">
-                    <span>Total Purchase Amount</span>
+                    <span>Total Expense Amount</span>
                     </p>
                     <div class="row mt-2">
                         <div class="col">
@@ -76,6 +76,89 @@
                     <div class="row mt-2">
                         <div class="col">
                             <span class="h2 font-weight-normal mb-0 text-info" style="font-size: 20px;">{{$total_sale - $total_expense}}  Ks</span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape text-white rounded-circle shadow" style="background-color:#473C70;">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                    <p class="mt-1 mb-0 text-success font-weight-normal text-sm">
+                    <span>Daily Purchase</span>
+                    </p>
+                    <div class="row mt-2">
+                        <div class="col">
+                            <span class="h2 font-weight-normal mb-0 text-info" style="font-size: 20px;">{{$total_purchases}}  Ks</span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape text-white rounded-circle shadow" style="background-color:#473C70;">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-6">
+            <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                    <p class="mt-1 mb-0 text-success font-weight-normal text-sm">
+                    <span>Daily Consumption</span>
+                    </p>
+                    <div class="row mt-2">
+                        <div class="col">
+                            <span class="h2 font-weight-normal mb-0 text-info" style="font-size: 20px;">{{$total_consumptions}}  Ks</span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape text-white rounded-circle shadow" style="background-color:#473C70;">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-6">
+            <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                    <p class="mt-1 mb-0 text-success font-weight-normal text-sm">
+                    <span>Shop Order Sale</span>
+                    </p>
+                    <div class="row mt-2">
+                        <div class="col">
+                            <span class="h2 font-weight-normal mb-0 text-info" style="font-size: 20px;">{{$total_shop}}  Ks</span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape text-white rounded-circle shadow" style="background-color:#473C70;">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-6">
+            <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                    <p class="mt-1 mb-0 text-success font-weight-normal text-sm">
+                    <span>Take Away Order Sale</span>
+                    </p>
+                    <div class="row mt-2">
+                        <div class="col">
+                            <span class="h2 font-weight-normal mb-0 text-info" style="font-size: 20px;">{{$total_take_away}}  Ks</span>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape text-white rounded-circle shadow" style="background-color:#473C70;">
@@ -143,7 +226,7 @@
 
 	</div> --}}
 
-    <div class="row md-12">
+    <div class="row md-12 mb-4">
 		{{-- <div class="col-md-4">
             <div class="card card-stats mb-4" >
                 <div class="card-body font-weight-bold">
@@ -194,7 +277,7 @@
                 </div>
             </div>
 		</div> --}}
-        <div class="col-md-6">
+        {{-- <div class="col-md-6">
             <div class="card card-stats mb-4" >
                 <div class="card-body font-weight-bold text-center">
                     <h5>Top Five Famous Menu Item</h5>
@@ -203,9 +286,9 @@
                     </div>
                 </div>
             </div>
-		</div>
+		</div> --}}
 
-        <div class="col-md-6">
+       {{-- <div class="col-md-6">
             <div class="card card-stats mb-4" >
                 <div class="card-body font-weight-bold text-center">
                     <h5>Five Unfamous Menu Item</h5>
@@ -214,7 +297,7 @@
                     </div>
                 </div>
             </div>
-		</div>
+		</div> --}}
 	</div>
 
 	<div class="row md-12">
@@ -472,7 +555,7 @@
            $('#main').append('<canvas id="pieChart"><canvas>');
             var total_sales = data.total_sale;
           var total_purchase = data.total_purchase;
-           var other_expense = data.total_expense;
+           var other_expense = data.total_expense + data.total_purchase;
 
                 var net_profit = total_sales  - (other_expense);
 
@@ -503,7 +586,7 @@
                     labels: [
                         "Total Sales (" + total_sales + " Ks)",
                         // "Total Purchase (" + total_purchase + " Ks)",
-                        "Other Expense (" + other_expense + " Ks)",
+                        "Other Expense (" + other_expense  + " Ks)",
                         "Net Profit (" + net_profit + " Ks)"
                     ],
                     datasets: [

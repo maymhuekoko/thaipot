@@ -51,7 +51,7 @@
                             @foreach($purchases as $index=>$item)  
                             <tr class="text-center">
                                 <td>{{$index+1}}</td>  
-                                <td>{{date_format($item->created_at, "d-m-Y")}}</td>
+                                <td>{{date_format($item->created_at, "Y-m-d")}}</td>
                                 <td>{{$item->total_quantity}}</td>   
                                 <td>{{$item->price}}</td>
                                 <!-- date_format($date,"Y/m/d H:i:s") -->
@@ -85,48 +85,19 @@
         "end_date":end_date,
         },
         success:function(data){
-            console.log("Something"+ data);
+            // console.log("Something"+ data);
             let html = '';
             $.each(data, function(i,v){
-                let url1 = "{{url('/Shop-Order-Voucher/')}}/"+v.shop_order.id;
-                let url2 = "{{url('/delivery_order_voucher/')}}/"+v.shop_order.id;
+                let url1 = "{{url('/Purchase/Details/')}}/"+v.id;
+                let date_str = v.created_at.substr(0, 10);
                 html +=`
                 <tr class="text-center">
-                    <td>${v.voucher_code}</td>
-                    <td>${v.total_price}</td>
-                    <td>${v.total_quantity}</td>`;
-                    if (v.type == 1){
-                        html += `
-                        <td>${v.shop_order.table.table_number}</td>
-                        `;
-                    }
-
-                    else{
-                        html += `
-                        <td>Take Away</td>
-                        `;
-                    }
-                    html += `
-                    <td>${v.date}</td>
-                    <td>
-                    `;
-
-                        if (v.type == 2){
-                            html += `
-                            <a href="${url2}" class="btn btn-info">Check Voucher</a>
-                        </td>
-
-                        </tr>
-                            `;
-                        }
-                        else{
-                            html +=`
-                            <a href="${url1}" class="btn btn-info">Check Voucher</a>
-                        </td>
-
-                        </tr>
-                            `;
-                        }
+                    <td>${i+1}</td>
+                    <td>${date_str}</td>
+                    <td>${v.price}</td>
+                    <td>${v.total_quantity}</td>;
+                    <td><a href="${url1}" class="btn btn-outline-primary">Check Details</a></td>
+                <tr>`;
 
 
             })
