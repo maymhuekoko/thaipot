@@ -134,11 +134,11 @@
                 </div>
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Pay Amount</label>
-                    <input type="text" class="form-control"  value="" id="pay_amount" placeholder="Enter Pay Amount" onkeyup="pay_amt(this.value)">
+                    <input type="text" class="form-control"  value="" id="pay_amount" placeholder="Enter Pay Amount" onkeyup="pay_amt1(this.value)">
                 </div>
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Change</label>
-                    <input type="text" class="form-control" readonly id="change_amount" value="">
+                    <input type="text" class="form-control" readonly id="change_amount1" value="">
                 </div>
                 <button type="button" class="btn btn-success mt-4" onclick="change_price()" btn-lg
                     btn-block">Store Voucher</button>
@@ -196,11 +196,11 @@
 
             <div class="form-group mt-3" id="dis_pay_amount">
                 <label class="font-weight-bold">Pay Amount</label>
-                <input type="text" class="form-control"  value="" id="pay_amount_dis" placeholder="Enter Pay Amount" onkeyup="pay_dis(this.value)">
+                <input type="text" class="form-control"  value="" id="pay_amount_dis" placeholder="Enter Pay Amount" onkeyup="pay_amt(this.value)">
             </div>
             <div class="form-group mt-3" id="dis_change_amount">
                 <label class="font-weight-bold">Change</label>
-                <input type="text" class="form-control" readonly id="change_amount_dis" value="">
+                <input type="text" class="form-control" readonly id="change_amount" value="">
             </div>
             <div class="row">
 
@@ -208,7 +208,7 @@
             <div class="row" id="ispromotion">
 
             </div>
-
+            <input type="hidden" id="bd_exit">
         </div>
         <div class="modal-footer" id="dis_footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -251,7 +251,10 @@ function extragramadd(val){
     // alert(val);
     $('#no_extra').val(val*35);
     var tot = parseInt($('#voucher_total_dis').val()) + parseInt(val*35);
-    var vtot = tot + (tot/100 * 5);
+    var ser = tot * 0.05;
+    var bd = $('#bd_exit').val();
+    // alert(bd);
+    var vtot = tot + ser - bd;
     $('#curr_voucher_total').val(vtot);
 }
 
@@ -259,7 +262,10 @@ function extragramadd1(val){
     // alert(val);
     $('#no_extra1').val(val*35);
     var total = parseInt($('#voucher_total').val()) + parseInt(val*35);
-    var vtotal = total + (total/100 * 5);
+    var ser1 = total * 0.05;
+    var bd1 = $('#bd_exit').val();
+    // alert(bd1);
+    var vtotal = total + ser1 -bd1;
     $('#curr_voucher_total1').val(vtotal);
 }
 
@@ -267,7 +273,7 @@ function foc_radio(){
     $('#dis_foc').show();
     $('#dis_percent').hide();
     $('#dis_amount').hide();
-    var dis_value = $('#curr_voucher_total1').val(parseInt($('#curr_voucher_total1').val()) + parseInt($('#no_extra1').val())-20900);
+    var dis_value = $('#curr_voucher_total1').val(parseInt($('#curr_voucher_total1').val()) -20900);
     $('#dis_type').val(1);
     $('#dis_val').val(0);
 }
@@ -285,21 +291,31 @@ function amount_radio(){
 }
 function percent_dis(val){
  var t = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
- var tot = t + (t/100 * 5);
+ var bdp = $('#bd_exit').val();
+ var tot = t + parseInt(t * 0.05) - bdp;
+
     $('#curr_voucher_total1').val(tot-(parseInt(tot/100 * val)));
     $('#dis_val').val(val);
 }
 function amount_dis(val){
     var t = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
-   var tot = t + (t/100 * 5);
+    var bda = $('#bd_exit').val();
+   var tot = t + parseInt(t * 0.05) - bda;
     $('#curr_voucher_total1').val(tot - parseInt(val));
     $('#dis_val').val(val);
 }
 function pay_amt(val){
     // alert(val);
-    var curr_amt = $('#curr_voucher_total1').val();
+    var curr_amt = $('#curr_voucher_total').val();
     $('#change_amount').val(val - curr_amt);
 }
+
+function pay_amt1(val){
+    // alert(val);
+    var curr_amt = $('#curr_voucher_total1').val();
+    $('#change_amount1').val(val - curr_amt);
+}
+
 function pay_dis(val){
     // alert(val);
     var curr_amt = $('#voucher_total_dis').val();
@@ -320,9 +336,9 @@ function change_price(){
     var discount_type = $('#dis_type').val();
     var discount_value = $('#dis_val').val();
     var pay_value = $('#pay_amount').val();
-    var change_value = $('#change_amount').val();
+    var change_value = $('#change_amount1').val();
     var pay_value_dis = $('#pay_amount_dis').val();
-    var change_value_dis = $('#change_amount_dis').val();
+    var change_value_dis = $('#change_amount').val();
     var extra_amt1 = $('#no_extra1').val();
     var extra_amt = $('#no_extra').val();
     var extra_gram1 = $('#no_extraamt1').val();
@@ -406,11 +422,14 @@ function change_price(){
                 $('#dis_type').val();
                 $('#dis_val').val();
                 if(price == 0){
+                    // alert('hi');
                     $('#voucher_total_dis').val(data.vtot);
                     $('#voucher_total').val(data.vtot);
                     $('#curr_voucher_total1').val(data.stot);
                     $('#curr_voucher_total').val(data.stot);
+                    $('#bd_exit').val(data.bd);
                 }else{
+                    // alert('fail')
                     $('#voucher_total_dis').val(price);
                     $('#voucher_total').val(price);
                     $('#curr_voucher_total1').val(price);

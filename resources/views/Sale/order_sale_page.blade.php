@@ -55,7 +55,7 @@
         </form>
 
         <ul class="nav nav-tabs customtab" role="tablist">
-            
+
             @foreach($cuisine_types as $cuisine)
             <li class="nav-item" style="font-size:14px;">
                 <a class="nav-link" data-toggle="tab" href="#{{$cuisine->id}}" role="tab">
@@ -931,7 +931,7 @@ if(!mycart){
     $('#note').val('');
     var table_id = $('#real_table_id').val();
 
-    alert(table_id);
+    // alert(table_id);
 
     $('#switch_btn').on('click', function(e){
         window.location.href = "/Add-More/take_away/"+table_id;

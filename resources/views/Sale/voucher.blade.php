@@ -123,10 +123,12 @@
                                           @endif
                                           @else
                                           @if ($order->birth_qty != 0)
+                                          <strong>Sub Total - {{$voutotal + $servicecharges}}</strong><br>
                                           <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong><br>
                                           <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4390)}}</strong><br>
-                                          @endif
+                                          @else
                                           <strong>Total - {{$voutotal + $servicecharges}}</strong><br>
+                                          @endif
                                           <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                           <strong>Change - {{$voucher->change_value}}</strong><br>
                                          @endif
@@ -139,11 +141,12 @@
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
                                         <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
-                                        <strong>Discount - FOC(1 person)</strong><br>
+                                        <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br>
                                         @if ($order->birth_qty != 0)
-                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong>
+                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong><br>
                                         @endif
                                         <strong>Total - {{$voutotal+ $servicecharges - 20900 - ($order->birth_qty * 4390)}}</strong><br>
+                                        <strong>Discount - FOC(1 person)</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                         <strong>Change - {{$voucher->change_value}}</strong><br>
                                    </div>
@@ -152,11 +155,12 @@
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
                                         <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
-                                        <strong>Discount - {{$voucher->discount_value}} %</strong><br>
+                                        <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br>
                                         @if ($order->birth_qty != 0)
-                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong>
+                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong><br>
                                         @endif
                                         <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4390)}}</strong><br>
+                                        <strong>Discount - {{$voucher->discount_value}} %</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                          <strong>Change - {{$voucher->change_value}}</strong><br>
                                    </div>
@@ -165,12 +169,12 @@
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
                                         <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
-                                        <strong>Discount - {{$voucher->discount_value}} </strong><br>
+                                        <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br>
                                         @if ($order->birth_qty != 0)
-                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong>
+                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong><br>
                                         @endif
                                         <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4390)}}</strong><br>
-                                        {{-- <strong>Total - {{$total}}</strong><br> --}}
+                                        <strong>Discount - {{$voucher->discount_value}} </strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                          <strong>Change - {{$voucher->change_value}}</strong><br>
                                    </div>
