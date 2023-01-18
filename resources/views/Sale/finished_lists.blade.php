@@ -101,20 +101,20 @@
                                 <td>
                                     @if ($vouc->type == 2)
                                     <a href="{{route('shop_voucher',$vouc->id)}}" class="btn btn-info">Check Voucher</a>
-                                        @if ($vouc->status == 0)
+                                        <!-- @if ($vouc->status == 0)
                                         <a class="btn btn-danger text-white" onclick="cancelvoucher({{$vouc->id}})" id="hide_{{$vouc->id}}">Cancel</a>
                                         <span id="cancel_{{$vouc->id}}" hidden>(CANCEL)</span>
                                         @else
                                         <span>(CANCEL)</span>
-                                        @endif
+                                        @endif -->
                                     @else
                                     <a href="{{route('shop_voucher1',$vouc->id)}}" class="btn btn-info">Check Voucher</a>
-                                        @if ($vouc->status == 0)
+                                        <!-- @if ($vouc->status == 0)
                                         <a class="btn btn-danger text-white" onclick="cancelvoucher({{$vouc->id}})" id="hide_{{$vouc->id}}">Cancel</a>
                                         <span id="cancel_{{$vouc->id}}" hidden>(CANCEL)</span>
                                         @else
                                         <span>(CANCEL)</span>
-                                        @endif
+                                        @endif -->
                                     @endif
                                 </td>
 
@@ -138,7 +138,7 @@
 
         $.ajax({
         type:'POST',
-        url:'/Finished-Order-DateFilter',
+        url:'/Finished-Voucher-DateFilter',
         data:{
         "_token":"{{csrf_token()}}",
         "start_date":start_date,
@@ -147,47 +147,30 @@
         success:function(data){
             let html = '';
             $.each(data, function(i,v){
-                console.log(data)
-                let url1 = "{{url('/Shop-Order-Voucher/')}}/"+v.shop_order.id;
-                let url2 = "{{url('/delivery_order_voucher/')}}/"+v.shop_order.id;
+                let url1 = "{{url('/shop_voucher1')}}/"+v.id;
+                let url2 = "{{url('/shop_voucher/')}}/"+v.id;
+
+                let table_no = v.shop_order.table_id? v.shop_order.table_id: "Take Away";
+
                 html +=`
                 <tr class="text-center">
                     <td>${v.voucher_code}</td>
                     <td>${v.total_price}</td>
-                    <td>${v.total_quantity}</td>`;
-                    if (v.type == 1){
-                        html += `
-                        <td>${v.shop_order.table.table_number}</td>
-                        `;
-                    }
-
-                    else{
-                        html += `
-                        <td>Take Away</td>
-                        `;
-                    }
-                    html += `
-                    <td>${v.date}</td>
-                    <td>
-                    `;
-
-                        if (v.type == 2){
-                            html += `
-                            <a href="${url2}" class="btn btn-info">Check Voucher</a>
-                        </td>
-
-                        </tr>
-                            `;
-                        }
-                        else{
-                            html +=`
-                            <a href="${url1}" class="btn btn-info">Check Voucher</a>
-                        </td>
-
-                        </tr>
-                            `;
-                        }
-
+                    <td>${v.total_quantity}</td>
+                    <td>${table_no}</td>
+                    <td>${v.voucher_date.substring(0, 10)}</td>`;
+                
+                if(v.type == 1){
+                    html +=`    <td>
+                                <a href="${url1}" class="btn btn-info">Check Voucher</a>
+                                </td>
+                            </tr>`;
+                }else{
+                    html +=`    <td>
+                                <a href="${url2}" class="btn btn-info">Check Voucher</a>
+                                </td>
+                        </tr>`;
+                }   
 
             })
             $('#sale_table').html(html);

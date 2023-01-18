@@ -51,7 +51,7 @@
             <div class="card card-stats mb-4 mb-xl-0">
                 <div class="card-body">
                     <p class="mt-1 mb-0 text-success font-weight-normal text-sm">
-                    <span>Total Purchase Amount</span>
+                    <span>Total Expense Amount</span>
                     </p>
                     <div class="row mt-2">
                         <div class="col">
@@ -555,7 +555,7 @@
            $('#main').append('<canvas id="pieChart"><canvas>');
             var total_sales = data.total_sale;
           var total_purchase = data.total_purchase;
-           var other_expense = data.total_expense;
+           var other_expense = data.total_expense + data.total_purchase;
 
                 var net_profit = total_sales  - (other_expense);
 
@@ -586,7 +586,7 @@
                     labels: [
                         "Total Sales (" + total_sales + " Ks)",
                         // "Total Purchase (" + total_purchase + " Ks)",
-                        "Other Expense (" + other_expense + " Ks)",
+                        "Other Expense (" + other_expense  + " Ks)",
                         "Net Profit (" + net_profit + " Ks)"
                     ],
                     datasets: [

@@ -34,8 +34,9 @@ class LoginController extends Controller
 		// return view('Sale.sale_page', compact('table_lists','table4n1','table4n2','table_types'));
 
         $voucher = Voucher::where('status',0)->get();
-            $purchase = Purchase::all();
-            $expense = Expense::all();
+        $purchase = TotalPurchase::all();
+        $expense = Expense::all();
+
             $total_sale = 0;$today_sale = 0;$total_inventory = 0;$total_expense=0;$total_profit= 0;
             $today = date("Y-m-d");
             foreach($voucher as $vou){
@@ -46,13 +47,16 @@ class LoginController extends Controller
                 $today_sale += $tod->total_price;
             }
             foreach($purchase as $pur){
-                $total_inventory += $pur->total_price;
+                $total_inventory += $pur->price;
             }
             foreach($expense as $exp){
                 $total_expense += $exp->amount;
             }
             $daily_purchases = TotalPurchase::whereDate('created_at', date('Y-m-d'))->get();
             $daily_consumptions = TotalConsumption::whereDate('created_at', date('Y-m-d'))->get();
+
+            //total expense - total purchase for total expense amount
+            $total_expense += $total_inventory;
 
             $total_purchases = 0;
             $total_consumptions = 0;
@@ -135,6 +139,8 @@ class LoginController extends Controller
         if ($user->role_flag == 1 || $user->role_flag == 2 || $user->role_flag == 4 || $user->role_flag == 5 || $user->role_flag == 6) {
 
             alert()->success("Successfully Login");
+
+            return redirect()->route('index');
         }
         elseif ($user->role_flag == 3) {
 
