@@ -55,7 +55,7 @@
         </form>
 
         <ul class="nav nav-tabs customtab" role="tablist">
-            
+
             @foreach($cuisine_types as $cuisine)
             <li class="nav-item" style="font-size:14px;">
                 <a class="nav-link" data-toggle="tab" href="#{{$cuisine->id}}" role="tab">

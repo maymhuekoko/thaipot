@@ -216,7 +216,7 @@ class SaleController extends Controller
 		$table = 1;
 		$ygn_towns = Town::where('state_id',13)->get();
 		$cuisine_types = CuisineType::all();
-		$table_id = $order->table_id; 
+		$table_id = $order->table_id;
 
 		return view('Sale.order_sale_page', compact('table_id', 'ygn_towns','cuisine_types','codes','items','meal_types','table','cuisine_types','table_number'));
 	}
@@ -440,8 +440,8 @@ class SaleController extends Controller
 		$orders = ShopOrder::find($order->id);
 		// dd($orders->option()->price);
 		$tableno = Table::find($orders->table_id);
-		
-	
+
+
 		$take_away = $request->take_away;
 		$fromadd = 1;
 		$tablenoo = 0;
@@ -539,7 +539,7 @@ class SaleController extends Controller
 		$meal_ids = $meal_types->pluck('id');
 
         $codes = Code::all();
-		
+
 		// $cuisine_types = CuisineType::all();
 		$cuisine_types = DB::table('cuisine_types')->whereIn('meal_id', $meal_ids)->get();
 
@@ -904,7 +904,7 @@ class SaleController extends Controller
             return response()->json($shop_order);
     }
 
-	
+
 	protected function storeTakeAwayVoucher(Request $request){
 		// dd($request->all());
 
@@ -1186,12 +1186,15 @@ class SaleController extends Controller
 		$total_qty = 0 ;
 
         $tota = $shop_order->adult_qty * 20900 + $shop_order->child_qty * 11000 + $shop_order->kid_qty * 9000 + $shop_order->extrapot_qty * 3000;
-        $total = $tota + (($tota/100) * 5) - ($shop_order->birth_qty * 4390);
+        $ser = $tota * 0.05;
+        $total = $tota + $ser - ($shop_order->birth_qty * 4390);
+        $bd = $shop_order->birth_qty * 4390;
 
         return response()->json([
             'vtot' => $tota,
             'stot' => $total,
 			'take_away' => $take_away,
+            'bd' => $bd,
         ]);
     }
 
@@ -1249,7 +1252,7 @@ class SaleController extends Controller
 	}
 
     protected function getFilterFinishedOrderList(Request $request){
-		
+
     	$purchases = TotalPurchase::whereDate('created_at', '>=', $request->start_date)->whereDate('created_at', '<=', $request->end_date)->get();
 
 		return response()->json($purchases);
