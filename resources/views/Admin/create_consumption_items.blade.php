@@ -1,16 +1,8 @@
 @extends('master')
 
-@section('title','Daily Purchase')
+@section('title','Daily Consumption')
 
 @section('place')
-
-{{-- <div class="col-md-5 col-8 align-self-center">
-    <h3 class="text-themecolor m-b-0 m-t-0">@lang('lang.purchase') @lang('lang.create')</h3>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{route('index')}}">@lang('lang.back_to_dashboard')</a></li>
-        <li class="breadcrumb-item active">Daily Purchase</li>
-    </ol>
-</div> --}}
 
 @endsection
 
@@ -20,7 +12,7 @@ $from_id = 1;
 @endphp
 <div class="row page-titles">
     <div class="col-md-12 col-12 align-self-center">
-        <h4 class="font-weight-normal">Create Daily Purchase Form</h4>
+        <h4 class="font-weight-normal">Create Daily Consumption Form</h4>
     </div>
 </div>
 
@@ -30,12 +22,12 @@ $from_id = 1;
             <div class="card-body">
                 
 
-                <form class="form-material m-t-40" method="post" action="{{route('store_purchase')}}" id="store_purchase">
+                <form class="form-material m-t-40" method="post" action="{{route('store_consumption')}}" id="store_purchase">
                     @csrf
                     <input type="hidden" name="type" id="type" value="1">
                     
                     <div class="form-group">
-                        <label class="font-weight-bold">Purchase No.</label>
+                        <label class="font-weight-bold">Consumption No.</label>
                         <input type="text" name="purchase_number" class="form-control" value="" id="item_purchase_no">
                     </div>
 
@@ -44,24 +36,6 @@ $from_id = 1;
                         <input type="date" name="purchase_date" class="form-control">
                     </div>
 
-                    {{-- <div class="form-group">
-                        <input type="text" name="supp_name" class="form-control" placeholder="Enter Supplier Name">
-                    </div> --}}
-                    <!-- <div class="form-group">
-                    <label class="font-weight-bold">@lang('lang.supplier_name')</label>
-                    <select class="select_sup form-control" name="supp_name" id="supp_name" >
-                        <option></option>
-                        @foreach($categories as $category)
-                        <option value="{{$category->id}}">{{$category->name}}</option>
-                        @endforeach
-                    </select>
-                    </div> -->
-                    
-                    <!-- <div class="form-group">
-                        <label class="font-weight-bold">Remark</label>
-                        <input type="text" name="purchase_remark" class="form-control">
-                    </div> -->
-                    
                     <!-- Header -->
                     
                     <div class="row">
@@ -103,8 +77,8 @@ $from_id = 1;
                     <div id="total_amt" class="mt-3">
                         <label class="font-weight-bold text-info">Total Amount - <span class="m-2" id="total_place"></span></label>
                     </div>
-                    <input type="button" name="btnsubmit" data-target="#storetotal" data-toggle="modal" class="btnsubmit float-right btn btn-primary" value="Save Unit">
-                    <div class="modal fade" id="storetotal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <input type="button" name="btnsubmit" data-target="#storetotal" data-toggle="modal" class="btnsubmit float-right btn btn-primary" value="Save Unit" onclick="submit_store()">
+                    <!-- <div class="modal fade" id="storetotal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
                             <div class="modal-header bg-info">
@@ -129,22 +103,18 @@ $from_id = 1;
                                     <label class="font-weight-bold">Credit Amount</label>
                                     <input type="number" id="credit_amount" name="credit_amount" class="form-control" readonly>
                                 </div>
-                                {{-- <div class="form-group m-2" id="repay_all">
-                                    <label class="font-weight-bold">Repay Date</label>
-                                    <input type="date" id="repay_date" name="repay_date" class="form-control">
-                                </div> --}}
                                 <div class="form-group m-2">
                                     <label class="font-weight-bold">Pay Amount</label>
                                     <input type="number" id="pay_amount" name="pay_amount" class="form-control" onkeyup="cal_credit(this.value)">
-                                </div>
-                            </div><!-- end modal body div -->
-                            <div class="modal-footer">
+                                </div> -->
+                            <!-- </div>end modal body div -->
+                            <!-- <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                               <button type="button" class="btn btn-primary" onclick="submit_store()">Save changes</button>
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> -->
                 </form>
 
             </div>
@@ -193,13 +163,17 @@ $from_id = 1;
                 <input type="text" value="" id="item_unit" name="unit" class="form-control">
             </div>
             <div class="form-group m-2">
-                <label class="font-weight-bold">Stock Quantity</label>
-                <input type="number" id="qty" class="form-control" onkeyup="calculate_total(this.value)">
+                <label class="font-weight-bold">Total Instock Quantity</label>
+                <input type="number" id="instock_qty" class="form-control" readonly>
             </div>
             <div class="form-group m-2">
-                <label class="font-weight-bold">Price</label>
-                <input type="text" value="" id="price" name="price" class="form-control">
+                <label class="font-weight-bold">Consumption Quantity</label>
+                <input type="number" id="qty" class="form-control" onkeyup="calculate_total(this.value)">
             </div>
+            <!-- <div class="form-group m-2"> -->
+                <!-- <label class="font-weight-bold">Price</label> -->
+                <input type="hidden" value="" id="price" name="price" class="form-control">
+            <!-- </div> -->
             
             
             <!-- <div class="form-group m-2">
@@ -411,13 +385,13 @@ $from_id = 1;
                             $('#normal_sale_price').val(n_price);
                         }
 
-                        $('#add_purchase_modal').modal('show');
-                        addpurchase();
+                        // $('#add_purchase_modal').modal('show');
+                        
                         $('#unit_id').val(id);
                         $('#purchase_price').val(now_price);
                         $('#old_purchase_price').val(data.price);
                         $('#old_normal_sale_price').val(normalprice);
-                        
+                        addpurchase();
                       }else{
                         addpurchase();
                       }
@@ -773,8 +747,9 @@ function searchSubCategory(value){
                             // console.log(data);
                                $('#item_amount').val(data.amount);
                                $('#item_unit').val(data.unit);
+                               $('#instock_qty').val(data.stock_quantity);
                                $('#qty').val();
-                               $("#price").val();
+                               $("#price").val(data.price);
                                $("#item_purchase_no").val();
                         },
                         error: function(status) {

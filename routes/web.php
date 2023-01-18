@@ -145,7 +145,7 @@ Route::group(['middleware' => ['UserAuth']], function () {
 
     Route::post('Table-Type/update/{id}', 'Web\AdminController@updateTableType')->name('update_table_type');
 
-    Route::get('finicial', 'Web\AdminController@getFinicial')->name('getfinicial');
+    // Route::get('finicial', 'Web\AdminController@getFinicial')->name('getfinicial');
     Route::post('getTotalSaleReport', 'Web\AdminController@getTotalSaleReport');
     Route::post('getTotalExpense', 'Web\AdminController@getTotalExpense');
     Route::get('expense', 'Web\AdminController@getExpense')->name('expense');
@@ -164,9 +164,17 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::get('Delivery_Pending-Order-Details/{id}', 'Web\SaleController@getPendingDeliveryOrderDetails')->name('deli_pending_order_details');
     Route::get('Finished-Order', 'Web\SaleController@getFinishedOrderList')->name('finished_lists');
     Route::post('Finished-Order-DateFilter', 'Web\SaleController@getFilterFinishedOrderList')->name('filter_finished_lists');
+
+    
+    Route::post('Finished-Consumption-DateFilter', 'Web\SaleController@getFilterFinishedConsumptionList');
+
+
     Route::get('Shop-Order-Voucher/{order_id}', 'Web\SaleController@getShopOrderVoucher')->name('shop_order_voucher');
 
     Route::get('Take-Away-Order-Voucher/{order_id}', 'Web\SaleController@getTakeAwayOrderVoucher')->name('take_away_order_voucher');
+
+    //Voucher list with date filter
+    Route::post('Finished-Voucher-DateFilter', 'Web\SaleController@getFilteredVoucher');
 
     Route::get('Delivery-Order-Voucher/{order_id}', 'Web\SaleController@getDeliveryOrderVoucher')->name('delivery_order_voucher');
     Route::get('gotopending','Web\SaleController@gotopendinglists')->name('gotopendinglist');
@@ -249,12 +257,35 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::post('add_daily_purchase', 'Web\AdminController@addDailyPurchase')->name('add_daily_purchase');
     Route::get('search_item/{id}', 'Web\AdminController@searchItem');
     Route::post('purchaseprice/update', 'Web\AdminController@purchasepriceUpdate')->name('purchasepriceupdate');
+    Route::post('Purchase/Store', 'Web\AdminController@storePurchaseHistory')->name('store_purchase');
+    //daily purchase detail
+    Route::get('Purchase/Details/{id}', 'Web\AdminController@getPurchaseHistoryDetails')->name('purchase_details');
+
+    //daily consumption
+    Route::get('daily_consumption', 'Web\AdminController@getDailyConsumption')->name('daily_consumption');
+    Route::get('daily_consumption/create', 'Web\AdminController@createDailyConsumption');
+    Route::post('Consumption/Store', 'Web\AdminController@storeConsumptionHistory')->name('store_consumption');
+    //daily purchase detail
+    Route::get('Consumption/Details/{id}', 'Web\AdminController@getConsumptionHistoryDetails')->name('consumption_details');
+
+    //daily income list
+    Route::get('Incomes', 'Web\AdminController@incomeList')->name('incomes');
+    Route::post('storeIncome', 'Web\AdminController@storeIncome')->name('store_income');
+    Route::post('updateIncome/{id}', 'Web\AdminController@updateIncome')->name('update_income');
+    Route::post('deleteIncome', 'Web\AdminController@deleteIncome')->name('delete_income');
+    Route::post('getTotalSaleReport', 'Web\AdminController@getTotalSaleReport');
+
+    //financial 
+    Route::get('Financial', 'Web\AdminController@getTotalSalenAndProfit')->name('financial');
 
     //Customer
     /* Route::get('Customer', 'Web\AdminController@getCustomerList')->name('customer_list');
     Route::post('Customer/store', 'Web\AdminController@storeCustomer')->name('store_customer');
     Route::get('Customer/details/{id}', 'Web\AdminController@getCustomerDetails')->name('customer_details');
     Route::post('Customer/Change-Level', 'Web\AdminController@changeCustomerLevel')->name('change_customer_level');*/
+
+    //Daily Sales Report
+    Route::get('daily_sales_report', 'Web\AdminController@getSalesReport')->name('daily_sales_report');
 
     Route::post('edit_ingredient','Web\InventoryController@editIngredient');
     Route::post('update_ingredient','Web\InventoryController@store_updateIngredient')->name('update_ingre');
