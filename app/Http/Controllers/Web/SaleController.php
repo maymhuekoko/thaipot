@@ -50,7 +50,7 @@ class SaleController extends Controller
 
 	protected function getPendingShopOrderList(){
 
-		$pending_lists = ShopOrder::where('status', 1)->where('take_away_flag', 0)->get();
+		$pending_lists = ShopOrder::where('status', 1)->where('take_away_flag', 0)->latest()->get();
 
         $promotion = Promotion::all();
 
@@ -59,7 +59,7 @@ class SaleController extends Controller
 
     protected function getPendingTakeAwayOrderList(){
 
-		$pending_lists = ShopOrder::where('status', 1)->where('take_away_flag', 1)->get();
+		$pending_lists = ShopOrder::where('status', 1)->where('take_away_flag', 1)->latest()->get();
 
         $promotion = Promotion::all();
 
@@ -77,7 +77,7 @@ class SaleController extends Controller
 
 	protected function gotopendinglists(){
 
-		$pending_lists = ShopOrder::where('status', 1)->get();
+		$pending_lists = ShopOrder::where('status', 1)->where('take_away_flag', 0)->latest()->get();
         $promotion = Promotion::all();
 
 		return view('Sale.pending_lists', compact('pending_lists','promotion'));
@@ -1243,7 +1243,7 @@ class SaleController extends Controller
 	protected function getFinishedOrderList(){
 
 		$order_lists = ShopOrder::where('status', 2)->get();
-    	$vouchers = Voucher::with('shopOrder')->get();
+    	$vouchers = Voucher::with('shopOrder')->latest()->get();
 
 		return view('Sale.finished_lists', compact('order_lists','vouchers'));
 	}
@@ -1256,8 +1256,8 @@ class SaleController extends Controller
 	}
 
 	protected function getFilteredVoucher(Request $request){
-		$vouchers = Voucher::whereDate('voucher_date', '>=', $request->start_date)->whereDate('voucher_date', '<=', $request->end_date)->with('shopOrder')->get();
-		
+		$vouchers = Voucher::whereDate('voucher_date', '>=', $request->start_date)->whereDate('voucher_date', '<=', $request->end_date)->with('shopOrder')->latest()->get();
+
 		return response()->json($vouchers);
 	}
 
