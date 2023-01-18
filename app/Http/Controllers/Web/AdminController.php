@@ -2112,18 +2112,43 @@ protected function updateIncome($id, Request $request)
         $children = 0;
         $kids = 0;
         $extra_pots = 0;
-        $extra_foods = 0;
+        $extra_grams = 0;
+        $extra_amount = 0;
+        $discount_amount = 0;
 
+        $adult_amount = 0;
+        $children_amount = 0;
+        $kid_amount = 0;
+        $extra_pot_amount = 0;
+        $first_total = 0;
+        $second_total = 0;
 
         $shop_orders = ShopOrder::whereDate('created_at', date('Y-m-d'))->get();
+        $vouchers = Voucher::whereDate('voucher_date', date('Y-m-d'))->get();
         
         foreach($shop_orders as $order){
             $adults += $order->adult_qty;
             $children += $order->child_qty;
-            $kids += $order->
+            $kids += $order->kid_qty;
+            $extra_pots += $order->extrapot_qty;
         }
 
+        $adult_amount += $adults * 20900;
+        $children_amount += $children * 11000;
+        $kid_amount += $kids * 9000;
+        $extra_pot_amount += $extra_pots * 3000;
 
-        return view('Admin.sales_report');
+        foreach($vouchers as $voucher){
+            $extra_grams += $voucher->extra_gram;
+            $extra_amount += $voucher->extra_amount;
+        }
+
+        $first_total += ($adult_amount + $children_amount + $kid_amount + $extra_pot_amount + $extra_amount);
+
+        $service_charge = $first_total * 0.05;
+
+        $second_total = $first_total + $service_charge;
+
+        return view('Admin.sales_report', compact('adults', 'children', 'kids', 'extra_pots', 'extra_grams', 'extra_amount', 'first_total', 'service_charge', 'second_total'));
     }
 }
