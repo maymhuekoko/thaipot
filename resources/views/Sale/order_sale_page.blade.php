@@ -700,10 +700,7 @@ var item_name = $('#item_name'+id).val();
                             </td>
                             <td class="text-success font-weight-bold"><button class="btn btn-sm btn-info" id="note_${id}" onclick="note(${id})">Note</button></td>
                             </tr>
-                            <tr id="hidenote${id}" hidden>
-                                <th class="text-danger font-weight-bold">Notes:</th>
-                                <td class="text-danger font-weight-bold" colspan="4" id="note_remark_${id}"></td>
-                            </tr>
+                           
                             `;
 
 
@@ -717,7 +714,6 @@ var item_name = $('#item_name'+id).val();
                                 `;
                                 }
                             })
-
 
 
                 });

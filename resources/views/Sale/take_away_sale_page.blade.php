@@ -49,7 +49,7 @@
                 $id = $tableId;
             }else{
                 $id = 0;
-            }    
+            }
             @endphp
 
             <input type="hidden" name="table_exists" value="{{$id}}" id="table_exists">
@@ -97,7 +97,7 @@
             @endforeach
         </ul>
 
-       
+
         <!-- Tab panes -->
         <div class="tab-content">
             <div class="tab-pane active" id="7" role="tabpanel">
@@ -681,11 +681,13 @@ else{
 }
     function showmodal(){
         var mycart = localStorage.getItem('mycart');
+        var myremark = localStorage.getItem('myremark');
         console.log(mycart);
         var grandTotal = localStorage.getItem('grandTotal');
         var grandTotal_obj = JSON.parse(grandTotal);
         if(mycart){
             var mycartobj = JSON.parse(mycart);
+            var myremarkobj = JSON.parse(myremark);
             var html='';
             if(mycartobj.length>0){
                 $.each(mycartobj,function(i,v){
@@ -703,11 +705,19 @@ else{
                             <td class="text-success font-weight-bold">${v.selling_price}</td>
                             <td class="text-success font-weight-bold"><button class="btn btn-sm btn-info" id="note_${id}" onclick="note(${id})">Note</button></td>
                             </tr>
-                            <tr>
-                                <th class="text-danger font-weight-bold">Notes:</th>
-                                <td class="text-danger font-weight-bold" colspan="4" id="note_remark_${id}"></td>
-                            </tr>
+
                             `;
+
+                            $.each(myremarkobj,function(j,val){
+                                if(v.id == val.id){
+                                    // document.getElementById("hidenote").style.visibility = "hidden";
+                                    html+= `<tr>
+                                    <th class="text-danger font-weight-bold">Notes:</th>
+                                    <td class="text-danger font-weight-bold" colspan="4">${val.remark}</td>
+                                    </tr>
+                                `;
+                                }
+                            })
                 });
             }
             $("#total_quantity").text(grandTotal_obj.total_qty);
@@ -830,7 +840,7 @@ if(!mycart){
         text:"Menu Item Cannot be Empty to Check Out",
         icon:"info",
     });
-}else{ 
+}else{
     $("#deli_option_lists").attr('value', mycart);
     $('#add_deli_complain').attr('value',myremark);
     $("#deli_order_id").attr('value', order);
@@ -879,6 +889,7 @@ function  save_note(){
     // $('#select2').clear();
     // $('#select2').text('Select Code');
     $('#select2').val(null).trigger('change');
+    showmodal();
 }
 </script>
 
