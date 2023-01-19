@@ -34,9 +34,6 @@
                         </thead>
                         <tbody>
                             @foreach($pending_lists as $order)
-                               
-                            
-                                @if($order->order_number)
                                 <tr>
                                 	<td>{{$order->order_number}}</td>
                                     @if($order->table_id == 0)
@@ -47,7 +44,12 @@
                                     <td>
                                     	<a href="{{route('pending_order_details', $order->id)}}" class="btn btn-info">Check Order Details</a>
 
-                                    	<a href="{{route('add_more_item', $order->id)}}" class="btn btn-success">Add More Item</a>
+                                        @if($order->table_id)
+                                    	<a href="/Add-More/take_away/{{$order->table_id}}" class="btn btn-success">Add More Item</a>
+                                        @else
+                                        <a href="/take_away" class="btn btn-success">Add More Item</a>
+                                        @endif
+
                                     	@if($user == 3)
                                     	    <button class="btn" style="background-color:lightgreen;color:white;" onclick="done({{$order->table_id}})">Done</button>
                                             {{-- <button class="btn btn-danger" style="color:white;" onclick="cancel({{$order->id}})">Cancel</button> --}}
@@ -61,9 +63,6 @@
                                     </td>
 
                                 </tr>
-                                @endif
-
-
                             @endforeach
                         </tbody>
                     </table>
