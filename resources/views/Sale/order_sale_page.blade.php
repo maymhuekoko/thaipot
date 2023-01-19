@@ -664,6 +664,7 @@ var item_name = $('#item_name'+id).val();
     function showmodal(){
 
         var mycart = localStorage.getItem('mycart');
+        var myremark = localStorage.getItem('myremark');
         console.log(mycart);
         var grandTotal = localStorage.getItem('grandTotal');
 
@@ -672,6 +673,8 @@ var item_name = $('#item_name'+id).val();
         if(mycart){
 
             var mycartobj = JSON.parse(mycart);
+            var myremarkobj = JSON.parse(myremark);
+
 
             var html='';
 
@@ -697,11 +700,24 @@ var item_name = $('#item_name'+id).val();
                             </td>
                             <td class="text-success font-weight-bold"><button class="btn btn-sm btn-info" id="note_${id}" onclick="note(${id})">Note</button></td>
                             </tr>
-                            <tr>
+                            <tr id="hidenote${id}">
                                 <th class="text-danger font-weight-bold">Notes:</th>
                                 <td class="text-danger font-weight-bold" colspan="4" id="note_remark_${id}"></td>
                             </tr>
                             `;
+
+
+                            $.each(myremarkobj,function(j,val){
+                                if(v.id == val.id){
+                                    document.getElementById("hidenote"+v.id).style.visibility = "hidden";
+                                    html+= `<tr>
+                                    <th class="text-danger font-weight-bold">Notes:</th>
+                                    <td class="text-danger font-weight-bold" colspan="4">${val.remark}</td>
+                                    </tr>
+                                `;
+                                }
+                            })
+
 
 
                 });
@@ -737,6 +753,9 @@ var item_name = $('#item_name'+id).val();
 
     function count_change(id,action,qty){
 
+        document.getElementById("hidenote"+id).style.visibility = "hidden";
+
+
         var grand_total = localStorage.getItem('grandTotal');
 
         var mycart=localStorage.getItem('mycart');
@@ -746,6 +765,7 @@ var item_name = $('#item_name'+id).val();
         var grand_total_obj = JSON.parse(grand_total);
 
         var item = mycartobj.filter(item =>item.id == id);
+
 
         if( action == 'plus'){
 
