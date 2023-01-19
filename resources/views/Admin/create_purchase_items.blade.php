@@ -499,7 +499,7 @@ $from_id = 1;
     function addpurchase(){
     // event.preventDefault();
     var counting_unit_select=  $( "#counting_unit_select option:selected" ).data('unitname');
-    alert(counting_unit_select);
+    // alert(counting_unit_select);
     var html = "";
     count + 1;
     var qty = $('#qty').val();
