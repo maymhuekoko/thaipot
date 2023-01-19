@@ -622,6 +622,10 @@
         $('#inc_exp_table').empty();
         $('#total_income').empty();
         $('#order_table').empty();
+        $('#expense_table').empty();
+        $('#purchase_table').empty();
+        $('#transaction_table').empty();
+        $('#income_table').empty();
 		var  daily = $('#daily').val();
         // alert(daily);
 		var  type  = 1;
@@ -777,7 +781,7 @@
                     var res = value.created_at;
                     res = res.substring(0, 10);
 
-                    $('#purchase_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
+                    $('#purchase_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
 		        });
 
                 //purchase table  
@@ -788,7 +792,7 @@
                     var res = value.created_at;
                     res = res.substring(0, 10);
 
-                    $('#transaction_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
+                    $('#transaction_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
                 });
 
                 //expense table
@@ -799,7 +803,7 @@
                     var res = value.created_at;
                     res = res.substring(0, 10);
 
-                    $('#expense_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(value.title)).append($('<td>').text(res)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
+                    $('#expense_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(value.title)).append($('<td>').text(res)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
                 });
 
                 //income table
@@ -814,7 +818,7 @@
 
                     let period = value.period == null? "Daily" : value.period;
 
-                    $('#income_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
+                    $('#income_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
                 });
 		        
 		        $('#report').show();
@@ -843,6 +847,10 @@
         $('#total_income').empty();
         $('#income_table').empty();
         $('#order_table').empty();
+        $('#expense_table').empty();
+        $('#purchase_table').empty();
+        $('#transaction_table').empty();
+        $('#income_table').empty();
 		var  daily = $('#weekly').val();
 		var  type  = 2;
 		$.ajax({
@@ -998,7 +1006,7 @@
                     var res = value.created_at;
                     res = res.substring(0, 10);
 
-                    $('#purchase_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
+                    $('#purchase_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
 		        });
 
                 //purchase table  
@@ -1009,7 +1017,7 @@
                     var res = value.created_at;
                     res = res.substring(0, 10);
 
-                    $('#transaction_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
+                    $('#transaction_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
                 });
 
                 //expense table
@@ -1020,7 +1028,7 @@
                     var res = value.created_at;
                     res = res.substring(0, 10);
 
-                    $('#expense_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(value.title)).append($('<td>').text(res)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
+                    $('#expense_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(value.title)).append($('<td>').text(res)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
                 });
 		        
 		        //income table
@@ -1035,7 +1043,7 @@
 
                     let period = value.period == null? "Daily" : value.period;
 
-                    $('#income_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
+                    $('#income_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
                 });
 
 		        $('#report').show();
@@ -1064,6 +1072,10 @@
         $('#total_income').empty();
         $('#income_table').empty();
         $('#order_table').empty();
+        $('#expense_table').empty();
+        $('#purchase_table').empty();
+        $('#transaction_table').empty();
+        $('#income_table').empty();
 		var  daily = $('#monthly').val();
 		var  type  = 3;
 		$.ajax({
@@ -1219,7 +1231,7 @@
                     var res = value.created_at;
                     res = res.substring(0, 10);
 
-                    $('#purchase_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
+                    $('#purchase_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
 		        });
 
                 //purchase table  
@@ -1230,7 +1242,7 @@
                     var res = value.created_at;
                     res = res.substring(0, 10);
 
-                    $('#transaction_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
+                    $('#transaction_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(res)).append($('<td>').text(value.total_quantity)).append($('<td>').text(value.price)).append($('<td>').append($(button)));
                 });
 
                 //expense table
@@ -1241,7 +1253,7 @@
                     var res = value.created_at;
                     res = res.substring(0, 10);
 
-                    $('#expense_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(value.title)).append($('<td>').text(res)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
+                    $('#expense_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(value.title)).append($('<td>').text(res)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
                 });
 
                  //income table
@@ -1256,7 +1268,7 @@
 
                     let period = value.period == null? "Daily" : value.period;
 
-                    $('#income_table').append($('<tr>')).append($('<td>').text(i++)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
+                    $('#income_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(value.amount));
                 });
                 
 		        $('#report').show();
@@ -1276,6 +1288,11 @@ function fil_date(){
 		$('#sale_table').empty();
         $('#income_table').empty();
         $('#order_table').empty();
+        $('#expense_table').empty();
+        $('#purchase_table').empty();
+        $('#transaction_table').empty();
+        $('#income_table').empty();
+        $('#inc_exp_table').empty();
     if($('.nav-tabs .active').text() == 'Weekly'){
         // alert('nav2');
         var type = 2;
@@ -1349,6 +1366,11 @@ function other_income(){
         $('#total_sales').empty();
         $('#sale_table').empty();
         $('#inc_exp_table').empty();
+        $('#expense_table').empty();
+        $('#purchase_table').empty();
+        $('#transaction_table').empty();
+        $('#income_table').empty();
+        $('#order_table').empty();
         if($('.nav-tabs .active').text() == 'Weekly'){
         // alert('nav2');
         var type = 2;
@@ -1466,7 +1488,7 @@ function other_income(){
                         var amount = value.amount;
                         var amount_text = ' ';
                     }
-                    $('#inc_exp_table').append($('<tr>')).append($('<td>').text(++i)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(amount+' '+amount_text));
+                    $('#inc_exp_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(amount+' '+amount_text));
                 });
                 }
             }
@@ -1478,6 +1500,11 @@ function other_expense(){
         $('#total_sales').empty();
         $('#sale_table').empty();
         $('#inc_exp_table').empty();
+        $('#expense_table').empty();
+        $('#purchase_table').empty();
+        $('#transaction_table').empty();
+        $('#income_table').empty();
+        $('#order_table').empty();
         if($('.nav-tabs .active').text() == 'Weekly'){
         // alert('nav2');
         var type = 2;
@@ -1535,7 +1562,7 @@ function other_expense(){
                         var amount = value.amount;
                         var amount_text = ' ';
                     }
-                    $('#inc_exp_table').append($('<tr>')).append($('<td>').text(++i)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(amount+' '+amount_text));
+                    $('#inc_exp_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(amount+' '+amount_text));
                 });
                 }
                 else if(data.time == 2){
@@ -1565,7 +1592,7 @@ function other_expense(){
                         var amount = value.amount;
                         var amount_text = ' ';
                     }
-                    $('#inc_exp_table').append($('<tr>')).append($('<td>').text(++i)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(amount+' '+amount_text));
+                    $('#inc_exp_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(amount+' '+amount_text));
                 });
                 }
                 else{
@@ -1595,7 +1622,7 @@ function other_expense(){
                         var amount = value.amount;
                         var amount_text = ' ';
                     }
-                    $('#inc_exp_table').append($('<tr>')).append($('<td>').text(++i)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(amount+' '+amount_text));
+                    $('#inc_exp_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(type)).append($('<td>').text(period)).append($('<td>').text(value.date)).append($('<td>').text(value.title)).append($('<td>').text(value.description)).append($('<td>').text(amount+' '+amount_text));
                 });
                 }
             }
@@ -1605,8 +1632,14 @@ function show_purchase(){
     // alert('income');
         $('#hide_date').hide();
         //$('#total_sales').empty();
-        //$('#sale_table').empty();
+        $('#sale_table').empty();
         $('#purchase_table').empty();
+        $('#expense_table').empty();
+        $('#purchase_table').empty();
+        $('#transaction_table').empty();
+        $('#income_table').empty();
+        $('#order_table').empty();
+        $('#inc_exp_table').empty();
         if($('.nav-tabs .active').text() == 'Weekly'){
         // alert('nav2');
         var type = 2;
@@ -1714,8 +1747,14 @@ function show_transaction(){
     // alert('income');
         $('#hide_date').hide();
         //$('#total_sales').empty();
-        //$('#sale_table').empty();
+        $('#sale_table').empty();
         $('#transaction_table').empty();
+        $('#expense_table').empty();
+        $('#purchase_table').empty();
+        $('#transaction_table').empty();
+        $('#income_table').empty();
+        $('#order_table').empty();
+        $('#inc_exp_table').empty();
         if($('.nav-tabs .active').text() == 'Weekly'){
         // alert('nav2');
         var type = 2;
@@ -1751,7 +1790,7 @@ function show_transaction(){
                     // if(type == 1){
                 
                 
-                $('#transaction_table').append($('<tr>')).append($('<td>').text(++i)).append($('<td>').text(value.tran_date)).append($('<td>').text(value.order.order_number)).append($('<td>').text(value.bank_account.bank_name + ' ' + value.bank_account.account_number)).append($('<td>').text(value.pay_amount)).append($('<td>').text(value.remark));
+                $('#transaction_table').append($('<tr>')).append($('<td>').text(i+1)).append($('<td>').text(value.tran_date)).append($('<td>').text(value.order.order_number)).append($('<td>').text(value.bank_account.bank_name + ' ' + value.bank_account.account_number)).append($('<td>').text(value.pay_amount)).append($('<td>').text(value.remark));
                 });
                 
                 
