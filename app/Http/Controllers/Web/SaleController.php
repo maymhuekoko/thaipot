@@ -855,7 +855,9 @@ class SaleController extends Controller
 
         $re_date = $date->format('Y-m-d');
 
-		$total = $shop_order->adult_qty * 21950 + $shop_order->child_qty * 11550 + $shop_order->kid_qty * 9450 + $shop_order->extrapot_qty * 3000 - $shop_order->birth_qty * 4390 + $request->extragram1;
+		$tota = $shop_order->adult_qty * 21950 + $shop_order->child_qty * 11550 + $shop_order->kid_qty * 9450 + $shop_order->extrapot_qty * 3000 + $request->extragram1;
+        $tser = $tota * 0.05;
+        $total  = $tota + $tser - ($shop_order->birth_qty * 4390);
         //  dd($request->change_amount_dis);
         $total_qty =  $shop_order->adult_qty + $shop_order->child_qty  + $shop_order->kid_qty ;
 
