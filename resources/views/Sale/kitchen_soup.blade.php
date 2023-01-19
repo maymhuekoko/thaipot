@@ -110,7 +110,7 @@
 
                     </a>
                     @else
-                    <a href="{{route('gotopendinglist')}}" id="goto" class="btn btn-outline-danger" type="button">
+                    <a href="/Pending-Order" id="goto" class="btn btn-outline-danger" type="button">
                         <span><i class="fa fa-info"></i> To Pending Voucher Lists </span>
                     </a>
                     @endif
