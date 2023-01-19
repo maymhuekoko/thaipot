@@ -700,7 +700,7 @@ var item_name = $('#item_name'+id).val();
                             </td>
                             <td class="text-success font-weight-bold"><button class="btn btn-sm btn-info" id="note_${id}" onclick="note(${id})">Note</button></td>
                             </tr>
-                            <tr id="hidenote${id}">
+                            <tr id="hidenote${id}" hidden>
                                 <th class="text-danger font-weight-bold">Notes:</th>
                                 <td class="text-danger font-weight-bold" colspan="4" id="note_remark_${id}"></td>
                             </tr>
@@ -709,7 +709,7 @@ var item_name = $('#item_name'+id).val();
 
                             $.each(myremarkobj,function(j,val){
                                 if(v.id == val.id){
-                                    document.getElementById("hidenote"+v.id).style.visibility = "hidden";
+                                    // document.getElementById("hidenote").style.visibility = "hidden";
                                     html+= `<tr>
                                     <th class="text-danger font-weight-bold">Notes:</th>
                                     <td class="text-danger font-weight-bold" colspan="4">${val.remark}</td>
@@ -753,9 +753,6 @@ var item_name = $('#item_name'+id).val();
 
     function count_change(id,action,qty){
 
-        document.getElementById("hidenote"+id).style.visibility = "hidden";
-
-
         var grand_total = localStorage.getItem('grandTotal');
 
         var mycart=localStorage.getItem('mycart');
@@ -765,6 +762,7 @@ var item_name = $('#item_name'+id).val();
         var grand_total_obj = JSON.parse(grand_total);
 
         var item = mycartobj.filter(item =>item.id == id);
+
 
 
         if( action == 'plus'){
@@ -1003,6 +1001,7 @@ function  save_note(){
     // $('#select2').clear();
     // $('#select2').text('Select Code');
     $('#select2').val(null).trigger('change');
+    showmodal();
 
 }
 
