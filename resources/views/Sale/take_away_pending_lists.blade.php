@@ -34,6 +34,9 @@
                         </thead>
                         <tbody>
                             @foreach($pending_lists as $order)
+                               
+                            
+                                @if($order->order_number)
                                 <tr>
                                 	<td>{{$order->order_number}}</td>
                                     @if($order->table_id == 0)
@@ -58,6 +61,9 @@
                                     </td>
 
                                 </tr>
+                                @endif
+
+
                             @endforeach
                         </tbody>
                     </table>

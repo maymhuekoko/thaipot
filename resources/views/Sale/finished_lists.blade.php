@@ -94,6 +94,8 @@
                                 <td>{{$vouc->total_quantity}}</td>
                                 @if ($vouc->type == 1)
                                 <td>{{isset($vouc->shopOrder->table->table_number)? $vouc->shopOrder->table->table_number: "Take Away"}}</td>
+                                @elseif($vouc->type == 2)
+                                <td>{{isset($vouc->shopOrder->table->table_number)? $vouc->shopOrder->table->table_number." (Take Away)": "Take Away"}}</td>
                                 @else
                                 <td>Take Away</td>
                                 @endif
@@ -149,8 +151,16 @@
             $.each(data, function(i,v){
                 let url1 = "{{url('/shop_voucher1')}}/"+v.id;
                 let url2 = "{{url('/shop_voucher/')}}/"+v.id;
+                let table_no = 0;
 
-                let table_no = v.shop_order.table_id? v.shop_order.table_id: "Take Away";
+                if(v.shop_order.table_id && v.type == 2){
+                    table_no = v.shop_order.table.table_number+" (Take Away)";
+                }else if(v.shop_order.table_id && v.type == 1){
+                    table_no = v.shop_order.table.table_number;
+                }else{
+                    table_no = "Take Away";
+                }
+                // table_no = v.shop_order.table_id? v.shop_order.table_id: "Take Away";
 
                 html +=`
                 <tr class="text-center">
