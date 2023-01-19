@@ -21,6 +21,7 @@ use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\TakeAwayOrder;
 use App\TotalConsumption;
 use App\TotalPurchase;
 use Illuminate\Support\Facades\Validator;
@@ -87,8 +88,8 @@ class SaleController extends Controller
 		$table_number = 0;
 		try {
 
-		$pending_order_details = ShopOrder::findOrFail($order_id);
-            // dd($pending_order_details->option);
+			$pending_order_details = ShopOrder::findOrFail($order_id);
+
 		} catch (\Exception $e) {
 
         	alert()->error("Pending Order Not Found!")->persistent("Close!");
@@ -98,6 +99,30 @@ class SaleController extends Controller
         //   dd($pending_order_details);
     	return view('Sale.pending_order_details', compact('pending_order_details','table_number'));
 
+	}
+
+	protected function getPendingTakeAwayDetails($order_id){
+		$table_number = 0;
+		try {
+
+		$pending_order_details = ShopOrder::findOrFail($order_id);
+
+		if($pending_order_details->take_away_flag == 1){
+			$item_shop_orders = DB::table('item_shop_order')->where('shop_order_id', $order_id)->get();
+		}
+
+		$menu_items = MenuItem::all();
+
+		$promotion = Promotion::all();
+            // dd($pending_order_details->option);
+		} catch (\Exception $e) {
+
+        	alert()->error("Pending Order Not Found!")->persistent("Close!");
+
+            return redirect()->back();
+    	}
+        //   dd($pending_order_details);
+    	return view('Sale.pending_take_away_details', compact('pending_order_details','table_number', 'item_shop_orders', 'menu_items', 'promotion'));
 	}
 
     protected function getPendingDeliveryOrderDetails($order_id){
