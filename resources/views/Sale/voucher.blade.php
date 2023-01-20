@@ -72,8 +72,8 @@
                                             @if ($order->adult_qty != 0)
                                             <tr style="text-align:left;">
                                                 <th >Adult</th>
-                                                <th >20900 * <span>{{$order->adult_qty}}</span></th>
-                                                <th>{{$order->adult_qty * 20900}}</th>
+                                                <th >21900 * <span>{{$order->adult_qty}}</span></th>
+                                                <th>{{$order->adult_qty * 21900}}</th>
                                             </tr>
                                             @endif
                                             @if ($order->child_qty != 0)
@@ -145,7 +145,7 @@
                                         @if ($order->birth_qty != 0)
                                         <strong>Birthday Discount(20%) - {{$order->birth_qty * 4390}}</strong><br>
                                         @endif
-                                        <strong>Total - {{$voutotal+ $servicecharges - 20900 - ($order->birth_qty * 4390)}}</strong><br>
+                                        <strong>Total - {{$voutotal+ $servicecharges - 21900 - ($order->birth_qty * 4390)}}</strong><br>
                                         <strong>Discount - FOC(1 person)</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                         <strong>Change - {{$voucher->change_value}}</strong><br>

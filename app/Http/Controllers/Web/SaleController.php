@@ -21,6 +21,7 @@ use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\TakeAwayOrder;
 use App\TotalConsumption;
 use App\TotalPurchase;
 use Illuminate\Support\Facades\Validator;
@@ -87,8 +88,8 @@ class SaleController extends Controller
 		$table_number = 0;
 		try {
 
-		$pending_order_details = ShopOrder::findOrFail($order_id);
-            // dd($pending_order_details->option);
+			$pending_order_details = ShopOrder::findOrFail($order_id);
+
 		} catch (\Exception $e) {
 
         	alert()->error("Pending Order Not Found!")->persistent("Close!");
@@ -98,6 +99,30 @@ class SaleController extends Controller
         //   dd($pending_order_details);
     	return view('Sale.pending_order_details', compact('pending_order_details','table_number'));
 
+	}
+
+	protected function getPendingTakeAwayDetails($order_id){
+		$table_number = 0;
+		try {
+
+		$pending_order_details = ShopOrder::findOrFail($order_id);
+
+		if($pending_order_details->take_away_flag == 1){
+			$item_shop_orders = DB::table('item_shop_order')->where('shop_order_id', $order_id)->get();
+		}
+
+		$menu_items = MenuItem::all();
+
+		$promotion = Promotion::all();
+            // dd($pending_order_details->option);
+		} catch (\Exception $e) {
+
+        	alert()->error("Pending Order Not Found!")->persistent("Close!");
+
+            return redirect()->back();
+    	}
+        //   dd($pending_order_details);
+    	return view('Sale.pending_take_away_details', compact('pending_order_details','table_number', 'item_shop_orders', 'menu_items', 'promotion'));
 	}
 
     protected function getPendingDeliveryOrderDetails($order_id){
@@ -857,7 +882,7 @@ class SaleController extends Controller
 
 		$tota = $shop_order->adult_qty * 21950 + $shop_order->child_qty * 11550 + $shop_order->kid_qty * 9450 + $shop_order->extrapot_qty * 3000 + $request->extragram1;
         $tser = $tota * 0.05;
-        $total  = $tota + $tser - ($shop_order->birth_qty * 4390);
+        $total  = $tota + $tser - ($shop_order->birth_qty * 4600);
         //  dd($request->change_amount_dis);
         $total_qty =  $shop_order->adult_qty + $shop_order->child_qty  + $shop_order->kid_qty ;
 
@@ -1187,10 +1212,10 @@ class SaleController extends Controller
 
 		$total_qty = 0 ;
 
-        $tota = $shop_order->adult_qty * 20900 + $shop_order->child_qty * 11000 + $shop_order->kid_qty * 9000 + $shop_order->extrapot_qty * 3000;
+        $tota = $shop_order->adult_qty * 21900 + $shop_order->child_qty * 11000 + $shop_order->kid_qty * 9000 + $shop_order->extrapot_qty * 3000;
         $ser = $tota * 0.05;
-        $total = $tota + $ser - ($shop_order->birth_qty * 4390);
-        $bd = $shop_order->birth_qty * 4390;
+        $total = $tota + $ser - ($shop_order->birth_qty * 4600);
+        $bd = $shop_order->birth_qty * 4600;
 
         return response()->json([
             'vtot' => $tota,
@@ -1289,7 +1314,7 @@ class SaleController extends Controller
 
     	$voucher = Voucher::where('id', $order->voucher_id)->first();
 
-        $voutotal = ($order->adult_qty * 20900)+($order->child_qty * 11000)+ ($order->kid_qty * 9000)+ ($order->extrapot_qty *3000) + $voucher->extra_amount;
+        $voutotal = ($order->adult_qty * 21900)+($order->child_qty * 11000)+ ($order->kid_qty * 9000)+ ($order->extrapot_qty *3000) + $voucher->extra_amount;
 
         $servicecharges =($voutotal/100 * 5);
 
@@ -1527,7 +1552,7 @@ class SaleController extends Controller
 
     	$voucher = Voucher::where('id', $order->voucher_id)->first();
 
-        $voutotal = ($order->adult_qty * 20900)+($order->child_qty * 11000)+ ($order->kid_qty * 9000)+ ($order->extrapot_qty *3000) + $voucher->extra_amount;
+        $voutotal = ($order->adult_qty * 21900)+($order->child_qty * 11000)+ ($order->kid_qty * 9000)+ ($order->extrapot_qty *3000) + $voucher->extra_amount;
 
         $servicecharges =($voutotal/100 * 5);
 

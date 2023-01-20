@@ -161,6 +161,10 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::get('Pending-Order', 'Web\SaleController@getPendingShopOrderList')->name('pending_lists');
     Route::get('Take-Away-Pending-Order', 'Web\SaleController@getPendingTakeAwayOrderList')->name('delivery_pending_lists');
     Route::get('Pending-Order-Details/{id}', 'Web\SaleController@getPendingShopOrderDetails')->name('pending_order_details');
+
+    //pending take away detail
+    Route::get('Pending-Take-Away-Details/{id}', 'Web\SaleController@getPendingTakeAwayDetails')->name('pending_take_away_details');
+
     Route::get('Delivery_Pending-Order-Details/{id}', 'Web\SaleController@getPendingDeliveryOrderDetails')->name('deli_pending_order_details');
     Route::get('Finished-Order', 'Web\SaleController@getFinishedOrderList')->name('finished_lists');
     Route::post('Finished-Order-DateFilter', 'Web\SaleController@getFilterFinishedOrderList')->name('filter_finished_lists');

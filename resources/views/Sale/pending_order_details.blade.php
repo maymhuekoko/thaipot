@@ -59,8 +59,8 @@
                                     <tr style="text-align:left;">
                                         <th >Adult</th>
                                         <th ><span>{{$pending_order_details->adult_qty}}</span></th>
-                                        <th>20900</th>
-                                        <th>{{$pending_order_details->adult_qty * 20900}}</th>
+                                        <th>21900</th>
+                                        <th>{{$pending_order_details->adult_qty * 21900}}</th>
                                     </tr>
                                     @endif
                                     @if ($pending_order_details->child_qty != 0)
@@ -171,7 +171,7 @@
                 </div>
                 <div class="form-group mt-3" id="dis_foc">
                     <label class="font-weight-bold">FOC</label>
-                    <input type="text" class="form-control"  value="20900">
+                    <input type="text" class="form-control"  value="21900">
                 </div>
                 <div class="form-group mt-3" id="dis_percent">
                     <label class="font-weight-bold">Discount Percent</label>
@@ -324,7 +324,7 @@
        $('#dis_foc').show();
        $('#dis_percent').hide();
        $('#dis_amount').hide();
-       var dis_value = $('#curr_voucher_total1').val(parseInt($('#curr_voucher_total1').val()) -20900);
+       var dis_value = $('#curr_voucher_total1').val(parseInt($('#curr_voucher_total1').val()) -21900);
        $('#dis_type').val(1);
        $('#dis_val').val(0);
    }
