@@ -118,7 +118,7 @@
                 </div>
                 <div class="form-group mt-3" id="dis_foc">
                     <label class="font-weight-bold">FOC</label>
-                    <input type="text" class="form-control"  value="20900">
+                    <input type="text" class="form-control"  value="21900">
                 </div>
                 <div class="form-group mt-3" id="dis_percent">
                     <label class="font-weight-bold">Discount Percent</label>
@@ -273,7 +273,7 @@ function foc_radio(){
     $('#dis_foc').show();
     $('#dis_percent').hide();
     $('#dis_amount').hide();
-    var dis_value = $('#curr_voucher_total1').val(parseInt($('#curr_voucher_total1').val()) -20900);
+    var dis_value = $('#curr_voucher_total1').val(parseInt($('#curr_voucher_total1').val()) -21900);
     $('#dis_type').val(1);
     $('#dis_val').val(0);
 }
