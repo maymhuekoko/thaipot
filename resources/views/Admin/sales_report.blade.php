@@ -187,28 +187,28 @@
                         <th>Remark</th>
                         </tr>
                     </thead>`;
-                $.each(data, function(i,v){
-                    // console.log(data)
-                    // let url1 = "{{url('/Consumption/Details/')}}/"+v.id;
+                // $.each(data, function(i,v){
+                //     console.log(v)
+                    // let url1 = "{{url('/Consumption/Details/')}}/"+data.id;
                     // let date_str = v.created_at.substring(0, 10);
                     html +=`
                     <tbody>
                         <tr>
                             <td>Adult</td>
-                            <td>${v.adults}</td>
-                            <td>${v.adults * 21900}</td>
+                            <td>${data.adults}</td>
+                            <td>${data.adults * 21900}</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Child 9 to 12</td>
-                            <td>${v.children}</td>
-                            <td>${v.children * 11000}</td>
+                            <td>${data.children}</td>
+                            <td>${data.children * 11000}</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Child 4 to 8</td>
-                            <td>${v.kids}</td>
-                            <td>${v.kids * 9000}</td>
+                            <td>${data.kids}</td>
+                            <td>${data.kids * 9000}</td>
                             <td></td>
                         </tr>
                         <tr>
@@ -219,32 +219,32 @@
                         </tr>
                         <tr>
                             <td>Extra Pot</td>
-                            <td>${v.extra_pots}</td>
-                            <td>${v.extra_pots * 3000}</td>
+                            <td>${data.extra_pots}</td>
+                            <td>${data.extra_pots * 3000}</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Extra Food</td>
-                            <td>${v.extra_grams}</td>
-                            <td>${v.extra_amount}</td>
+                            <td>${data.extra_grams}</td>
+                            <td>${data.extra_amount}</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Total</td>
                             <td></td>
-                            <td>${v.first_total}</td>
+                            <td>${data.first_total}</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Service Charge 5%</td>
                             <td></td>
-                            <td>${v.service_charge}</td>
+                            <td>${data.service_charge}</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Total</td>
                             <td></td>
-                            <td>${v.second_total}</td>
+                            <td>${data.second_total}</td>
                             <td></td>
                         </tr>
                         <tr>
@@ -297,7 +297,7 @@
                         </tr>
                     </tbody>
                     `;
-                })
+                // })
                 $('#sale_table').html(html);
             }
             })
