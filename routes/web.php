@@ -290,6 +290,8 @@ Route::group(['middleware' => ['UserAuth']], function () {
 
     //Daily Sales Report
     Route::get('daily_sales_report', 'Web\AdminController@getSalesReport')->name('daily_sales_report');
+    // Sales-Report-DateFilter
+    Route::post('Sales-Report-DateFilter', 'Web\AdminController@getSaleReportDate');
 
     Route::post('edit_ingredient','Web\InventoryController@editIngredient');
     Route::post('update_ingredient','Web\InventoryController@store_updateIngredient')->name('update_ingre');
