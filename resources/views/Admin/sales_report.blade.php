@@ -160,8 +160,7 @@
 @section('js')
  <script>
     $(document).ready(function(){
-        
-       
+       $('#datePicker').val("");
     });
     $('#datePicker').change(function() {
             var startDate = $('#datePicker').val();
@@ -174,10 +173,9 @@
             "start_date":startDate,
             },
             success:function(data){
-                alert('success');
                 let html = '';
                 $('#sale_table').empty();
-                $('#datePicker').val();
+                $('#datePicker').val("");
                 html +=`
                     <thead style="background-color: lightblue; color: white; font-weight: bold;">
                         <tr>
