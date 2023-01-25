@@ -1273,7 +1273,7 @@ protected function checkPromotion(Request $request){
     }
 
     public function purchasepriceUpdate(Request $request)
-    {   
+    {
         try{
             $counting_unit = Pi::findOrfail($request->unit_id);
         } catch (\Exception $e) {
@@ -1300,7 +1300,7 @@ protected function checkPromotion(Request $request){
         $price = $request->price;
 
         $qty = $request->qty;
-        
+
         $type = $request->type;
 
         $purchase_no = $request->purchase_number;
@@ -1318,7 +1318,7 @@ protected function checkPromotion(Request $request){
             $total_price += $psub_total;
         }
 
-        
+
 
         foreach ($qty as $q) {
 
@@ -1336,9 +1336,9 @@ protected function checkPromotion(Request $request){
             for($count = 0; $count < count($unit); $count++){
 
                  $counting_unit = Pi::find($unit[$count]);
-                 
+
                  $balance_qty = ($counting_unit->current_quantity + $qty[$count]);
-                
+
                  $counting_unit->stock_quantity = $counting_unit->stock_quantity + $balance_qty;
 
                  $counting_unit->price = $request->price[$count];
@@ -1391,7 +1391,7 @@ protected function checkPromotion(Request $request){
 
     protected function getDailyConsumption(){
         $consumptions = TotalConsumption::all();
-        
+
         return view('Admin.consumption_items',compact('consumptions'));
     }
 
@@ -1415,7 +1415,7 @@ protected function checkPromotion(Request $request){
         $price = $request->price;
 
         $qty = $request->qty;
-        
+
         $type = $request->type;
 
         $purchase_no = $request->purchase_number;
@@ -1433,7 +1433,7 @@ protected function checkPromotion(Request $request){
             $total_price += $psub_total;
         }
 
-        
+
 
         foreach ($qty as $q) {
 
@@ -1450,9 +1450,9 @@ protected function checkPromotion(Request $request){
             for($count = 0; $count < count($unit); $count++){
 
                 $counting_unit = Pi::find($unit[$count]);
-                 
+
                 // $balance_qty = ($counting_unit->current_quantity + $qty[$count]);
-                
+
                 $counting_unit->stock_quantity = $counting_unit->stock_quantity - $request->qty[$count];
 
                 $counting_unit->save();
@@ -1508,7 +1508,7 @@ protected function checkPromotion(Request $request){
 
 
         $purchases = TotalPurchase::where(DB::raw('CAST(created_at as date)'), '>=', $start_date) ->where(DB::raw(' CAST(created_at as date) '), '<=', $end_date)->get();
-        
+
         return response()->json('hello');
     }
 
@@ -1565,28 +1565,28 @@ protected function updateIncome($id, Request $request)
         $income->type = $request->type;
 
         $income->period = $request->period;
-        
+
         $income->date = $request->date;
 
         $income->title = $request->title;
-        
+
         $income->description = $request->description;
-        
+
         $income->amount = $request->amount;
-        
+
         $income->profit_loss_flag = $request->profit_loss_flag;
-        
+
         $income->save();
 
         alert()->success('Successfully Updated!');
 
         return redirect()->route('incomes');
 	}
-	
+
     protected function deleteIncome(Request $request)
 	{
         $income = Income::find($request->income_id);
-        
+
         $income->delete();
 
         $incomes = Income::all();
@@ -1612,7 +1612,7 @@ protected function updateIncome($id, Request $request)
         $to_date = $request->to_date;
 
         $total_sales = 0;
-        
+
         $total_order = 0;
 
         $total_profit = 0;
@@ -1620,9 +1620,9 @@ protected function updateIncome($id, Request $request)
         $other_income = 0;
 
         $other_expense = 0;
-        
+
         $total_purchase = 0;
-        
+
         $total_transaction = 0;
 
         $consume = 0;
@@ -1705,15 +1705,15 @@ protected function updateIncome($id, Request $request)
             }
 
             $total_profit = $consume - $purchase;
-            
+
             // $purchase_lists = Purchase::whereDate('purchase_date',$daily)->where('purchase_type',2)->get();
-            
+
             foreach($total_purchases as $purchase){
                 $total_purchase += $purchase->price;
             }
-            
+
             // $transaction_lists = Transaction::whereDate('tran_date',$daily)->get();
-            
+
             // foreach($transaction_lists as $transaction){
             //     $total_transaction += $transaction->pay_amount;
             // }
@@ -1732,13 +1732,13 @@ protected function updateIncome($id, Request $request)
                 $end_date = date('Y-m-d', strtotime("+1 week" , strtotime($start_month)));
 
                 $voucher_lists = Voucher::whereBetween('voucher_date', [$start_month, $end_date])->get();
-                
+
                 $total_consumptions = TotalConsumption::whereBetween('created_at', [$start_month, $end_date])->get();
 
                 $total_purchases = TotalPurchase::whereBetween('created_at', [$start_month, $end_date])->get();
 
                 $total_expenses = Expense::whereBetween('date', [$start_month, $end_date])->get();
-                                            
+
                 $date_fil_lists = Voucher::whereBetween('voucher_date', [$start_month, $end_date])
                                         ->whereBetween('voucher_date',[$from_date,$to_date])->get();
 
@@ -1751,11 +1751,11 @@ protected function updateIncome($id, Request $request)
                 foreach($total_consumptions as $consumption){
                     $consume += $consumption->price;
                 }
-    
+
                 foreach($total_purchases as $pur){
                     $purchase += $pur->price;
                 }
-    
+
                 $total_profit = $consume - $purchase;
 
                 $total_shop_sales = Voucher::where('type', 1)->whereBetween('voucher_date', [$start_month, $end_date])->get();
@@ -1780,13 +1780,13 @@ protected function updateIncome($id, Request $request)
                 $end_date = date('Y-m-d', strtotime("+2 week" , strtotime($start_month)));
 
                 $voucher_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])->get();
-                
+
                 $total_consumptions = TotalConsumption::whereBetween('created_at', [$start_date, $end_date])->get();
 
                 $total_purchases = TotalPurchase::whereBetween('created_at', [$start_date, $end_date])->get();
 
                 $total_expenses = Expense::whereBetween('date', [$start_date, $end_date])->get();
-            
+
                 $date_fil_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])
                                            ->whereBetween('voucher_date',[$from_date,$to_date])->get();
 
@@ -1799,7 +1799,7 @@ protected function updateIncome($id, Request $request)
                 foreach($total_consumptions as $consumption){
                     $consume += $consumption->price;
                 }
-    
+
                 foreach($total_purchases as $pur){
                     $purchase += $pur->price;
                 }
@@ -1809,13 +1809,13 @@ protected function updateIncome($id, Request $request)
                 foreach($total_shop_sales as $sale){
                     $total_order += $sale->total_price;
                 }
-    
+
                 $total_take_away_sales = Voucher::where('type', 2)->whereBetween('voucher_date', [$start_date, $end_date])->get();
 
                 foreach($total_take_away_sales as $sale){
                     $other_income += $sale->total_price;
                 }
-    
+
                 $total_profit = $consume - $purchase;
 
             } elseif ($week_count == 3) {
@@ -1825,13 +1825,13 @@ protected function updateIncome($id, Request $request)
                 $end_date = date('Y-m-d', strtotime("+3 week" , strtotime($start_month)));
 
                 $voucher_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])->get();
-                
+
                 $total_consumptions = TotalConsumption::whereBetween('created_at', [$start_date, $end_date])->get();
 
                 $total_purchases = TotalPurchase::whereBetween('created_at', [$start_date, $end_date])->get();
 
                 $total_expenses = Expense::whereBetween('date', [$start_date, $end_date])->get();
-            
+
                 $date_fil_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])
                                            ->whereBetween('voucher_date',[$from_date,$to_date])->get();
 
@@ -1840,11 +1840,11 @@ protected function updateIncome($id, Request $request)
                 foreach($total_incomes as $val){
                     $income += $val->amount;
                 }
-        
+
                 foreach($total_consumptions as $consumption){
                     $consume += $consumption->price;
                 }
-    
+
                 foreach($total_purchases as $pur){
                     $purchase += $pur->price;
                 }
@@ -1854,13 +1854,13 @@ protected function updateIncome($id, Request $request)
                 foreach($total_shop_sales as $sale){
                     $total_order += $sale->total_price;
                 }
-    
+
                 $total_take_away_sales = Voucher::where('type', 2)->whereBetween('voucher_date', [$start_date, $end_date])->get();
 
                 foreach($total_take_away_sales as $sale){
                     $other_income += $sale->total_price;
                 }
-    
+
                 $total_profit = $consume - $purchase;
 
             } else {
@@ -1870,13 +1870,13 @@ protected function updateIncome($id, Request $request)
                 $end_date = date('Y-m-d',strtotime('last day of this month'));
 
                 $voucher_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])->get();
-                
+
                 $total_consumptions = TotalConsumption::whereBetween('created_at', [$start_date, $end_date])->get();
 
                 $total_purchases = TotalPurchase::whereBetween('created_at', [$start_date, $end_date])->orWhere('type', 1)->get();
 
                 $total_expenses = Expense::whereBetween('date', [$start_date, $end_date])->get();
-            
+
                 $date_fil_lists = Voucher::whereBetween('voucher_date', [$start_date, $end_date])
                                            ->whereBetween('voucher_date',[$from_date,$to_date])->get();
 
@@ -1889,7 +1889,7 @@ protected function updateIncome($id, Request $request)
                 foreach($total_consumptions as $consumption){
                     $consume += $consumption->price;
                 }
-    
+
                 foreach($total_purchases as $pur){
                     $purchase += $pur->price;
                 }
@@ -1905,7 +1905,7 @@ protected function updateIncome($id, Request $request)
                 foreach($total_take_away_sales as $sale){
                     $other_income += $sale->total_price;
                 }
-    
+
                 $total_profit = $consume - $purchase;
 
             }
@@ -1939,12 +1939,12 @@ protected function updateIncome($id, Request $request)
             //         $other_expense += $other->amount;
             //     }
             // }
-            
+
             foreach($total_purchases as $purchae){
                 $total_purchase += $purchae->price;
             }
-            
-            
+
+
             // foreach($transaction_lists as $transaction){
             //     $total_transaction += $transaction->pay_amount;
             // }
@@ -1955,7 +1955,7 @@ protected function updateIncome($id, Request $request)
             $monthly = $request->value;
 
             $voucher_lists = Voucher::whereMonth('voucher_date', $monthly)->get();
-            
+
             $total_consumptions = TotalConsumption::whereMonth('created_at', $monthly)->get();
 
             $total_purchases = TotalPurchase::whereMonth('created_at', $monthly)->get();
@@ -2000,13 +2000,13 @@ protected function updateIncome($id, Request $request)
             //         $other_expense += $other->amount;
             //     }
             // }
-            
+
             //  $purchase_lists = Purchase::whereMonth('purchase_date', $monthly)->where('purchase_type',2)->get();
-            
+
             foreach($total_purchases as $purchae){
                 $total_purchase += $purchae->price;
             }
-            
+
             foreach($total_consumptions as $consumption){
                 $consume += $consumption->price;
             }
@@ -2029,7 +2029,7 @@ protected function updateIncome($id, Request $request)
 
             $total_profit = $consume - $purchase;
             // $transaction_lists = Transaction::whereMonth('tran_date', $monthly)->get();
-            
+
             // foreach($transaction_lists as $transaction){
             //     $total_transaction += $transaction->pay_amount;
             // }
@@ -2064,7 +2064,7 @@ protected function updateIncome($id, Request $request)
             }
 
         }
-        
+
         // foreach($order_lists as $order){
         //     $total_order += $order->est_price;
         // }
@@ -2104,7 +2104,7 @@ protected function updateIncome($id, Request $request)
             "total_incomes" => $total_incomes,
         ]);
 
-        
+
     }
 
     protected function getSalesReport(){
@@ -2115,17 +2115,12 @@ protected function updateIncome($id, Request $request)
         $extra_grams = 0;
         $extra_amount = 0;
         $discount_amount = 0;
+        $cash=0;$kpay=0;$wave=0;$cb=0;$aya=0;$yoma=0;$aplus=0;
 
-        $adult_amount = 0;
-        $children_amount = 0;
-        $kid_amount = 0;
-        $extra_pot_amount = 0;
-        $first_total = 0;
         $second_total = 0;
-
         $shop_orders = ShopOrder::whereDate('created_at', date('Y-m-d'))->get();
         $vouchers = Voucher::whereDate('voucher_date', date('Y-m-d'))->get();
-        
+
         foreach($shop_orders as $order){
             $adults += $order->adult_qty;
             $children += $order->child_qty;
@@ -2133,23 +2128,50 @@ protected function updateIncome($id, Request $request)
             $extra_pots += $order->extrapot_qty;
         }
 
-        $adult_amount += $adults * 20900;
-        $children_amount += $children * 11000;
-        $kid_amount += $kids * 9000;
-        $extra_pot_amount += $extra_pots * 3000;
+        $adult_amount = $adults * 21900;
+        $children_amount = $children * 11000;
+        $kid_amount = $kids * 9000;
+        $extra_pot_amount = $extra_pots * 3000;
 
         foreach($vouchers as $voucher){
             $extra_grams += $voucher->extra_gram;
             $extra_amount += $voucher->extra_amount;
+            $discount_amount += $voucher->discount_value;
+            if($voucher->pay_type == 1){
+                $cash += $voucher->total_price;
+            }
+            if($voucher->pay_type == 2){
+                $kpay += $voucher->total_price;
+            }
+            if($voucher->pay_type == 3){
+                $wave += $voucher->total_price;
+            }
+            if($voucher->pay_type == 4){
+                $cb += $voucher->total_price;
+            }
+            if($voucher->pay_type == 5){
+                $aya += $voucher->total_price;
+            }
+            if($voucher->pay_type == 6){
+                $yoma += $voucher->total_price;
+            }
+            if($voucher->pay_type == 7){
+                $aplus += $voucher->total_price;
+            }
         }
 
-        $first_total += ($adult_amount + $children_amount + $kid_amount + $extra_pot_amount + $extra_amount);
+        $first_total = $adult_amount + $children_amount + $kid_amount + $extra_pot_amount + $extra_amount;
+
+        // dd($first_total);
 
         $service_charge = $first_total * 0.05;
 
         $second_total = $first_total + $service_charge;
 
-        return view('Admin.sales_report', compact('adults', 'children', 'kids', 'extra_pots', 'extra_grams', 'extra_amount', 'first_total', 'service_charge', 'second_total'));
+        return view('Admin.sales_report',
+        compact('adults','children', 'kids', 'extra_pots', 'extra_grams', 'extra_amount', 'first_total',
+        'service_charge', 'second_total','discount_amount',
+        'cash','kpay','wave','cb','aya','yoma','aplus'));
     }
 
     protected function getSaleReportDate(Request $request){
@@ -2171,7 +2193,7 @@ protected function updateIncome($id, Request $request)
 
         $shop_orders = ShopOrder::whereDate('created_at', $daily)->get();
         $vouchers = Voucher::whereDate('voucher_date', $daily)->get();
-        
+
         foreach($shop_orders as $order){
             $adults += $order->adult_qty;
             $children += $order->child_qty;
@@ -2196,14 +2218,14 @@ protected function updateIncome($id, Request $request)
         $second_total = $first_total + $service_charge;
 
         return response()->json([
-            "adults" => $adults, 
-            "children" => $children, 
-            "kids" => $kids, 
-            "extra_pots" => $extra_pots, 
-            "extra_grams" => $extra_grams, 
-            "extra_amount" => $extra_amount, 
-            "first_total" => $first_total, 
-            "service_charge" => $service_charge, 
+            "adults" => $adults,
+            "children" => $children,
+            "kids" => $kids,
+            "extra_pots" => $extra_pots,
+            "extra_grams" => $extra_grams,
+            "extra_amount" => $extra_amount,
+            "first_total" => $first_total,
+            "service_charge" => $service_charge,
             "second_total" => $second_total
         ]);
     }
