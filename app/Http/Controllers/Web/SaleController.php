@@ -880,7 +880,7 @@ class SaleController extends Controller
 
         $re_date = $date->format('Y-m-d');
 
-		$tota = $shop_order->adult_qty * 21950 + $shop_order->child_qty * 11550 + $shop_order->kid_qty * 9450 + $shop_order->extrapot_qty * 3000 + $request->extragram1;
+		$tota = $shop_order->adult_qty * 21900 + $shop_order->child_qty * 11550 + $shop_order->kid_qty * 9450 + $shop_order->extrapot_qty * 3000 + $request->extragram1;
         $tser = $tota * 0.05;
         $total  = $tota + $tser - ($shop_order->birth_qty * 4600);
         //  dd($request->change_amount_dis);
@@ -900,9 +900,15 @@ class SaleController extends Controller
             $voucher->discount_value = $request->discount_value;
             $voucher->pay_value = $request->pay_amount;
             $voucher->change_value = $request->change_amount;
+            $voucher->pay_type = $request->pay_type;
         }else{
             $voucher->pay_value = $request->pay_amount_dis;
             $voucher->change_value = $request->change_amount_dis;
+            $voucher->pay_type = $request->pay_type_dis;
+
+            if($shop_order->birth_qty != 0){
+                $voucher->discount_value = $shop_order->birth_qty * 4600;
+            }
         }
         if($request->extragram == 0){
             $voucher->extra_gram = $request->extragram1;

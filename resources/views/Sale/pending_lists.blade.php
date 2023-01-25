@@ -136,6 +136,18 @@
                     <label class="font-weight-bold">Pay Amount</label>
                     <input type="text" class="form-control"  value="" id="pay_amount" placeholder="Enter Pay Amount" onkeyup="pay_amt1(this.value)">
                 </div>
+                <div class="form-group mt-3" id="type_pay">
+                    <label class="font-weight-bold">Pay Type</label>
+                    <select name="pay_type" class="form-control" id="pay_type">
+                        <option value="1">Cash</option>
+                        <option value="2">K Pay</option>
+                        <option value="1">Wave</option>
+                        <option value="1">CB</option>
+                        <option value="1">AYA</option>
+                        <option value="1">YOMA</option>
+                        <option value="1">A+</option>
+                    </select>
+                </div>
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Change</label>
                     <input type="text" class="form-control" readonly id="change_amount1" value="">
@@ -198,6 +210,18 @@
                 <label class="font-weight-bold">Pay Amount</label>
                 <input type="text" class="form-control"  value="" id="pay_amount_dis" placeholder="Enter Pay Amount" onkeyup="pay_amt(this.value)">
             </div>
+            <div class="form-group mt-3" id="dis_pay_type">
+                <label class="font-weight-bold">Pay Type</label>
+                <select name="pay_type_dis" class="form-control" id="pay_type_dis">
+                    <option value="1">Cash</option>
+                    <option value="2">K Pay</option>
+                    <option value="3">Wave</option>
+                    <option value="4">CB</option>
+                    <option value="5">AYA</option>
+                    <option value="6">YOMA</option>
+                    <option value="7">A+</option>
+                </select>
+            </div>
             <div class="form-group mt-3" id="dis_change_amount">
                 <label class="font-weight-bold">Change</label>
                 <input type="text" class="form-control" readonly id="change_amount" value="">
@@ -227,6 +251,7 @@
     $('#dis_foc').hide();
     $('#dis_percent').hide();
     $('#dis_amount').hide();
+    $('#dis_pay_type').hide();
 })
 function yes_radio(){
     // alert('yes');
@@ -245,6 +270,7 @@ function no_radio(){
     $('#curr_extra_total').show();
     $('#extra_gram').show();
     $('#extra_amt').show();
+    $('#dis_pay_type').show();
 }
 
 function extragramadd(val){
@@ -275,7 +301,7 @@ function foc_radio(){
     $('#dis_amount').hide();
     var dis_value = $('#curr_voucher_total1').val(parseInt($('#curr_voucher_total1').val()) -21900);
     $('#dis_type').val(1);
-    $('#dis_val').val(0);
+    $('#dis_val').val(21900);
 }
 function percent_radio(){
     $('#dis_foc').hide();
@@ -343,6 +369,8 @@ function change_price(){
     var extra_amt = $('#no_extra').val();
     var extra_gram1 = $('#no_extraamt1').val();
     var extra_gram = $('#no_extraamt').val();
+    var pay_type = $('#pay_type').val();
+    var pay_type_dis = $('#pay_type_dis').val();
 
     if(change_value_dis>=0 && change_value>=0){
         $.ajax({
@@ -364,6 +392,8 @@ function change_price(){
         "extragram" : extra_gram,
         "extraamt1" : extra_amt1,
         "extraamt" : extra_amt,
+        "pay_type" : pay_type,
+        "pay_type_dis" : pay_type_dis,
         },
 
         success:function(data){

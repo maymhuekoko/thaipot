@@ -100,7 +100,7 @@
             <tr>
                 <td>Discount</td>
                 <td></td>
-                <td></td>
+                <td>{{$discount_amount}}</td>
                 <td></td>
             </tr>
             <tr style="height: 43.933px;">
@@ -129,14 +129,14 @@
             </tr>
             <tr>
                 <td colspan="4">
-                <p>Cash - </p>
-                <p class="mt-3">Kpay - </p>
-                <p class="mt-3">Wave - </p>
-                <p class="mt-3">CB - </p>
-                <p class="mt-3">AYA - </p>
-                <p class="mt-3">YoMa - </p>
-                <p class="mt-3">A+ - </p>
-                <p class="mt-3">Total - </p>
+                <p>Cash - {{$cash}}</p>
+                <p class="mt-3">Kpay - {{$cash}}</p>
+                <p class="mt-3">Wave - {{$wave}}</p>
+                <p class="mt-3">CB - {{$cb}}</p>
+                <p class="mt-3">AYA - {{$aya}}</p>
+                <p class="mt-3">YoMa - {{$yoma}}</p>
+                <p class="mt-3">A+ - {{$aplus}}</p>
+                <p class="mt-3">Total - {{$second_total}}</p>
                 </td>
             </tr>
             <tr>
