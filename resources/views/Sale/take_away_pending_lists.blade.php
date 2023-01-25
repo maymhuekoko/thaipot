@@ -131,6 +131,18 @@
                     <label class="font-weight-bold">Pay Amount</label>
                     <input type="text" class="form-control"  value="" id="pay_amount" placeholder="Enter Pay Amount" onkeyup="pay_amt(this.value)">
                 </div>
+                <div class="form-group mt-3" id="type_pay">
+                    <label class="font-weight-bold">Pay Type</label>
+                    <select name="pay_type" class="form-control" id="pay_type">
+                        <option value="1">Cash</option>
+                        <option value="2">K Pay</option>
+                        <option value="1">Wave</option>
+                        <option value="1">CB</option>
+                        <option value="1">AYA</option>
+                        <option value="1">YOMA</option>
+                        <option value="1">A+</option>
+                    </select>
+                </div>
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Change</label>
                     <input type="text" class="form-control" readonly id="change_amount" value="">
@@ -177,6 +189,18 @@
             <div class="form-group mt-3" id="dis_pay_amount">
                 <label class="font-weight-bold">Pay Amount</label>
                 <input type="text" class="form-control"  value="" id="pay_amount_dis" placeholder="Enter Pay Amount" onkeyup="pay_dis(this.value)">
+            </div>
+            <div class="form-group mt-3" id="dis_pay_type">
+                <label class="font-weight-bold">Pay Type</label>
+                <select name="pay_type_dis" class="form-control" id="pay_type_dis">
+                    <option value="1">Cash</option>
+                    <option value="2">K Pay</option>
+                    <option value="3">Wave</option>
+                    <option value="4">CB</option>
+                    <option value="5">AYA</option>
+                    <option value="6">YOMA</option>
+                    <option value="7">A+</option>
+                </select>
             </div>
             <div class="form-group mt-3" id="dis_change_amount">
                 <label class="font-weight-bold">Change</label>
@@ -226,7 +250,7 @@
     $('#dis_foc').hide();
     $('#dis_percent').hide();
     $('#dis_amount').hide();
-
+    $('#dis_pay_type').hide();
 })
 function yes_radio(){
     // alert('yes');
@@ -240,6 +264,7 @@ function no_radio(){
     $('#dis_change_amount').show();
     $('#promotion').show();
     $('#dis_footer').show();
+    $('#dis_pay_type').show();
 }
 function foc_radio(){
     $('#dis_foc').show();
@@ -304,6 +329,8 @@ function change_price(){
     var change_value = $('#change_amount').val();
     var pay_value_dis = $('#pay_amount_dis').val();
     var change_value_dis = $('#change_amount_dis').val();
+    var pay_type = $('#pay_type').val();
+    var pay_type_dis = $('#pay_type_dis').val();
     var ispromotion = $('#ispromotion').text();
     if($('#console').prop("checked") == true){
          var console = 1;
@@ -320,7 +347,7 @@ function change_price(){
        var promotion = 0;
        var promotion_value = 0;
     }
-   
+
 
     if(change_value_dis>=0 && change_value>=0){
         $.ajax({
@@ -341,6 +368,8 @@ function change_price(){
         "customer_console" : console,
         "promotion" : promotion,
         "promotionvalue" : promotion_value,
+        "pay_type" : pay_type,
+        "pay_type_dis" : pay_type_dis,
         },
 
         success:function(data){
