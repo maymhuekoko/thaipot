@@ -23,7 +23,8 @@ class Voucher extends Model
         'date',
         'extra_gram',
         'extra_amount',
-        'pay_type'
+        'pay_type',
+        'remark'
     ];
 
     public function option() {

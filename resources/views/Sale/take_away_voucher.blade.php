@@ -43,11 +43,11 @@
                             <div class="col-md-12">
                                 <div  style="text-align:center;">
                                     <address>
-                                        <strong style="font-size:17px;font-weight:bold;">Law Ka Nat</strong><br>
+                                        <strong style="font-size:17px;font-weight:bold;">THAI POT</strong><br>
                                             <strong style="font-size:17px;font-weight:bold;"> Restaurant</strong><br>
-                                            <strong style="font-size:17px;font-weight:bold;"> No (767), YayLe` Road, Maubin</strong><br>
-                                            <strong style="font-size:17px;font-weight:bold;">Ayeyarwady Region, Myanmar</strong><br>
-                                            <strong style="font-size:17px;font-weight:bold;"><i class="fas fa-mobile-alt"></i> 09 770 725084</strong><br>
+                                            <strong style="font-size:17px;font-weight:bold;"> No (4), Kan Road, Hlaing Township</strong><br>
+                                            <strong style="font-size:17px;font-weight:bold;">Yangon, Myanmar</strong><br>
+                                            <strong style="font-size:17px;font-weight:bold;"><i class="fas fa-mobile-alt"></i> 09 5007997, 09260523688</strong><br>
                                     </address>
                                 </div>
                                 <div class="pull-right text-left" style="margin-top:20px;">

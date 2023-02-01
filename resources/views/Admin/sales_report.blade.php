@@ -24,7 +24,7 @@
 </style>
 
 
-<div class="row">
+<div class="row"  id='printableArea'>
 <div class="offset-md-2 col-md-8">
 <div class="card">
     <div class="card-body p-5">
@@ -61,12 +61,7 @@
                 <td>{{$kids * 9000}}</td>
                 <td></td>
             </tr>
-            <tr>
-                <td>Cheese</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+
             <tr>
                 <td>Extra Pot</td>
                 <td>{{$extra_pots}}</td>
@@ -115,22 +110,34 @@
                 <td></td>
                 <td></td>
             </tr>
+            <tr style="height: 43.933px;">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr style="height: 43.933px;">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
             <tr>
                 <td>Take away</td>
                 <td></td>
-                <td></td>
+                <td>{{$take_total}}</td>
                 <td></td>
             </tr>
             <tr>
                 <td>Sub Total</td>
                 <td></td>
-                <td></td>
+                <td>{{($second_total - $discount_amount) + $take_total}}</td>
                 <td></td>
             </tr>
             <tr>
                 <td colspan="4">
                 <p>Cash - {{$cash}}</p>
-                <p class="mt-3">Kpay - {{$cash}}</p>
+                <p class="mt-3">Kpay - {{$kpay}}</p>
                 <p class="mt-3">Wave - {{$wave}}</p>
                 <p class="mt-3">CB - {{$cb}}</p>
                 <p class="mt-3">AYA - {{$aya}}</p>
@@ -141,26 +148,66 @@
             </tr>
             <tr>
                 <td colspan="4">
-                    <p>Expend -</p>
-                    <p>Balance -</p>
+                    <p>Expend - {{$expend}}</p>
+                    <p>Balance - {{(($second_total - $discount_amount) + $take_total) - $expend}}</p>
                 </td>
             </tr>
         </tbody>
     </table>
+
+
 </div>
 <div class="d-flex justify-content-between table-bottom">
     <p>Checked By</p>
     <p>Received By</p>
 </div>
 </div>
+
 </div>
+</div>
+<div class="col-md-12">
+    <div class="text-center">
+        <button id="print" class="btn btn-info" type="button">
+            <span><i class="fa fa-print"></i> Print</span>
+        </button>
+    </div>
+</div>
+<div id="mobileprint" class="d-none">
+
 </div>
 @endsection
 
 @section('js')
+<script src="{{asset('js/jquery.PrintArea.js')}}" type="text/JavaScript"></script>
  <script>
     $(document).ready(function(){
-       $('#datePicker').val("");
+    //    $('#datePicker').val("");
+       $("#print").click(function() {
+          var mode = 'iframe'; //popup
+            var close = mode == "popup";
+            var options = {
+                mode: mode,
+                popClose: close
+            };
+            $("#printableArea").printArea(options);
+
+            // let html = document.getElementById('printableArea').innerHTML;
+            // $('#mobileprint').html(html);
+
+            // var printContent = $('#mobileprint')[0];
+            // var WinPrint = window.open('', '', 'width=900,height=650');
+            // WinPrint.document.write('<html><head><title>Print Voucher</title>');
+            // WinPrint.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
+            // WinPrint.document.write('<link rel="stylesheet" type="text/css" media="print" href="css/print.css">');
+            // WinPrint.document.write('</head><body >');
+            // WinPrint.document.write(printContent.innerHTML);
+            // WinPrint.document.write('</body></html>');
+
+            // WinPrint.focus();
+            // WinPrint.print();
+            // WinPrint.document.close();
+            // WinPrint.close();
+        });
     });
     $('#datePicker').change(function() {
             var startDate = $('#datePicker').val();
@@ -210,12 +257,6 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Cheese</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
                             <td>Extra Pot</td>
                             <td>${data.extra_pots}</td>
                             <td>${data.extra_pots * 3000}</td>
@@ -248,6 +289,18 @@
                         <tr>
                             <td>Discount</td>
                             <td></td>
+                            <td>${data.discount_amount}</td>
+                            <td></td>
+                        </tr>
+                        <tr style="height: 43.933px;">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr style="height: 43.933px;">
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -266,31 +319,31 @@
                         <tr>
                             <td>Take away</td>
                             <td></td>
-                            <td></td>
+                            <td>${data.take_total}</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Sub Total</td>
                             <td></td>
-                            <td></td>
+                            <td>${(data.second_total - data.discount_amount) + data.take_total}</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td colspan="4">
-                            <p>Cash - </p>
-                            <p class="mt-3">Kpay - </p>
-                            <p class="mt-3">Wave - </p>
-                            <p class="mt-3">CB - </p>
-                            <p class="mt-3">AYA - </p>
-                            <p class="mt-3">YoMa - </p>
-                            <p class="mt-3">A+ - </p>
-                            <p class="mt-3">Total - </p>
+                            <p>Cash - ${data.cash}</p>
+                            <p class="mt-3">Kpay - ${data.kpay}</p>
+                            <p class="mt-3">Wave - ${data.wave}</p>
+                            <p class="mt-3">CB - ${data.cb}</p>
+                            <p class="mt-3">AYA - ${data.aya}</p>
+                            <p class="mt-3">YoMa - ${data.yoma}</p>
+                            <p class="mt-3">A+ - ${data.aplus}</p>
+                            <p class="mt-3">Total - ${data.second_total}</p>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="4">
-                                <p>Expend -</p>
-                                <p>Balance -</p>
+                                <p>Expend - ${data.expend}</p>
+                                <p>Balance - ${((data.second_total - data.discount_amount) + data.take_total) - data.expend}</p>
                             </td>
                         </tr>
                     </tbody>

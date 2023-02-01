@@ -356,7 +356,7 @@
                     <div class="form-check offset-md-10">
                         <input class="form-check-input" type="checkbox" value="" id="mchk3">
                         <label class="form-check-label" for="mchk3">
-                          Others
+                          Gimchi
                         </label>
                     </div>
                     </div>
@@ -382,7 +382,7 @@
                         <div class="form-check offset-md-10">
                             <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk3">
                             <label class="form-check-label" for="simrchk3">
-                              Others
+                              Gimchi
                             </label>
                         </div>
                     </div>

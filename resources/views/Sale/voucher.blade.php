@@ -45,9 +45,9 @@
                                     <address>
                                         <strong style="font-size:17px;font-weight:bold;">THAI POT</strong><br>
                                             <strong style="font-size:17px;font-weight:bold;"> Restaurant</strong><br>
-                                            <strong style="font-size:17px;font-weight:bold;"> No (767), YayLe` Road, Maubin</strong><br>
-                                            <strong style="font-size:17px;font-weight:bold;">Ayeyarwady Region, Myanmar</strong><br>
-                                            <strong style="font-size:17px;font-weight:bold;"><i class="fas fa-mobile-alt"></i> 09 770 725084</strong><br>
+                                            <strong style="font-size:17px;font-weight:bold;"> No (4), Kan Road, Hlaing Township</strong><br>
+                                            <strong style="font-size:17px;font-weight:bold;">Yangon, Myanmar</strong><br>
+                                            <strong style="font-size:17px;font-weight:bold;"><i class="fas fa-mobile-alt"></i> 09 5007997, 09260523688</strong><br>
                                     </address>
                                 </div>
                                 <div class="pull-right text-left" style="margin-top:20px;">
@@ -109,7 +109,7 @@
                                     @if($voucher->discount_type == null)
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
                                          <strong>Voucher Total - {{$voutotal}}</strong><br>
-                                         <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
+                                         <strong>Service Charges(5%) - {{$servicecharges}}(+)</strong><br>
                                          @if ($voucher->promotion == 'Cash Back' || $voucher->promotion == 'Discount Percentage')
                                          <strong>{{$voucher->promotion}} - {{$voucher->promotion_value}}</strong><br>
                                           @if (explode(' ',$voucher->promotion_value)[1] == '%')
@@ -123,8 +123,8 @@
                                           @endif
                                           @else
                                           @if ($order->birth_qty != 0)
-                                          <strong>Sub Total - {{$voutotal + $servicecharges}}</strong><br>
-                                          <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}}</strong><br>
+                                          {{-- <strong>Sub Total - {{$voutotal + $servicecharges}}</strong><br> --}}
+                                          <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}}(-)</strong><br>
                                           <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4600)}}</strong><br>
                                           @else
                                           <strong>Total - {{$voutotal + $servicecharges}}</strong><br>
@@ -140,43 +140,52 @@
                                     @elseif ($voucher->discount_type == 1)
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
-                                        <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
-                                        <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br>
+                                        <strong>Service Charges(5%) - {{$servicecharges}} (+)</strong><br>
+                                        {{-- <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br> --}}
                                         @if ($order->birth_qty != 0)
-                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}}</strong><br>
+                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}} (-)</strong><br>
                                         @endif
-                                        <strong>Total - {{$voutotal+ $servicecharges - 21900 - ($order->birth_qty * 4600)}}</strong><br>
-                                        <strong>Discount - FOC(1 person)</strong><br>
+                                        <strong>Discount - FOC(1 person)(-21900)</strong><br>
+                                        <strong>Total - {{($voutotal+ $servicecharges) - 21900 - ($order->birth_qty * 4600)}}</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                         <strong>Change - {{$voucher->change_value}}</strong><br>
+                                        @if ($voucher->remark != null)
+                                        <strong style="color:red;">Remark - {{$voucher->remark}}</strong><br>
+                                        @endif
                                    </div>
                                    @elseif ($voucher->discount_type == 2)
                                    <?php $total = $voutotal - ($voucher->discount_value/100) * $voutotal ; ?>
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
-                                        <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
-                                        <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br>
+                                        <strong>Service Charges(5%) - {{$servicecharges}} (+)</strong><br>
+                                        {{-- <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br> --}}
                                         @if ($order->birth_qty != 0)
-                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}}</strong><br>
+                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}} (-)</strong><br>
                                         @endif
-                                        <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4600)}}</strong><br>
-                                        <strong>Discount - {{$voucher->discount_value}} %</strong><br>
+                                        <strong>Discount - {{$voucher->discount_value}} % (-)</strong><br>
+                                        <strong>Total - {{($voutotal + $servicecharges)-((($voutotal + $servicecharges)-($order->birth_qty * 4600))*($voucher->discount_value/100))-($order->birth_qty * 4600)}}</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                          <strong>Change - {{$voucher->change_value}}</strong><br>
+                                         @if ($voucher->remark != null)
+                                         <strong style="color:red;">Remark - {{$voucher->remark}}</strong><br>
+                                         @endif
                                    </div>
                                    @elseif ($voucher->discount_type == 3)
                                    <?php $total = $voutotal - $voucher->discount_value; ?>
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
-                                        <strong>Service Charges(5%) - {{$servicecharges}}</strong><br>
-                                        <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br>
+                                        <strong>Service Charges(5%) - {{$servicecharges}} (+)</strong><br>
+                                        {{-- <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br> --}}
                                         @if ($order->birth_qty != 0)
-                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}}</strong><br>
+                                        <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}} (-)</strong><br>
                                         @endif
-                                        <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4600)}}</strong><br>
-                                        <strong>Discount - {{$voucher->discount_value}} </strong><br>
+                                        <strong>Discount - {{$voucher->discount_value}} (-)</strong><br>
+                                        <strong>Total - {{($voutotal + $servicecharges) - $voucher->discount_value -($order->birth_qty * 4600)}}</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                          <strong>Change - {{$voucher->change_value}}</strong><br>
+                                         @if ($voucher->remark != null)
+                                         <strong style="color:red;">Remark - {{$voucher->remark}}</strong><br>
+                                         @endif
                                    </div>
                                     @endif
                                     <h6  style="text-align:center;margin-top:10px;">**ကျေးဇူးတင်ပါသည်***</h6>
