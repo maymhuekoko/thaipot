@@ -43,20 +43,20 @@
                         <div class="col-md-12">
                             <div class="text-center">
                                 <address>
-                                    <h4 class="font-weight-bold"> &nbsp;<b class="text-center">Thai Pot&nbsp;&nbsp;(<span class="text-danger">Kitchen</span>)</b></h4>
-                                        <h5 class="font-weight-bold">Restaurant</h5>
+                                    <h4 style="font-weight:bold;"> &nbsp;<b class="text-center">Thai Pot&nbsp;&nbsp;(<span class="text-danger">Kitchen</span>)</b></h4>
+                                        <h5 style="font-weight:bold;">Restaurant</h5>
                                 </address>
                             </div>
 
                             <div class="pull-right text-left">
-                                <h5 class="font-weight-bold">Waiter Name : {{$wname}}</h5>
-                                    <h5 class="font-weight-bold">Date : <i class="fa fa-calendar"></i> {{$real_date}} </h5>
+                                <h5 style="font-weight:bold;">Waiter Name : {{$wname}}</h5>
+                                    <h5 style="font-weight:bold;">Date : <i class="fa fa-calendar"></i> {{$real_date}} </h5>
                                     @if($tablenoo != 1)
 
-                                       <h5 class="font-weight-bold">Table-Number : {{$tableno->table_number}}</h5>
+                                       <h5 style="font-weight:bold;">Table-Number : {{$tableno->table_number}}</h5>
 
                                     @elseif($tablenoo == 1)
-                                    <h5 class="font-weight-bold">Table-Number : Delivery Order</h5>
+                                    <h5 style="font-weight:bold;">Table-Number : Delivery Order</h5>
                                     @endif
                                 </font>
                             </div>
@@ -67,9 +67,9 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <td class="font-weight-bold">Kitchen</td>
-                                            <td class="font-weight-bold">Soup Name</td>
-                                            <td class="font-weight-bold">Qty</td>
+                                            <td style="font-weight:bold;">Kitchen</td>
+                                            <td style="font-weight:bold;margin-left:30px;">Soup Name</td>
+                                            <td style="font-weight:bold;margin-left:30px;">Qty</td>
                                         </tr>
                                     </thead>
                                 <tbody>
@@ -81,8 +81,8 @@
                                         </tr>
                                         @if ($shop_order->remark != null)
                                         <tr>
-                                            <th class="text-danger font-weight-bold">Notes :</th>
-                                            <td class="text-danger" colspan="3">{{$shop_order->remark}}</td>
+                                            <th class="text-danger" style="font-weight:bold;">Notes :</th>
+                                            <td class="text-danger" colspan="3" style="font-weight:bold;">{{$shop_order->remark}}</td>
                                             </tr>
                                         @endif
                                     {{-- @endforeach --}}

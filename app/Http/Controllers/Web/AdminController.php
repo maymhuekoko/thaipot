@@ -2115,16 +2115,30 @@ protected function updateIncome($id, Request $request)
         $extra_grams = 0;
         $extra_amount = 0;
         $discount_amount = 0;
+        $take_total = 0;
+        $expend = 0;
         $cash=0;$kpay=0;$wave=0;$cb=0;$aya=0;$yoma=0;$aplus=0;
 
         $second_total = 0;
         $shop_orders = ShopOrder::whereDate('created_at', date('Y-m-d'))->get();
         $vouchers = Voucher::whereDate('voucher_date', date('Y-m-d'))->get();
+        $vouchers1 = Voucher::whereDate('voucher_date', date('Y-m-d'))->where('type',2)->get();
+        $expends = TotalConsumption::whereDate('created_at', date('Y-m-d'))->get();
+
+        foreach($expends as $exp){
+            $expend += $exp->price;
+        }
+
+        foreach($vouchers1 as $voucher1){
+            $minus = $voucher1->total_price - $voucher1->discount_value;
+            $take_total += $minus;
+        }
 
         foreach($shop_orders as $order){
             $adults += $order->adult_qty;
             $children += $order->child_qty;
             $kids += $order->kid_qty;
+            $discount_amount += $order->birth_qty * 4600;
             $extra_pots += $order->extrapot_qty;
         }
 
@@ -2171,7 +2185,7 @@ protected function updateIncome($id, Request $request)
         return view('Admin.sales_report',
         compact('adults','children', 'kids', 'extra_pots', 'extra_grams', 'extra_amount', 'first_total',
         'service_charge', 'second_total','discount_amount',
-        'cash','kpay','wave','cb','aya','yoma','aplus'));
+        'cash','kpay','wave','cb','aya','yoma','aplus','take_total','expend'));
     }
 
     protected function getSaleReportDate(Request $request){
@@ -2183,35 +2197,68 @@ protected function updateIncome($id, Request $request)
         $extra_grams = 0;
         $extra_amount = 0;
         $discount_amount = 0;
-
-        $adult_amount = 0;
-        $children_amount = 0;
-        $kid_amount = 0;
-        $extra_pot_amount = 0;
-        $first_total = 0;
+        $take_total = 0;
+        $expend = 0;
+        $cash=0;$kpay=0;$wave=0;$cb=0;$aya=0;$yoma=0;$aplus=0;
         $second_total = 0;
 
         $shop_orders = ShopOrder::whereDate('created_at', $daily)->get();
         $vouchers = Voucher::whereDate('voucher_date', $daily)->get();
+        $vouchers1 = Voucher::whereDate('voucher_date', $daily)->where('type',2)->get();
+        $expends = TotalConsumption::whereDate('created_at', $daily)->get();
+
+        foreach($expends as $exp){
+            $expend += $exp->price;
+        }
+
+        foreach($vouchers1 as $voucher1){
+            $minus = $voucher1->total_price - $voucher1->discount_value;
+            $take_total += $minus;
+        }
 
         foreach($shop_orders as $order){
             $adults += $order->adult_qty;
             $children += $order->child_qty;
             $kids += $order->kid_qty;
+            $discount_amount += $order->birth_qty * 4600;
             $extra_pots += $order->extrapot_qty;
         }
 
-        $adult_amount += $adults * 20900;
-        $children_amount += $children * 11000;
-        $kid_amount += $kids * 9000;
-        $extra_pot_amount += $extra_pots * 3000;
+        $adult_amount = $adults * 21900;
+        $children_amount = $children * 11000;
+        $kid_amount = $kids * 9000;
+        $extra_pot_amount = $extra_pots * 3000;
 
         foreach($vouchers as $voucher){
             $extra_grams += $voucher->extra_gram;
             $extra_amount += $voucher->extra_amount;
+            $discount_amount += $voucher->discount_value;
+            if($voucher->pay_type == 1){
+                $cash += $voucher->total_price;
+            }
+            if($voucher->pay_type == 2){
+                $kpay += $voucher->total_price;
+            }
+            if($voucher->pay_type == 3){
+                $wave += $voucher->total_price;
+            }
+            if($voucher->pay_type == 4){
+                $cb += $voucher->total_price;
+            }
+            if($voucher->pay_type == 5){
+                $aya += $voucher->total_price;
+            }
+            if($voucher->pay_type == 6){
+                $yoma += $voucher->total_price;
+            }
+            if($voucher->pay_type == 7){
+                $aplus += $voucher->total_price;
+            }
         }
 
-        $first_total += ($adult_amount + $children_amount + $kid_amount + $extra_pot_amount + $extra_amount);
+        $first_total = $adult_amount + $children_amount + $kid_amount + $extra_pot_amount + $extra_amount;
+
+        // dd($first_total);
 
         $service_charge = $first_total * 0.05;
 
@@ -2226,7 +2273,17 @@ protected function updateIncome($id, Request $request)
             "extra_amount" => $extra_amount,
             "first_total" => $first_total,
             "service_charge" => $service_charge,
-            "second_total" => $second_total
+            "second_total" => $second_total,
+            "discount_amount" => $discount_amount,
+            "cash" => $cash,
+            "kpay" => $kpay,
+            "wave" => $wave,
+            "cb" => $cb,
+            "aya" => $aya,
+            "yoma" => $yoma,
+            "aplus" => $aplus,
+            "take_total" => $take_total,
+            "expend" => $expend,
         ]);
     }
 }

@@ -20,12 +20,12 @@ $from_id = 1;
     <div class="col-7">
         <div class="card shadow text-black">
             <div class="card-body">
-                
+
 
                 <form class="form-material m-t-40" method="post" action="{{route('store_consumption')}}" id="store_purchase">
                     @csrf
                     <input type="hidden" name="type" id="type" value="1">
-                    
+
                     <div class="form-group">
                         <label class="font-weight-bold">Consumption No.</label>
                         <input type="text" name="purchase_number" class="form-control" value="" id="item_purchase_no">
@@ -37,7 +37,7 @@ $from_id = 1;
                     </div>
 
                     <!-- Header -->
-                    
+
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
@@ -65,10 +65,10 @@ $from_id = 1;
                             </div>
                         </div>
                         <div class="col-md-1">
-                           
+
                         </div>
                     </div>
-                    
+
                     <!-- end header -->
                     <div id="unit_place">
                         <label class="font-weight-bold">Units</label>
@@ -121,35 +121,35 @@ $from_id = 1;
         </div>
     </div>
     <div class="col-5">
-        
-       
-        
+
+
+
         <div class="card shadow text-black">
             <input type="hidden" name="total_amount" id="tot_amt" value="0">
-            
-            
-            
-            
-            
+
+
+
+
+
             <div class="form-group m-2">
                  <label class="font-weight-bold">Category Name</label>
-                <select id="purchase_type" class=" p-4 select-type form-control" style="font-size: 14px" onchange="searchCategory(this.value)">
+                <select id="purchase_type" class="select-type form-control" style="font-size: 14px" onchange="searchCategory(this.value)">
                    <!-- <option value="">Select Category</option> -->
                     @foreach($categories as $category)
                     <option value="{{$category->id}}">{{$category->name}}</option>
                     @endforeach
                 </select>
             </div>
-            
-            
+
+
             <div class="form-group m-2">
                 <label class="font-weight-bold">Name</label>
-                <select  name="item_name" class="p-4 select-cat form-control" id="counting_unit_select" onchange="searchSubCategory(this.value)">
+                <select  name="item_name" class="select-cat form-control" id="counting_unit_select" onchange="searchSubCategory(this.value)">
                 <!-- <option value="">Select Item Name</option> -->
                     @foreach($items as $item)
                         <option value="{{$item->id}}" data-unitname="{{$item->name}}" data-id="$item->id">{{$item->name}}</option>
                     @endforeach
-                    
+
                 </select>
             </div>
             <!-- <div class="from-group m-2"> -->
@@ -174,19 +174,19 @@ $from_id = 1;
                 <!-- <label class="font-weight-bold">Price</label> -->
                 <input type="hidden" value="" id="price" name="price" class="form-control">
             <!-- </div> -->
-            
-            
+
+
             <!-- <div class="form-group m-2">
                 <label class="font-weight-bold">@lang('lang.item')</label>
                 <select class="p-4 select form-control" name="item" id="counting_unit_select" >
                     <option></option>
-                    
-                    counting unit foreach loop goes here 
+
+                    counting unit foreach loop goes here
 
                 </select>
             </div> -->
 
-           
+
 
 
 
@@ -313,18 +313,18 @@ $from_id = 1;
         $(".select-type").select2({
             placeholder:"Select Category",
         });
-        
+
         $(".select-cat").select2({
             placeholder:"Select Item",
         });
         $(".select-subcat").select2({
             placeholder:"Select Subcategory",
         });
-        
+
          $(".select").select2({
                     placeholder: "ရှာရန်",
                 });
-        
+
         $(".select_sup").select2({
             placeholder:"Choose Supplier Name",
         });
@@ -335,9 +335,9 @@ $from_id = 1;
             console.log("PO Purchase");
             $('#purchase_type').val(2).change();
         }
-        
+
         showmodal();
-        
+
     });
 
     /*** */
@@ -347,14 +347,14 @@ $from_id = 1;
     // });
 
     $('#addpurchase').click(function(){
-        
+
         var now_price = $('#price').val();
         // alert(now_price);
         var id=  $( "#counting_unit_select" ).val();
         // var type = $('#purchase_type').find(":selected").val();
-    
+
         var purchaseprice=  $( "#counting_unit_select option:selected" ).data('purchaseprice');
-    
+
         if(type == 1){
         var normalprice=  $( "#counting_unit_select option:selected" ).data('normalprice');
         //var wholeprice=  $( "#counting_unit_select option:selected" ).data('wholeprice');
@@ -376,7 +376,7 @@ $from_id = 1;
                 // "item_id": id,
             },
             success:function(data){
-               
+
                $('#old_purchase_price').val(data.price);
                       if(now_price != data.price){
 
@@ -386,7 +386,7 @@ $from_id = 1;
                         }
 
                         // $('#add_purchase_modal').modal('show');
-                        
+
                         $('#unit_id').val(id);
                         $('#purchase_price').val(now_price);
                         $('#old_purchase_price').val(data.price);
@@ -395,7 +395,7 @@ $from_id = 1;
                       }else{
                         addpurchase();
                       }
-            
+
             },
         });
 
@@ -430,7 +430,7 @@ $from_id = 1;
                if(data){
                 modalformclear();
                 $('#add_purchase_modal').modal('hide');
-                
+
                 swal({
                     title:"Success!",
                     text:"Successfully changed!",
@@ -523,25 +523,25 @@ $from_id = 1;
             localStorage.setItem('myprcart',JSON.stringify(myprcartobj));
         }
         if(my_pr_total == null ){
-            
+
             localStorage.setItem('prTotal',JSON.stringify(totallast));
-            
+
         }else{
-            
+
             var pr_total_obj = JSON.parse(my_pr_total);
-            
+
             pr_total_obj.sub_total = cal_total + pr_total_obj.sub_total;
-            
+
             pr_total_obj.total_qty = parseInt(qty) + parseInt(pr_total_obj.total_qty);
-            
+
             localStorage.setItem('prTotal',JSON.stringify(pr_total_obj));
         }
         showmodal();
-        
+
         // $('#tot_amt').val(last);
         // $('#total_place').html(last);
         // $('#show_total').html(last);
-       
+
         formClear();
     }
     }
@@ -599,7 +599,7 @@ function cash(value)
 }
 function submit_store()
 {
-    
+
     $('#store_purchase').submit();
     localStorage.removeItem('myprcart');
     localStorage.removeItem('prTotal');
@@ -674,31 +674,31 @@ function change_amt(id,qty)
             pr_total_obj.total_qty -= parseInt(myprcartobj[i].qty);
             pr_total_obj.total_qty = parseInt(pr_total_obj.total_qty)+change_qty;
             pr_total_obj.sub_total -= parseInt(myprcartobj[i].sub_total);
-           
+
             myprcartobj[i].qty = change_qty;
             myprcartobj[i].sub_total = myprcartobj[i].price * change_qty;
             pr_total_obj.sub_total +=parseInt(myprcartobj[i].sub_total);
-           
+
             localStorage.setItem('myprcart',JSON.stringify(myprcartobj));
             localStorage.setItem('prTotal',JSON.stringify(pr_total_obj));
         }
-        
-        
+
+
     });
     // pr_total_obj.total_qty += parseInt(qty);
     // pr_total_obj.sub_total = qty * price;
     // localStorage.setItem('prTotal',JSON.stringify(pr_total_obj));
-    
+
     showmodal();
 }
 function searchCategory(value){
                     let cat_id = value;
-                    
+
                     // $("#type").val(cat_id);
-                    
-                    
+
+
                     // alert(cat_id);
-                    
+
                     $('#counting_unit_select').empty();
                     $.ajax({
                         type: 'POST',
@@ -732,7 +732,7 @@ function searchSubCategory(value){
                     let item_id = value;
                     var type = $('#item_amount').val('');
                     // alert(cat_id);
-                    
+
                     // $('#subcategory').empty();
                     $.ajax({
                         type: 'POST',
@@ -761,7 +761,7 @@ function searchSubCategory(value){
                         }
                     });
                 }
-                
+
                 function searchCountingUnit(value){
                     let sub_id = value;
                     let cat_id = $('#category').val();
@@ -782,11 +782,11 @@ function searchSubCategory(value){
                             $('#counting_unit_select').append($('<option>').text('units'));
                             $.each(data,function(i,v){
                                 if(type == 1){
-                                
+
                                     $('#counting_unit_select').append($('<option>').text(v.unit_code +"-"+
                                         v.unit_name + "  " +  v.current_quantity + "ခု"+"  "+
                                         v.purchase_price + "ကျပ်").attr('value', v.id).data('id',v.id).data('unitname',v.unit_name).data('purchaseprice',v.purchase_price).data('normalprice' ,v.order_price).data('currentqty',v.current_quantity).data('normalfixed',v.order_fixed_percent).data('normalfixedflash',v.order_fixed_flash));
-                                
+
                                 }else if(type == 2){
                                     $('#counting_unit_select').append($('<option>').text(v.item_code +"-"+
                                         v.item_name + "  " +  v.instock_qty + "ခု"+"  "+

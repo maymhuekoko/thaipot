@@ -882,7 +882,7 @@ class SaleController extends Controller
 
 		$tota = $shop_order->adult_qty * 21900 + $shop_order->child_qty * 11550 + $shop_order->kid_qty * 9450 + $shop_order->extrapot_qty * 3000 + $request->extragram1;
         $tser = $tota * 0.05;
-        $total  = $tota + $tser - ($shop_order->birth_qty * 4600);
+        $total  = ($tota + $tser) - ($shop_order->birth_qty * 4600);
         //  dd($request->change_amount_dis);
         $total_qty =  $shop_order->adult_qty + $shop_order->child_qty  + $shop_order->kid_qty ;
 
@@ -901,6 +901,7 @@ class SaleController extends Controller
             $voucher->pay_value = $request->pay_amount;
             $voucher->change_value = $request->change_amount;
             $voucher->pay_type = $request->pay_type;
+            $voucher->remark = $request->vou_remark;
         }else{
             $voucher->pay_value = $request->pay_amount_dis;
             $voucher->change_value = $request->change_amount_dis;
@@ -1014,9 +1015,12 @@ class SaleController extends Controller
             $voucher->discount_value = $request->discount_value;
             $voucher->pay_value = $request->pay_amount;
             $voucher->change_value = $request->change_amount;
+            $voucher->pay_type = $request->pay_type;
+            $voucher->total_price = $voucher->total_price - $request->discount_value;
         }else{
             $voucher->pay_value = $request->pay_amount_dis;
             $voucher->change_value = $request->change_amount_dis;
+            $voucher->pay_type = $request->pay_type_dis;
         }
         if($request->promotion !=0 && $request->promotionvalue !=0){
             $voucher->promotion = $request->promotion;
@@ -1027,41 +1031,7 @@ class SaleController extends Controller
 
         $voucher->save();
 
-     	// foreach ($shop_order->option as $option) {
 
-        // 	$voucher->option()->attach($option->id, ['quantity' => $option->pivot->quantity,'price' => $option->sale_price, 'date' => $re_date]);
-
-		// 	$moption = Option::findorFail($option->id);
-		// 	// dd($moption->id);
-		// 	$amount = DB::table('ingredient_option')
-
-		// 	->where('option_id',$moption->id)
-		// 	->get();
-		// 	//   dd($amount);
-		// 	foreach($amount as $amt)
-		// 	$amountt = json_encode($amt->amount);
-		// 	// dd($amountt);
-
-		// 	// dd($amountt);
-		// 	$ingredien = DB::table('ingredient_option')
-		// 	// ->select('ingredient_id')
-		// 	->where('option_id',$moption->id)
-		// 	->get();
-		// 	if($ingredien == null)
-		// 	{
-		// 	foreach($ingredien as $ingred)
-		// 	// dd($ingredien);
-		// 	$ingreID = $ingred->ingredient_id;
-		// 	// dd($ingreID);
-
-        //     $ingredient_update = Ingredient::findorFail($ingreID);
-		// 	$balance_qty = $ingredient_update->instock_quantity - $amountt;
-		// 	$ingredient_update->instock_quantity = $balance_qty;
-		// 	// dd("Hello");
-		// 	$ingredient_update->save();
-		// 	}
-        //     }
-    //  dd("Helllo");
             $shop_order->voucher_id = $voucher->id;
 
             $shop_order->status = 2;

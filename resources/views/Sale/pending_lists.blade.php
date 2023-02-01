@@ -152,6 +152,10 @@
                     <label class="font-weight-bold">Change</label>
                     <input type="text" class="form-control" readonly id="change_amount1" value="">
                 </div>
+                <div class="form-group mt-3">
+                    <label class="font-weight-bold">Remark</label>
+                    <input type="text" class="form-control" id="vou_remark" value="">
+                </div>
                 <button type="button" class="btn btn-success mt-4" onclick="change_price()" btn-lg
                     btn-block">Store Voucher</button>
             </div>
@@ -363,6 +367,7 @@ function change_price(){
     var discount_value = $('#dis_val').val();
     var pay_value = $('#pay_amount').val();
     var change_value = $('#change_amount1').val();
+    var vou_remark = $('#vou_remark').val();
     var pay_value_dis = $('#pay_amount_dis').val();
     var change_value_dis = $('#change_amount').val();
     var extra_amt1 = $('#no_extra1').val();
@@ -394,6 +399,7 @@ function change_price(){
         "extraamt" : extra_amt,
         "pay_type" : pay_type,
         "pay_type_dis" : pay_type_dis,
+        "vou_remark" : vou_remark,
         },
 
         success:function(data){
