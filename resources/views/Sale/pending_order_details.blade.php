@@ -115,7 +115,7 @@
     {{-- <a href="#" class="btn  ml-2" style="background-color:lightgreen;color:white;" onclick="done({{$pending_order_details->id}})">Done</a>
 
     @else --}}
-    <a href="#" class="btn btn-info ml-2" style="color:white;" onclick="storeVoucher('{{$pending_order_details->id}}')">Store Voucher</a>
+    {{-- <a href="#" class="btn btn-info ml-2" style="color:white;" onclick="storeVoucher('{{$pending_order_details->id}}')">Store Voucher</a> --}}
     @endif
 
 </div>
