@@ -63,45 +63,45 @@
                                     <table class="table">
                                         <thead>
                                             <tr style="text-align:left;">
-                                                <th ><strong>Person</strong></th>
-                                                <th ><strong>Price & Qty</strong></th>
-                                                <th ><strong>Total</strong></th>
+                                                <th style="padding-left:20px;padding-right:20px;"><strong>Person</strong></th>
+                                                <th style="padding-left:20px;padding-right:20px;"><strong>Price & Qty</strong></th>
+                                                <th style="padding-left:20px;padding-right:20px;"><strong>Total</strong></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @if ($order->adult_qty != 0)
                                             <tr style="text-align:left;">
-                                                <th >Adult</th>
-                                                <th >21900 * <span>{{$order->adult_qty}}</span></th>
-                                                <th>{{$order->adult_qty * 21900}}</th>
+                                                <th style="padding-left:20px;padding-right:20px;">Adult</th>
+                                                <th style="padding-left:20px;padding-right:20px;">21900 * <span>{{$order->adult_qty}}</span></th>
+                                                <th style="padding-left:20px;padding-right:20px;">{{$order->adult_qty * 21900}}</th>
                                             </tr>
                                             @endif
                                             @if ($order->child_qty != 0)
                                             <tr style="text-align:left;">
-                                                <th >Children</th>
-                                                <th >11000 * <span>{{$order->child_qty}}</span></th>
-                                                <th>{{$order->child_qty * 11000}}</th>
+                                                <th style="padding-left:20px;padding-right:20px;">Children</th>
+                                                <th style="padding-left:20px;padding-right:20px;">11000 * <span>{{$order->child_qty}}</span></th>
+                                                <th style="padding-left:20px;padding-right:20px;">{{$order->child_qty * 11000}}</th>
                                             </tr>
                                             @endif
                                             @if ($order->kid_qty != 0)
                                             <tr style="text-align:left;">
-                                                <th >Kids</th>
-                                                <th >9000 * <span>{{$order->kid_qty}}</span></th>
-                                                <th>{{$order->kid_qty * 9000}}</th>
+                                                <th style="padding-left:20px;padding-right:20px;">Kids</th>
+                                                <th style="padding-left:20px;padding-right:20px;">9000 * <span>{{$order->kid_qty}}</span></th>
+                                                <th style="padding-left:20px;padding-right:20px;">{{$order->kid_qty * 9000}}</th>
                                             </tr>
                                             @endif
                                             @if ($order->extrapot_qty != 0)
                                             <tr style="text-align:left;">
-                                                <th >Extra Pot</th>
-                                                <th >3000 * <span>{{$order->extrapot_qty}}</span></th>
-                                                <th>{{$order->extrapot_qty * 3000}}</th>
+                                                <th style="padding-left:20px;padding-right:20px;">Extra Pot</th>
+                                                <th style="padding-left:20px;padding-right:20px;">3000 * <span>{{$order->extrapot_qty}}</span></th>
+                                                <th style="padding-left:20px;padding-right:20px;">{{$order->extrapot_qty * 3000}}</th>
                                             </tr>
                                             @endif
                                             @if($voucher->extra_gram != 0)
                                             <tr style="text-align:left;">
-                                                <th >Extra Gram</th>
-                                                <th >{{$voucher->extra_gram}}(g)</span></th>
-                                                <th>{{$voucher->extra_amount}}</th>
+                                                <th style="padding-left:20px;padding-right:20px;">Extra Gram</th>
+                                                <th style="padding-left:20px;padding-right:20px;">{{$voucher->extra_gram}}(g)</span></th>
+                                                <th style="padding-left:20px;padding-right:20px;">{{$voucher->extra_amount}}</th>
                                             </tr>
                                             @endif
                                         </tbody>
@@ -220,31 +220,31 @@
 <script>
     $(document).ready(function() {
         $("#print").click(function() {
-            var mode = 'iframe'; //popup
-            var close = mode == "popup";
-            var options = {
-                mode: mode,
-                popClose: close
-            };
-            $("#printableArea").printArea(options);
+            // var mode = 'iframe'; //popup
+            // var close = mode == "popup";
+            // var options = {
+            //     mode: mode,
+            //     popClose: close
+            // };
+            // $("#printableArea").printArea(options);
 
 
-            // let html = document.getElementById('printableArea').innerHTML;
-            // $('#mobileprint').html(html);
+            let html = document.getElementById('printableArea').innerHTML;
+            $('#mobileprint').html(html);
 
-            // var printContent = $('#mobileprint')[0];
-            // var WinPrint = window.open('', '', 'width=900,height=650');
-            // WinPrint.document.write('<html><head><title>Print Voucher</title>');
-            // WinPrint.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
-            // WinPrint.document.write('<link rel="stylesheet" type="text/css" media="print" href="css/print.css">');
-            // WinPrint.document.write('</head><body >');
-            // WinPrint.document.write(printContent.innerHTML);
-            // WinPrint.document.write('</body></html>');
+            var printContent = $('#mobileprint')[0];
+            var WinPrint = window.open('', '', 'width=900,height=650');
+            WinPrint.document.write('<html><head><title>Print Voucher</title>');
+            WinPrint.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
+            WinPrint.document.write('<link rel="stylesheet" type="text/css" media="print" href="css/print.css">');
+            WinPrint.document.write('</head><body >');
+            WinPrint.document.write(printContent.innerHTML);
+            WinPrint.document.write('</body></html>');
 
-            // WinPrint.focus();
-            // WinPrint.print();
-            // WinPrint.document.close();
-            // WinPrint.close();
+            WinPrint.focus();
+            WinPrint.print();
+            WinPrint.document.close();
+            WinPrint.close();
         });
     });
     </script>
