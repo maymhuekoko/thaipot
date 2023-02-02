@@ -37,7 +37,7 @@
     <div class="page-wrapper">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-md-5 printableArea" style="width:45%;" id='printableArea'>
+                <div class="col-md-5" style="width:45%;" id='printableArea'>
                     <div class="card card-body">
                         <div class="row">
                             <div class="col-md-12">
@@ -166,31 +166,30 @@
 <script>
     $(document).ready(function() {
         $("#print").click(function() {
-            // var mode = 'iframe'; //popup
-            // var close = mode == "popup";
-            // var options = {
-            //     mode: mode,
-            //     popClose: close
-            // };
-            // $("div.printableArea").printArea(options);
+            var mode = 'iframe'; //popup
+            var close = mode == "popup";
+            var options = {
+                mode: mode,
+                popClose: close
+            };
+            $("#printableArea").printArea(options);
 
+            // let html = document.getElementById('printableArea').innerHTML;
+            // $('#mobileprint').html(html);
 
-            let html = document.getElementById('printableArea').innerHTML;
-            $('#mobileprint').html(html);
+            // var printContent = $('#mobileprint')[0];
+            // var WinPrint = window.open('', '', 'width=900,height=650');
+            // WinPrint.document.write('<html><head><title>Print Voucher</title>');
+            // WinPrint.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
+            // WinPrint.document.write('<link rel="stylesheet" type="text/css" media="print" href="css/print.css">');
+            // WinPrint.document.write('</head><body >');
+            // WinPrint.document.write(printContent.innerHTML);
+            // WinPrint.document.write('</body></html>');
 
-            var printContent = $('#mobileprint')[0];
-            var WinPrint = window.open('', '', 'width=900,height=650');
-            WinPrint.document.write('<html><head><title>Print Voucher</title>');
-            WinPrint.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
-            WinPrint.document.write('<link rel="stylesheet" type="text/css" media="print" href="css/print.css">');
-            WinPrint.document.write('</head><body >');
-            WinPrint.document.write(printContent.innerHTML);
-            WinPrint.document.write('</body></html>');
-
-            WinPrint.focus();
-            WinPrint.print();
-            WinPrint.document.close();
-            WinPrint.close();
+            // WinPrint.focus();
+            // WinPrint.print();
+            // WinPrint.document.close();
+            // WinPrint.close();
         });
     });
     </script>
