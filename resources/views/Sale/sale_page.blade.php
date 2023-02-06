@@ -335,54 +335,54 @@
                         </label>
                     </div>
                     <div id="soupchk" class="mt-3">
-                    <div class="form-check offset-md-10">
+                    <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="mchk">
                         <label class="form-check-label" for="mchk">
-                          Tonyan
+                          Tom-yum
                         </label>
                     </div>
-                    <div class="form-check offset-md-10">
+                    <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="mchk1">
                         <label class="form-check-label" for="mchk1">
-                          Marlar
+                          Marla
                         </label>
                     </div>
-                    <div class="form-check offset-md-10">
+                    <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="mchk2">
                         <label class="form-check-label" for="mchk2">
-                          Soup
+                          Sweet Soup
                         </label>
                     </div>
-                    <div class="form-check offset-md-10">
+                    <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="mchk3">
                         <label class="form-check-label" for="mchk3">
-                          Gimchi
+                          Kimchi
                         </label>
                     </div>
                     </div>
                     <div id="soupradio"  class="mt-3">
-                        <div class="form-check offset-md-10">
+                        <div class="form-check">
                             <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk">
                             <label class="form-check-label" for="simrchk">
-                              Tonyan
+                              Tom-yum
                             </label>
                         </div>
-                        <div class="form-check offset-md-10">
+                        <div class="form-check">
                             <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk1">
                             <label class="form-check-label" for="simrchk1">
-                              Marlar
+                              Marla
                             </label>
                         </div>
-                        <div class="form-check offset-md-10">
+                        <div class="form-check">
                             <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk2">
                             <label class="form-check-label" for="simrchk2">
-                              Soup
+                              Sweet Soup
                             </label>
                         </div>
-                        <div class="form-check offset-md-10">
+                        <div class="form-check">
                             <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk3">
                             <label class="form-check-label" for="simrchk3">
-                              Gimchi
+                              Kimchi
                             </label>
                         </div>
                     </div>
@@ -497,31 +497,31 @@
         $('#ordermodal').modal('hide');
     if(document.getElementById('simchk').checked == true){
         if(document.getElementById('simrchk').checked == true){
-            var soup = 'Tonyan';
+            var soup = 'Tom-yum';
         }
         if(document.getElementById('simrchk1').checked == true){
-            var soup = 'Marlar';
+            var soup = 'Marla';
         }
         if(document.getElementById('simrchk2').checked == true){
-            var soup = 'Soup';
+            var soup = 'Sweet Soup';
         }
         if(document.getElementById('simrchk3').checked == true){
-            var soup = 'Others';
+            var soup = 'Kimchi';
         }
     }
     if(document.getElementById('mixchk').checked == true){
         var soup ='';
         if(document.getElementById('mchk').checked == true){
-            soup += 'Tonyan,';
+            soup += 'Tom-yum,';
         }
         if(document.getElementById('mchk1').checked == true){
-            soup += 'Marlar,';
+            soup += 'Marla,';
         }
         if(document.getElementById('mchk2').checked == true){
-            soup += 'Soup,';
+            soup += 'Sweet Soup,';
         }
         if(document.getElementById('mchk3').checked == true){
-            soup += 'Others,';
+            soup += 'Kimchi,';
         }
     }
 
