@@ -117,6 +117,9 @@
 
                 </div>
             </div>
+            <div id="mobileprint" class="d-none">
+
+            </div>
         </div>
     </div>
 </div>
