@@ -110,7 +110,12 @@
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
                                          <strong>Voucher Total - {{$voutotal}}</strong><br>
                                          <strong>Service Charges(5%) - {{$servicecharges}}(+)</strong><br>
+                                         @if ($voucher->govtax == 1)
+                                         <strong>Gov Tax(%) -<span>{{$servicecharges}}(+)</span></strong><br>
+                                         @else
                                          <strong>Gov Tax(%) -<span style="padding-left: 50px;">(+)</span></strong><br>
+                                         @endif
+
                                          @if ($voucher->promotion == 'Cash Back' || $voucher->promotion == 'Discount Percentage')
                                          <strong>{{$voucher->promotion}} - {{$voucher->promotion_value}}</strong><br>
                                           @if (explode(' ',$voucher->promotion_value)[1] == '%')
@@ -142,7 +147,11 @@
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
                                         <strong>Service Charges(5%) - {{$servicecharges}} (+)</strong><br>
+                                        @if ($voucher->govtax == 1)
+                                        <strong>Gov Tax(%) -<span>{{$servicecharges}}(+)</span></strong><br>
+                                        @else
                                         <strong>Gov Tax(%) -<span style="padding-left: 50px;">(+)</span></strong><br>
+                                        @endif
                                         {{-- <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br> --}}
                                         @if ($order->birth_qty != 0)
                                         <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}} (-)</strong><br>
@@ -160,7 +169,11 @@
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
                                         <strong>Service Charges(5%) - {{$servicecharges}} (+)</strong><br>
+                                        @if ($voucher->govtax == 1)
+                                        <strong>Gov Tax(%) -<span>{{$servicecharges}}(+)</span></strong><br>
+                                        @else
                                         <strong>Gov Tax(%) -<span style="padding-left: 50px;">(+)</span></strong><br>
+                                        @endif
                                         {{-- <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br> --}}
                                         @if ($order->birth_qty != 0)
                                         <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}} (-)</strong><br>
@@ -178,7 +191,11 @@
                                     <div style="text-align:right;margin-right:10px;margin-top:20px;font-size:17px;font-weight:bold;">
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
                                         <strong>Service Charges(5%) - {{$servicecharges}} (+)</strong><br>
+                                        @if ($voucher->govtax == 1)
+                                        <strong>Gov Tax(%) -<span>{{$servicecharges}}(+)</span></strong><br>
+                                        @else
                                         <strong>Gov Tax(%) -<span style="padding-left: 50px;">(+)</span></strong><br>
+                                        @endif
                                         {{-- <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br> --}}
                                         @if ($order->birth_qty != 0)
                                         <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}} (-)</strong><br>

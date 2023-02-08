@@ -24,6 +24,7 @@ class Voucher extends Model
         'extra_gram',
         'extra_amount',
         'pay_type',
+        'govtax',
         'remark'
     ];
 

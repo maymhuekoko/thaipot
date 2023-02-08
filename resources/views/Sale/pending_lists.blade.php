@@ -148,6 +148,21 @@
                         <option value="1">A+</option>
                     </select>
                 </div>
+                <div class="form-group mt-3 row">
+                    <label class="font-weight-bold col-md-4">Gov Tax</label>
+                    <div class="col-md-4 form-check">
+                        <input class="form-check-input" type="radio" name="flexRadio3" id="gov_yes1">
+                        <label class="form-check-label" for="gov_yes1">
+                          YES
+                        </label>
+                    </div>
+                    <div class="col-md-4 form-check">
+                        <input class="form-check-input" type="radio" name="flexRadio3" id="gov_no1" checked>
+                        <label class="form-check-label" for="gov_no1">
+                          NO
+                        </label>
+                    </div>
+                </div>
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Change</label>
                     <input type="text" class="form-control" readonly id="change_amount1" value="">
@@ -226,6 +241,21 @@
                     <option value="7">A+</option>
                 </select>
             </div>
+            <div class="form-group mt-3 row" id="dis_govtax">
+                <label class="font-weight-bold col-md-4">Gov Tax</label>
+                <div class="col-md-4 form-check">
+                    <input class="form-check-input" type="radio" name="flexRadio2" id="gov_yes">
+                    <label class="form-check-label" for="gov_yes">
+                      YES
+                    </label>
+                </div>
+                <div class="col-md-4 form-check">
+                    <input class="form-check-input" type="radio" name="flexRadio2" id="gov_no" checked>
+                    <label class="form-check-label" for="gov_no">
+                      NO
+                    </label>
+                </div>
+            </div>
             <div class="form-group mt-3" id="dis_change_amount">
                 <label class="font-weight-bold">Change</label>
                 <input type="text" class="form-control" readonly id="change_amount" value="">
@@ -269,6 +299,7 @@ function no_radio(){
     $('#dis_voucher_total').show();
     $('#dis_pay_amount').show();
     $('#dis_change_amount').show();
+    $('#dis_govtax').show();
     $('#promotion').show();
     $('#dis_footer').show();
     $('#curr_extra_total').show();
@@ -377,6 +408,19 @@ function change_price(){
     var pay_type = $('#pay_type').val();
     var pay_type_dis = $('#pay_type_dis').val();
 
+    if($('#gov_yes').is(":checked")){
+        var govtax_dis = 1;
+    }else{
+        var govtax_dis = 0;
+    }
+
+    if($('#gov_yes1').is(":checked")){
+        var govtax = 1;
+    }else{
+        var govtax = 0;
+    }
+
+
     if(change_value_dis>=0 && change_value>=0){
         $.ajax({
 
@@ -399,6 +443,8 @@ function change_price(){
         "extraamt" : extra_amt,
         "pay_type" : pay_type,
         "pay_type_dis" : pay_type_dis,
+        "govtax" : govtax,
+        "govtax_dis" : govtax_dis,
         "vou_remark" : vou_remark,
         },
 
@@ -479,6 +525,7 @@ function change_price(){
         $('#dis_voucher_total').hide();
         $('#dis_pay_amount').hide();
         $('#dis_change_amount').hide();
+        $('#dis_govtax').hide();
         $('#promotion').hide();
         $('#promotion_name').hide();
         $('#dis_footer').hide();
