@@ -2117,6 +2117,7 @@ protected function updateIncome($id, Request $request)
         $discount_amount = 0;
         $take_total = 0;
         $expend = 0;
+        $govtax = 0;
         $cash=0;$kpay=0;$wave=0;$cb=0;$aya=0;$yoma=0;$aplus=0;
 
         $second_total = 0;
@@ -2151,6 +2152,7 @@ protected function updateIncome($id, Request $request)
             $extra_grams += $voucher->extra_gram;
             $extra_amount += $voucher->extra_amount;
             $discount_amount += $voucher->discount_value;
+            $govtax += $voucher->govtax_amount;
             if($voucher->pay_type == 1){
                 $cash += $voucher->total_price;
             }
@@ -2180,11 +2182,11 @@ protected function updateIncome($id, Request $request)
 
         $service_charge = $first_total * 0.05;
 
-        $second_total = $first_total + $service_charge;
+        $second_total = $first_total + $service_charge + $govtax;
 
         return view('Admin.sales_report',
         compact('adults','children', 'kids', 'extra_pots', 'extra_grams', 'extra_amount', 'first_total',
-        'service_charge', 'second_total','discount_amount',
+        'service_charge', 'second_total','discount_amount', 'govtax',
         'cash','kpay','wave','cb','aya','yoma','aplus','take_total','expend'));
     }
 
@@ -2199,6 +2201,7 @@ protected function updateIncome($id, Request $request)
         $discount_amount = 0;
         $take_total = 0;
         $expend = 0;
+        $govtax = 0;
         $cash=0;$kpay=0;$wave=0;$cb=0;$aya=0;$yoma=0;$aplus=0;
         $second_total = 0;
 
@@ -2232,6 +2235,7 @@ protected function updateIncome($id, Request $request)
         foreach($vouchers as $voucher){
             $extra_grams += $voucher->extra_gram;
             $extra_amount += $voucher->extra_amount;
+            $govtax += $voucher->govtax_amount;
             $discount_amount += $voucher->discount_value;
             if($voucher->pay_type == 1){
                 $cash += $voucher->total_price;
@@ -2262,7 +2266,7 @@ protected function updateIncome($id, Request $request)
 
         $service_charge = $first_total * 0.05;
 
-        $second_total = $first_total + $service_charge;
+        $second_total = $first_total + $service_charge + $govtax;
 
         return response()->json([
             "adults" => $adults,
@@ -2284,6 +2288,7 @@ protected function updateIncome($id, Request $request)
             "aplus" => $aplus,
             "take_total" => $take_total,
             "expend" => $expend,
+            "govtax" => $govtax,
         ]);
     }
 }
