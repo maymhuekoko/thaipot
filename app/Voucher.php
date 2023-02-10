@@ -25,7 +25,8 @@ class Voucher extends Model
         'extra_amount',
         'pay_type',
         'govtax',
-        'remark'
+        'remark',
+        'govtax_amount'
     ];
 
     public function option() {

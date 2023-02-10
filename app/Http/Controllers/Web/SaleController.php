@@ -894,7 +894,6 @@ class SaleController extends Controller
             'type' => 1,
             'status' => 0,
             'date' => $re_date,
-            
         ]);
         if($request->discount_type !=null && $request->discount_value != null){
             $voucher->discount_type = $request->discount_type;
@@ -903,12 +902,14 @@ class SaleController extends Controller
             $voucher->change_value = $request->change_amount;
             $voucher->pay_type = $request->pay_type;
             $voucher->govtax = $request->govtax;
+            $voucher->govtax_amount = $request->govtax_amt1;
             $voucher->remark = $request->vou_remark;
         }else{
             $voucher->pay_value = $request->pay_amount_dis;
             $voucher->change_value = $request->change_amount_dis;
             $voucher->pay_type = $request->pay_type_dis;
             $voucher->govtax = $request->govtax_dis;
+            $voucher->govtax_amount = $request->govtax_amt;
             if($shop_order->birth_qty != 0){
                 $voucher->discount_value = $shop_order->birth_qty * 4600;
             }
