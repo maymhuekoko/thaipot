@@ -87,6 +87,12 @@
                 <td></td>
             </tr>
             <tr>
+                <td>Gov Tax 5%</td>
+                <td></td>
+                <td>{{$govtax}}</td>
+                <td></td>
+            </tr>
+            <tr>
                 <td>Total</td>
                 <td></td>
                 <td>{{$second_total}}</td>
@@ -278,6 +284,12 @@
                             <td>Service Charge 5%</td>
                             <td></td>
                             <td>${data.service_charge}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Gov Tax 5%</td>
+                            <td></td>
+                            <td>${data.govtax}</td>
                             <td></td>
                         </tr>
                         <tr>

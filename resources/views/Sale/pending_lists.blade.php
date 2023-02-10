@@ -82,6 +82,7 @@
                 <input type="hidden" id="hid_order_id">
                 <input type="hidden" id="dis_type">
                 <input type="hidden" id="dis_val">
+                <input type="hidden" id="govtax_val1" value="0">
                 <div class="form-group">
                     <label class="font-weight-bold">Voucher Total</label>
                     <input type="text" class="form-control" readonly id="voucher_total" value="">
@@ -94,6 +95,21 @@
                     <div class="form-group  col-md-6" id="extra_amt1">
                         <label class="font-weight-bold">Extra Amount</label>
                         <input type="text" class="form-control"  id="no_extra1" value="0" readonly>
+                    </div>
+                </div>
+                <div class="form-group mt-3 row">
+                    <label class="font-weight-bold col-md-4">Gov Tax</label>
+                    <div class="col-md-4 form-check">
+                        <input class="form-check-input" type="radio" name="flexRadio3" id="gov_yes1" value="01" onclick="extragramadd1(this.value)">
+                        <label class="form-check-label" for="gov_yes1">
+                          YES
+                        </label>
+                    </div>
+                    <div class="col-md-4 form-check">
+                        <input class="form-check-input" type="radio" name="flexRadio3" id="gov_no1" value="02" checked onclick="extragramadd1(this.value)">
+                        <label class="form-check-label" for="gov_no1">
+                          NO
+                        </label>
                     </div>
                 </div>
                 <div class="row text-center">
@@ -132,6 +148,7 @@
                     <label class="font-weight-bold">Current Voucher Total</label>
                     <input type="text" class="form-control" readonly id="curr_voucher_total1" value="">
                 </div>
+
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Pay Amount</label>
                     <input type="text" class="form-control"  value="" id="pay_amount" placeholder="Enter Pay Amount" onkeyup="pay_amt1(this.value)">
@@ -148,21 +165,7 @@
                         <option value="1">A+</option>
                     </select>
                 </div>
-                <div class="form-group mt-3 row">
-                    <label class="font-weight-bold col-md-4">Gov Tax</label>
-                    <div class="col-md-4 form-check">
-                        <input class="form-check-input" type="radio" name="flexRadio3" id="gov_yes1">
-                        <label class="form-check-label" for="gov_yes1">
-                          YES
-                        </label>
-                    </div>
-                    <div class="col-md-4 form-check">
-                        <input class="form-check-input" type="radio" name="flexRadio3" id="gov_no1" checked>
-                        <label class="form-check-label" for="gov_no1">
-                          NO
-                        </label>
-                    </div>
-                </div>
+
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Change</label>
                     <input type="text" class="form-control" readonly id="change_amount1" value="">
@@ -189,6 +192,7 @@
           </button>
         </div>
         <div class="modal-body">
+            <input type="hidden" id="govtax_val"  value="0">
             <div class="row text-center">
                 <div class="col-md-4 mb-2">
                     <h4 class="font-weight-bold">Discount:</h4>
@@ -224,7 +228,21 @@
                 <label class="font-weight-bold">Current Voucher Total</label>
                 <input type="text" class="form-control" readonly  value="" id="curr_voucher_total">
             </div>
-
+            <div class="form-group mt-3 row" id="dis_govtax">
+                <label class="font-weight-bold col-md-4">Gov Tax</label>
+                <div class="col-md-4 form-check">
+                    <input class="form-check-input" type="radio" name="flexRadio2" id="gov_yes" value="01"  onclick="extragramadd(this.value)">
+                    <label class="form-check-label" for="gov_yes">
+                      YES
+                    </label>
+                </div>
+                <div class="col-md-4 form-check">
+                    <input class="form-check-input" type="radio" name="flexRadio2" id="gov_no" checked value="02"  onclick="extragramadd(this.value)">
+                    <label class="form-check-label" for="gov_no">
+                      NO
+                    </label>
+                </div>
+            </div>
             <div class="form-group mt-3" id="dis_pay_amount">
                 <label class="font-weight-bold">Pay Amount</label>
                 <input type="text" class="form-control"  value="" id="pay_amount_dis" placeholder="Enter Pay Amount" onkeyup="pay_amt(this.value)">
@@ -241,21 +259,7 @@
                     <option value="7">A+</option>
                 </select>
             </div>
-            <div class="form-group mt-3 row" id="dis_govtax">
-                <label class="font-weight-bold col-md-4">Gov Tax</label>
-                <div class="col-md-4 form-check">
-                    <input class="form-check-input" type="radio" name="flexRadio2" id="gov_yes">
-                    <label class="form-check-label" for="gov_yes">
-                      YES
-                    </label>
-                </div>
-                <div class="col-md-4 form-check">
-                    <input class="form-check-input" type="radio" name="flexRadio2" id="gov_no" checked>
-                    <label class="form-check-label" for="gov_no">
-                      NO
-                    </label>
-                </div>
-            </div>
+
             <div class="form-group mt-3" id="dis_change_amount">
                 <label class="font-weight-bold">Change</label>
                 <input type="text" class="form-control" readonly id="change_amount" value="">
@@ -275,6 +279,7 @@
       </div>
     </div>
 </div>
+
 @endsection
 
 @section('js')
@@ -310,23 +315,49 @@ function no_radio(){
 
 function extragramadd(val){
     // alert(val);
-    $('#no_extra').val(val*35);
-    var tot = parseInt($('#voucher_total_dis').val()) + parseInt(val*35);
-    var ser = tot * 0.05;
+    if(val == 01){
+        var tot = parseInt($('#voucher_total_dis').val()) + parseInt($('#no_extra').val());
+        var ser = tot * 0.1;
+        $('#govtax_val').val(ser1);
+    }
+    else if(val == 02){
+        var tot = parseInt($('#voucher_total_dis').val()) + parseInt($('#no_extra').val());
+        var ser = tot * 0.05;
+        $('#govtax_val').val(0);
+    }
+    else{
+        $('#no_extra').val(val*35);
+        var tot = parseInt($('#voucher_total_dis').val()) + parseInt(val*35);
+        var ser = tot * 0.05;
+        $('#govtax_val').val(0);
+    }
     var bd = $('#bd_exit').val();
     // alert(bd);
-    var vtot = tot + ser - bd;
+    var vtot = (tot + ser) - bd;
     $('#curr_voucher_total').val(vtot);
 }
 
 function extragramadd1(val){
     // alert(val);
-    $('#no_extra1').val(val*35);
-    var total = parseInt($('#voucher_total').val()) + parseInt(val*35);
-    var ser1 = total * 0.05;
+    if(val == 01){
+        var total = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
+        var ser1 = total * 0.1;
+        $('#govtax_val1').val(ser1);
+    }
+    else if(val == 02){
+        var total = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
+        var ser1 = (total * 0.05);
+        $('#govtax_val1').val(0);
+    }
+    else{
+        $('#no_extra1').val(val*35);
+        var total = parseInt($('#voucher_total').val()) + parseInt(val*35);
+        var ser1 = total * 0.05;
+        $('#govtax_val1').val(0);
+    }
     var bd1 = $('#bd_exit').val();
     // alert(bd1);
-    var vtotal = total + ser1 -bd1;
+    var vtotal = ( total + ser1 )-bd1;
     $('#curr_voucher_total1').val(vtotal);
 }
 
@@ -353,15 +384,23 @@ function amount_radio(){
 function percent_dis(val){
  var t = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
  var bdp = $('#bd_exit').val();
- var tot = t + parseInt(t * 0.05) - bdp;
-
+ if($('#gov_yes1').is(":checked")){
+    var tot = t + (2 * parseInt(t * 0.05))- bdp;
+ }else{
+    var tot = t + parseInt(t * 0.05) - bdp;
+ }
     $('#curr_voucher_total1').val(tot-(parseInt(tot/100 * val)));
     $('#dis_val').val(val);
 }
 function amount_dis(val){
     var t = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
     var bda = $('#bd_exit').val();
-   var tot = t + parseInt(t * 0.05) - bda;
+    if($('#gov_yes1').is(":checked")){
+        var tot = t + (2 * parseInt(t * 0.05))- bda;
+    }else{
+        var tot = t + parseInt(t * 0.05) - bda;
+    }
+
     $('#curr_voucher_total1').val(tot - parseInt(val));
     $('#dis_val').val(val);
 }
@@ -407,9 +446,12 @@ function change_price(){
     var extra_gram = $('#no_extraamt').val();
     var pay_type = $('#pay_type').val();
     var pay_type_dis = $('#pay_type_dis').val();
+    var govtax_amt = $('#govtax_val').val();
+    var govtax_amt1 = $('#govtax_val1').val();
 
     if($('#gov_yes').is(":checked")){
         var govtax_dis = 1;
+
     }else{
         var govtax_dis = 0;
     }
@@ -446,6 +488,8 @@ function change_price(){
         "govtax" : govtax,
         "govtax_dis" : govtax_dis,
         "vou_remark" : vou_remark,
+        "govtax_amt" : govtax_amt,
+        "govtax_amt1" : govtax_amt1,
         },
 
         success:function(data){

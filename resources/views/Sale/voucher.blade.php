@@ -111,9 +111,9 @@
                                          <strong>Voucher Total - {{$voutotal}}</strong><br>
                                          <strong>Service Charges(5%) - {{$servicecharges}}(+)</strong><br>
                                          @if ($voucher->govtax == 1)
-                                         <strong>Gov Tax(%) -<span>{{$servicecharges}}(+)</span></strong><br>
+                                         <strong>Gov Tax(5%) -<span>{{$servicecharges}}(+)</span></strong><br>
                                          @else
-                                         <strong>Gov Tax(%) -<span style="padding-left: 50px;">(+)</span></strong><br>
+                                         <strong>Gov Tax(5%) -<span style="padding-left: 50px;">(+)</span></strong><br>
                                          @endif
 
                                          @if ($voucher->promotion == 'Cash Back' || $voucher->promotion == 'Discount Percentage')
@@ -131,9 +131,9 @@
                                           @if ($order->birth_qty != 0)
                                           {{-- <strong>Sub Total - {{$voutotal + $servicecharges}}</strong><br> --}}
                                           <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}}(-)</strong><br>
-                                          <strong>Total - {{$voutotal + $servicecharges - ($order->birth_qty * 4600)}}</strong><br>
+                                          <strong>Total - {{$voucher->govtax != 0 ? $voutotal + (2*$servicecharges) - ($order->birth_qty * 4600) : $voutotal + $servicecharges - ($order->birth_qty * 4600)}}</strong><br>
                                           @else
-                                          <strong>Total - {{$voutotal + $servicecharges}}</strong><br>
+                                          <strong>Total - {{$voucher->govtax != 0 ? $voutotal + (2*$servicecharges) : $voutotal + $servicecharges}}</strong><br>
                                           @endif
                                           <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                           <strong>Change - {{$voucher->change_value}}</strong><br>
@@ -148,16 +148,16 @@
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
                                         <strong>Service Charges(5%) - {{$servicecharges}} (+)</strong><br>
                                         @if ($voucher->govtax == 1)
-                                        <strong>Gov Tax(%) -<span>{{$servicecharges}}(+)</span></strong><br>
+                                        <strong>Gov Tax(5%) -<span>{{$servicecharges}}(+)</span></strong><br>
                                         @else
-                                        <strong>Gov Tax(%) -<span style="padding-left: 50px;">(+)</span></strong><br>
+                                        <strong>Gov Tax(5%) -<span style="padding-left: 50px;">(+)</span></strong><br>
                                         @endif
                                         {{-- <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br> --}}
                                         @if ($order->birth_qty != 0)
                                         <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}} (-)</strong><br>
                                         @endif
                                         <strong>Discount - FOC(1 person)(-21900)</strong><br>
-                                        <strong>Total - {{($voutotal+ $servicecharges) - 21900 - ($order->birth_qty * 4600)}}</strong><br>
+                                        <strong>Total - {{($voutotal+ ($voucher->govtax == 0 ? $servicecharges : 2 * $servicecharges)) - 21900 - ($order->birth_qty * 4600)}}</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                         <strong>Change - {{$voucher->change_value}}</strong><br>
                                         @if ($voucher->remark != null)
@@ -170,16 +170,16 @@
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
                                         <strong>Service Charges(5%) - {{$servicecharges}} (+)</strong><br>
                                         @if ($voucher->govtax == 1)
-                                        <strong>Gov Tax(%) -<span>{{$servicecharges}}(+)</span></strong><br>
+                                        <strong>Gov Tax(5%) -<span>{{$servicecharges}}(+)</span></strong><br>
                                         @else
-                                        <strong>Gov Tax(%) -<span style="padding-left: 50px;">(+)</span></strong><br>
+                                        <strong>Gov Tax(5%) -<span style="padding-left: 50px;">(+)</span></strong><br>
                                         @endif
                                         {{-- <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br> --}}
                                         @if ($order->birth_qty != 0)
                                         <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}} (-)</strong><br>
                                         @endif
                                         <strong>Discount - {{$voucher->discount_value}} % (-)</strong><br>
-                                        <strong>Total - {{($voutotal + $servicecharges)-((($voutotal + $servicecharges)-($order->birth_qty * 4600))*($voucher->discount_value/100))-($order->birth_qty * 4600)}}</strong><br>
+                                        <strong>Total - {{($voutotal+ ($voucher->govtax == 0 ? $servicecharges : 2 * $servicecharges))-((($voutotal+ ($voucher->govtax != 0 ? $servicecharges : 2 * $servicecharges))-($order->birth_qty * 4600))*($voucher->discount_value/100))-($order->birth_qty * 4600)}}</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                          <strong>Change - {{$voucher->change_value}}</strong><br>
                                          @if ($voucher->remark != null)
@@ -192,16 +192,16 @@
                                         <strong>Voucher Total - {{$voutotal}}</strong><br>
                                         <strong>Service Charges(5%) - {{$servicecharges}} (+)</strong><br>
                                         @if ($voucher->govtax == 1)
-                                        <strong>Gov Tax(%) -<span>{{$servicecharges}}(+)</span></strong><br>
+                                        <strong>Gov Tax(5%) -<span>{{$servicecharges}}(+)</span></strong><br>
                                         @else
-                                        <strong>Gov Tax(%) -<span style="padding-left: 50px;">(+)</span></strong><br>
+                                        <strong>Gov Tax(5%) -<span style="padding-left: 50px;">(+)</span></strong><br>
                                         @endif
                                         {{-- <strong>Sub Total - {{$voutotal + $servicecharges}} </strong><br> --}}
                                         @if ($order->birth_qty != 0)
                                         <strong>Birthday Discount(20%) - {{$order->birth_qty * 4600}} (-)</strong><br>
                                         @endif
                                         <strong>Discount - {{$voucher->discount_value}} (-)</strong><br>
-                                        <strong>Total - {{($voutotal + $servicecharges) - $voucher->discount_value -($order->birth_qty * 4600)}}</strong><br>
+                                        <strong>Total - {{($voutotal+ ($voucher->govtax == 0 ? $servicecharges : 2 * $servicecharges)) - $voucher->discount_value -($order->birth_qty * 4600)}}</strong><br>
                                         <strong>Pay - {{$voucher->pay_value}}</strong><br>
                                          <strong>Change - {{$voucher->change_value}}</strong><br>
                                          @if ($voucher->remark != null)
