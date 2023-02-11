@@ -318,7 +318,7 @@ function extragramadd(val){
     if(val == 01){
         var tot = parseInt($('#voucher_total_dis').val()) + parseInt($('#no_extra').val());
         var ser = tot * 0.1;
-        $('#govtax_val').val(ser1);
+        $('#govtax_val').val(ser);
     }
     else if(val == 02){
         var tot = parseInt($('#voucher_total_dis').val()) + parseInt($('#no_extra').val());
