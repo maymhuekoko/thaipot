@@ -534,6 +534,14 @@
     var table_id = $('#tableid').val();
     var remark = $('#soupremark').val();
     $('#scanId').val(table_id);
+
+    if(adult_qty == 0){
+        swal({
+                title: "Warning!",
+                text : "You need to fill basic field!",
+                icon : "warning",
+            });
+    }
     $.ajax({
 
     type:'POST',
@@ -554,14 +562,16 @@
     },
 
     success:function(data){
-        console.log('success');
-        $('#kit_id').val(data.id);
+
+            console.log('success');
+            $('#kit_id').val(data.id);
+            $('#scanshow').modal('show');
+
 
     }
 })
 
 
-    $('#scanshow').modal('show');
    }
 
    function showdis(){

@@ -276,6 +276,7 @@ class SaleController extends Controller
         // return response()->json(QrCode::size(150)->generate('hello'));
         $validator = Validator::make($request->all(), [
 			'table_id' => 'required',
+            'start_time' => 'required',
 		]);
 
 		if ($validator->fails()) {
@@ -300,15 +301,12 @@ class SaleController extends Controller
                 $end_time = $myArray[0]+2 .':'.$myArray[1] . 'AM';
             }
 
-			$table = Table::where('id', $request->table_id)->first();
-            $table->start_time = $start_time;
-            $table->end_time = $end_time;
-            $table->status = 2;
-            $table->save();
+
             // dd($table);
 				// if (empty($table)) {
                     // if($is_desktop == true || $is_mobile == true){
                         // dd($request->all());
+            if($request->adult_qty != 0){
 					$order = ShopOrder::create([
 		                'table_id' => $request->table_id,
 		                'status' => 1,
@@ -323,10 +321,17 @@ class SaleController extends Controller
                         'remark' => $request->remark,
 								// Order Status = 1
 		            ]);
+                }
                 // }
 		            $order->order_number = "ORD-".sprintf("%04s", $order->id);
 
 		            $order->save();
+
+                    $table = Table::where('id', $request->table_id)->first();
+                    $table->start_time = $start_time;
+                    $table->end_time = $end_time;
+                    $table->status = 2;
+                    $table->save();
 
 				// }
 
@@ -334,7 +339,7 @@ class SaleController extends Controller
 
 			alert()->error("Something Wrong! When Store Shop Order");
 
-			return redirect()->back();
+			response()->json('wrong');
 
 		}
 
