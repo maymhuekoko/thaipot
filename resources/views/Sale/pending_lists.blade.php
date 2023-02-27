@@ -16,6 +16,14 @@
 
 @section('content')
 <?php $user = session()->get('user')->role_flag;?>
+
+<div>
+    <form action="{{route('soup_kitchen')}}" method="POST" id="soupkichen">
+        @csrf
+        <input type="hidden" id="kit_id" name="order_id">
+        <input type="hidden" id="pot_qty" name="pot_qty">
+    </form>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="card shadow">
@@ -45,6 +53,7 @@
                                     	<a href="{{route('pending_order_details', $order->id)}}" class="btn btn-info">Check Order Details</a>
 
                                     	<a href="{{route('add_more_item', $order->id)}}" class="btn btn-success">Extra Meal</a>
+                                        <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#showorder{{$order->id}}">Edit Table</a>
                                     	@if($user == 3)
                                     	    <button class="btn" style="background-color:lightgreen;color:white;" onclick="done({{$order->table_id}})">Done</button>
                                             {{-- <button class="btn btn-danger" style="color:white;" onclick="cancel({{$order->id}})">Cancel</button> --}}
@@ -56,6 +65,151 @@
 
 
                                     </td>
+
+
+<div class="modal fade" id="showorder{{$order->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Table Edit Form</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-check offset-md-2 col-md-4">
+                    <input class="form-check-input" type="checkbox" value="" id="adultchk" onclick="showdis()">
+                    <label class="form-check-label" for="adultchk">
+                      Adult
+                    </label>
+                </div>
+                <div class="form-group col-md-4">
+                    <input class="form-control" type="text" placeholder="0"  id="adult" value="{{$order->adult_qty}}" disabled>
+                </div>
+                <div class="form-check offset-md-2 col-md-4">
+                    <input class="form-check-input" type="checkbox" value="" id="childchk" onclick="showdis()">
+                    <label class="form-check-label" for="childchk">
+                      Children
+                    </label>
+                </div>
+                <div class="form-group col-md-4">
+                    <input class="form-control" type="text" placeholder="0" value="{{$order->child_qty}}" id="child" disabled>
+                </div><div class="form-check offset-md-2 col-md-4">
+                    <input class="form-check-input" type="checkbox" value="" id="kidchk" onclick="showdis()">
+                    <label class="form-check-label" for="kidchk">
+                      Kid
+                    </label>
+                </div>
+                <div class="form-group col-md-4">
+                    <input class="form-control" type="text" placeholder="0" value="{{$order->kid_qty}}" id="kid" disabled>
+                </div>
+                <div class="form-check offset-md-2 col-md-4">
+                    <input class="form-check-input" type="checkbox" value="" id="potchk" onclick="showdis()">
+                    <label class="form-check-label" for="potchk">
+                      Extra Pot
+                    </label>
+                </div>
+                <div class="form-group col-md-4" hidden>
+                    <input class="form-control" type="text" value="{{$order->extrapot_qty}}" id="old_pot_qty" disabled>
+                </div>
+                <div class="form-group col-md-4">
+                    <input class="form-control" type="text" value="{{$order->extrapot_qty}}" id="pot" disabled>
+                </div>
+                <div class="form-check offset-md-2 col-md-4">
+                    <input class="form-check-input" type="checkbox" value="" id="bdchk" onclick="showdis()">
+                    <label class="form-check-label" for="bdchk">
+                      Birthday Person
+                    </label>
+                </div>
+                <div class="form-group col-md-4">
+                    <input class="form-control" type="text"  value="{{$order->birth_qty}}" id="bd" disabled>
+                </div>
+                <div class="form-check offset-md-3 col-md-3">
+                    <input class="form-check-input" type="radio" value="" name="selectsoup" id="simchk" onclick="simplechg()">
+                    <label class="form-check-label" for="simchk">
+                      Simple
+                    </label>
+                </div>
+                <div class="form-check col-md-4">
+                    <input class="form-check-input" type="radio" value=""  name="selectsoup" id="mixchk" onclick="mixchg()">
+                    <label class="form-check-label" for="mixchk">
+                      Mix
+                    </label>
+                </div>
+                <div id="soupchk" class="mt-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="mchk">
+                    <label class="form-check-label" for="mchk">
+                      Tom-yum
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="mchk1">
+                    <label class="form-check-label" for="mchk1">
+                      Marla
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="mchk2">
+                    <label class="form-check-label" for="mchk2">
+                      Sweet Soup
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="mchk3">
+                    <label class="form-check-label" for="mchk3">
+                      Kimchi
+                    </label>
+                </div>
+                </div>
+                <div id="soupradio"  class="mt-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk">
+                        <label class="form-check-label" for="simrchk">
+                          Tom-yum
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk1">
+                        <label class="form-check-label" for="simrchk1">
+                          Marla
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk2">
+                        <label class="form-check-label" for="simrchk2">
+                          Sweet Soup
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk3">
+                        <label class="form-check-label" for="simrchk3">
+                          Kimchi
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class=" offset-md-2 col-md-4">
+                    <label class="font-weight-bold" for="remark">
+                      Remark
+                    </label>
+                </div>
+                <div class="form-group col-md-4">
+                    <input class="form-control" type="text" placeholder="Enter Remark" id="soupremark">
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="showscancode({{$order->id}})">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+</div>
 
                                 </tr>
                             @endforeach
@@ -158,11 +312,14 @@
                     <select name="pay_type" class="form-control" id="pay_type">
                         <option value="1">Cash</option>
                         <option value="2">K Pay</option>
-                        <option value="1">Wave</option>
-                        <option value="1">CB</option>
-                        <option value="1">AYA</option>
-                        <option value="1">YOMA</option>
-                        <option value="1">A+</option>
+                        <option value="3">Wave</option>
+                        <option value="4">CB</option>
+                        <option value="5">AYA</option>
+                        <option value="6">YOMA</option>
+                        <option value="7">A+</option>
+                        <option value="8">MPU</option>
+                        <option value="9">Visa</option>
+                        <option value="10">Master</option>
                     </select>
                 </div>
 
@@ -257,6 +414,9 @@
                     <option value="5">AYA</option>
                     <option value="6">YOMA</option>
                     <option value="7">A+</option>
+                    <option value="8">MPU</option>
+                    <option value="9">Visa</option>
+                    <option value="10">Master</option>
                 </select>
             </div>
 
@@ -280,6 +440,33 @@
     </div>
 </div>
 
+<div class="modal" tabindex="-1" role="dialog" id="scanshow">
+    <div class="modal-dialog" role="document" style="max-width: 300px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">QR Code</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            {{-- <input type="text" value="" id="scanId"> --}}
+
+          <p>Scan Here.</p>
+          <div  id="scanid">
+            <div class="text-center printableArea">
+                {!! QrCode::size(150)->generate('Welcome to ThaiPot!') !!}
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="print">Print</button>
+            <button type="button" class="btn btn-secondary" id="closescan">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 @endsection
 
 @section('js')
@@ -291,6 +478,28 @@
     $('#dis_percent').hide();
     $('#dis_amount').hide();
     $('#dis_pay_type').hide();
+    $('#soupradio').hide();
+    $('#soupchk').hide();
+
+    $("#print").click(function() {
+            $('#scanshow').modal('hide');
+            // window.print();
+            var mode = 'iframe'; //popup
+            var close = mode == "popup";
+            var options = {
+                mode: mode,
+                popClose: close
+            };
+            $("div.printableArea").printArea(options);
+
+            setTimeout(function(){
+                $('#soupkichen').submit();
+            }, 2500);
+        });
+
+        $('#closescan').click(function() {
+            $('#soupkichen').submit();
+        })
 })
 function yes_radio(){
     // alert('yes');
@@ -317,7 +526,7 @@ function extragramadd(val){
     // alert(val);
     if(val == 01){
         var tot = parseInt($('#voucher_total_dis').val()) + parseInt($('#no_extra').val());
-        var ser = tot * 0.1;
+        var ser = tot * 0.05;
         $('#govtax_val').val(ser);
     }
     else if(val == 02){
@@ -341,7 +550,7 @@ function extragramadd1(val){
     // alert(val);
     if(val == 01){
         var total = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
-        var ser1 = total * 0.1;
+        var ser1 = total * 0.05;
         $('#govtax_val1').val(ser1);
     }
     else if(val == 02){
@@ -646,6 +855,111 @@ function change_price(){
         })
 
     }
+
+    function showdis(){
+    if($('#adultchk').is(':checked')){
+        $('#adult').removeAttr('disabled');
+    }
+    if($('#childchk').is(':checked')){
+        $('#child').removeAttr('disabled');
+    }
+    if($('#kidchk').is(':checked')){
+        $('#kid').removeAttr('disabled');
+    }
+    if($('#potchk').is(':checked')){
+        $('#pot').removeAttr('disabled');
+    }
+    if($('#bdchk').is(':checked')){
+        $('#bd').removeAttr('disabled');
+    }
+   }
+
+   function simplechg(){
+        $('#soupradio').show();
+        $('#soupchk').hide();
+    }
+
+    function mixchg(){
+        $('#soupradio').hide();
+        $('#soupchk').show();
+    }
+
+    function showscancode(id){
+        alert(id);
+        $('#showorder'+id).modal('hide');
+    if(document.getElementById('simchk').checked == true){
+        if(document.getElementById('simrchk').checked == true){
+            var soup = 'Tom-yum';
+        }
+        if(document.getElementById('simrchk1').checked == true){
+            var soup = 'Marla';
+        }
+        if(document.getElementById('simrchk2').checked == true){
+            var soup = 'Sweet Soup';
+        }
+        if(document.getElementById('simrchk3').checked == true){
+            var soup = 'Kimchi';
+        }
+    }
+    if(document.getElementById('mixchk').checked == true){
+        var soup ='';
+        if(document.getElementById('mchk').checked == true){
+            soup += 'Tom-yum,';
+        }
+        if(document.getElementById('mchk1').checked == true){
+            soup += 'Marla,';
+        }
+        if(document.getElementById('mchk2').checked == true){
+            soup += 'Sweet Soup,';
+        }
+        if(document.getElementById('mchk3').checked == true){
+            soup += 'Kimchi,';
+        }
+    }
+
+    var adult_qty = $('#adult').val();
+    var child_qty = $('#child').val();
+    var kid_qty = $('#kid').val();
+    var extrapot_qty = $('#pot').val();
+    var birth_qty = $('#bd').val();
+    var remark = $('#soupremark').val();
+    var old_pot_qty = $('#old_pot_qty').val();
+
+    if(adult_qty == 0){
+        swal({
+                title: "Warning!",
+                text : "You need to fill basic field!",
+                icon : "warning",
+            });
+    }
+    $.ajax({
+
+    type:'POST',
+
+    url:'/EditThaiOrder',
+
+    data:{
+    "_token":"{{csrf_token()}}",
+    "adult_qty":adult_qty,
+    "child_qty" : child_qty ,
+    "kid_qty" : kid_qty,
+    "extrapot_qty" : extrapot_qty,
+    "birth_qty" : birth_qty,
+    "soup_name" : soup,
+    'remark' : remark,
+    'shop_order_id' : id,
+    },
+
+    success:function(data){
+            console.log('success');
+            $('#kit_id').val(data.id);
+            $('#pot_qty').val(old_pot_qty);
+            $('#scanshow').modal('show');
+    }
+})
+
+
+   }
 
 
 </script>

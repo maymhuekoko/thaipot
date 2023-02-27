@@ -136,11 +136,14 @@
                     <select name="pay_type" class="form-control" id="pay_type">
                         <option value="1">Cash</option>
                         <option value="2">K Pay</option>
-                        <option value="1">Wave</option>
-                        <option value="1">CB</option>
-                        <option value="1">AYA</option>
-                        <option value="1">YOMA</option>
-                        <option value="1">A+</option>
+                        <option value="3">Wave</option>
+                        <option value="4">CB</option>
+                        <option value="5">AYA</option>
+                        <option value="6">YOMA</option>
+                        <option value="7">A+</option>
+                        <option value="8">MPU</option>
+                        <option value="9">Visa</option>
+                        <option value="10">Master</option>
                     </select>
                 </div>
                 <div class="form-group mt-3">
@@ -200,6 +203,9 @@
                     <option value="5">AYA</option>
                     <option value="6">YOMA</option>
                     <option value="7">A+</option>
+                    <option value="8">MPU</option>
+                    <option value="9">Visa</option>
+                    <option value="10">Master</option>
                 </select>
             </div>
             <div class="form-group mt-3" id="dis_change_amount">
