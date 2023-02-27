@@ -2118,7 +2118,7 @@ protected function updateIncome($id, Request $request)
         $take_total = 0;
         $expend = 0;
         $govtax = 0;
-        $cash=0;$kpay=0;$wave=0;$cb=0;$aya=0;$yoma=0;$aplus=0;
+        $cash=0;$kpay=0;$wave=0;$cb=0;$aya=0;$yoma=0;$aplus=0;$mpu=0;$visa=0;$master=0;
 
         $second_total = 0;
         $shop_orders = ShopOrder::whereDate('created_at', date('Y-m-d'))->get();
@@ -2174,6 +2174,15 @@ protected function updateIncome($id, Request $request)
             if($voucher->pay_type == 7){
                 $aplus += $voucher->total_price;
             }
+            if($voucher->pay_type == 8){
+                $mpu += $voucher->total_price;
+            }
+            if($voucher->pay_type == 9){
+                $visa += $voucher->total_price;
+            }
+            if($voucher->pay_type == 10){
+                $master += $voucher->total_price;
+            }
         }
 
         $first_total = $adult_amount + $children_amount + $kid_amount + $extra_pot_amount + $extra_amount;
@@ -2187,7 +2196,7 @@ protected function updateIncome($id, Request $request)
         return view('Admin.sales_report',
         compact('adults','children', 'kids', 'extra_pots', 'extra_grams', 'extra_amount', 'first_total',
         'service_charge', 'second_total','discount_amount', 'govtax',
-        'cash','kpay','wave','cb','aya','yoma','aplus','take_total','expend'));
+        'cash','kpay','wave','cb','aya','yoma','aplus','mpu','visa','master','take_total','expend'));
     }
 
     protected function getSaleReportDate(Request $request){
@@ -2202,7 +2211,7 @@ protected function updateIncome($id, Request $request)
         $take_total = 0;
         $expend = 0;
         $govtax = 0;
-        $cash=0;$kpay=0;$wave=0;$cb=0;$aya=0;$yoma=0;$aplus=0;
+        $cash=0;$kpay=0;$wave=0;$cb=0;$aya=0;$yoma=0;$aplus=0;$mpu=0;$visa=0;$master=0;
         $second_total = 0;
 
         $shop_orders = ShopOrder::whereDate('created_at', $daily)->get();
@@ -2258,6 +2267,15 @@ protected function updateIncome($id, Request $request)
             if($voucher->pay_type == 7){
                 $aplus += $voucher->total_price;
             }
+            if($voucher->pay_type == 8){
+                $mpu += $voucher->total_price;
+            }
+            if($voucher->pay_type == 9){
+                $visa += $voucher->total_price;
+            }
+            if($voucher->pay_type == 10){
+                $master += $voucher->total_price;
+            }
         }
 
         $first_total = $adult_amount + $children_amount + $kid_amount + $extra_pot_amount + $extra_amount;
@@ -2286,6 +2304,9 @@ protected function updateIncome($id, Request $request)
             "aya" => $aya,
             "yoma" => $yoma,
             "aplus" => $aplus,
+            "mpu" => $mpu,
+            "master" => $master,
+            "visa" => $visa,
             "take_total" => $take_total,
             "expend" => $expend,
             "govtax" => $govtax,

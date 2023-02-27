@@ -169,7 +169,7 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::get('Finished-Order', 'Web\SaleController@getFinishedOrderList')->name('finished_lists');
     Route::post('Finished-Order-DateFilter', 'Web\SaleController@getFilterFinishedOrderList')->name('filter_finished_lists');
 
-    
+
     Route::post('Finished-Consumption-DateFilter', 'Web\SaleController@getFilterFinishedConsumptionList');
 
 
@@ -196,6 +196,7 @@ Route::group(['middleware' => ['UserAuth']], function () {
     //qrcode //Start Thai Pot
     Route::get('qrcode', 'Web\SaleController@getQrcodePage')->name('qrcode');
     Route::post('StoreThaiOrder', 'Web\SaleController@storeThaiShopOrder')->name('store_thai_shop_order');
+    Route::post('EditThaiOrder', 'Web\SaleController@editThaiShopOrder')->name('edit_thai_shop_order');
 
 
     Route::get('Sale', 'Web\SaleController@getSalePage')->name('sale_page');
@@ -240,7 +241,7 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::get('shop_voucher/{id}', 'Web\SaleController@getShopVoucherDetail')->name('shop_voucher');
     Route::get('shop_voucher1/{id}', 'Web\SaleController@getShopVoucherDetail1')->name('shop_voucher1');
 
-    //purchase item 
+    //purchase item
     Route::get('pi_category', 'Web\InventoryController@getPiCategoryList')->name('pi_category_list');
     Route::post('pi_category/store', 'Web\InventoryController@storePiCategory')->name('pi_category_store');
     Route::post('pi_category/update/{id}', 'Web\InventoryController@updatePiCategory')->name('pi_category_update');
@@ -279,7 +280,7 @@ Route::group(['middleware' => ['UserAuth']], function () {
     Route::post('deleteIncome', 'Web\AdminController@deleteIncome')->name('delete_income');
     Route::post('getTotalSaleReport', 'Web\AdminController@getTotalSaleReport');
 
-    //financial 
+    //financial
     Route::get('Financial', 'Web\AdminController@getTotalSalenAndProfit')->name('financial');
 
     //Customer

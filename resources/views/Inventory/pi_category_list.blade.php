@@ -17,7 +17,7 @@
 @section('content')
 
 <div class="row page-titles">
-    <div class="col-md-5 col-8 align-self-center">        
+    <div class="col-md-5 col-8 align-self-center">
         <h2 class="font-weight-bold">PI Category List</h2>
     </div>
 </div>
@@ -48,7 +48,7 @@
                                     <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#edit_item{{$category->id}}"><i class="far fa-edit"></i>
                                     Edit</a>
                                 </td>
-                                
+
                                 <div class="modal fade" id="edit_item{{$category->id}}" role="dialog" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
@@ -62,14 +62,14 @@
                                     <div class="modal-body">
                                         <form class="form-material" method="post" action="{{route('pi_category_update', $category->id)}}">
                                             @csrf
-                                            <div class="form-group">    
+                                            <div class="form-group">
                                                 <label class="font-weight-bold">Name</label>
-                                                <input type="text" name="name" class="form-control" value="{{$category->name}}"> 
+                                                <input type="text" name="name" class="form-control" value="{{$category->name}}">
                                             </div>
                                             <input type="submit" name="btnsubmit" class="btnsubmit float-right btn btn-primary" value="Update">
-                                        </form>           
+                                        </form>
                                     </div>
-                               
+
                               </div>
                                     </div>
                                 </div>
@@ -88,8 +88,8 @@
                 <h3 class="card-title">PI Category Create Form</h3>
                 <form class="form-material" method="post" action="{{route('pi_category_store')}}">
                     @csrf
-                    
-                    <div class="form-group">    
+
+                    <div class="form-group">
                         <label class="font-weight-bold">Name</label>
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Enter Category Name" required>
 
@@ -97,7 +97,7 @@
                             <span class="invalid-feedback alert alert-danger" role="alert"  height="100">
                                 {{ $message }}
                             </span>
-                        @enderror 
+                        @enderror
 
                     </div>
                     <input type="submit" name="btnsubmit" class="btnsubmit float-right btn btn-primary" value="Save Category">

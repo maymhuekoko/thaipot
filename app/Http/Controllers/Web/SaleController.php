@@ -359,6 +359,46 @@ class SaleController extends Controller
 
     //end
 
+    //Start edit thai
+    protected function editThaiShopOrder(Request $request){
+        // return response()->json(QrCode::size(150)->generate('hello'));
+
+        $user_name =  session()->get('user')->name;
+
+        try {
+           $shop_order = ShopOrder::find($request->shop_order_id);
+            // dd($table);
+				// if (empty($table)) {
+                    // if($is_desktop == true || $is_mobile == true){
+                        // dd($request->all());
+            if($request->adult_qty != 0){
+						$shop_order->sale_by = $user_name;
+                        $shop_order->adult_qty = $request->adult_qty;
+                        $shop_order->child_qty = $request->child_qty;
+                        $shop_order->kid_qty = $request->kid_qty;
+                        $shop_order->birth_qty = $request->birth_qty;
+                        $shop_order->extrapot_qty = $request->extrapot_qty;
+                        $shop_order->soup_name = $request->soup_name;
+                        $shop_order->remark = $request->remark;
+                        $shop_order->save();
+                }
+
+
+		} catch (Exception $e) {
+
+			alert()->error("Something Wrong! When Store Shop Order");
+
+			response()->json('wrong');
+
+		}
+
+      	alert()->success('Successfully Edit Shop Order');
+
+        return response()->json($shop_order);
+
+	}
+    //end
+
 	protected function storeShopOrder(Request $request){
 
 		// dd($request->all());
@@ -696,6 +736,7 @@ class SaleController extends Controller
 
     //soup kitchen
     protected function soupkitchen(Request $request){
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
 			'order_id' => 'required',
 		]);
@@ -730,14 +771,23 @@ class SaleController extends Controller
 			  $orders = ShopOrder::find($request->order_id);
 			  $tableno = Table::find($orders->table_id);
 
-
+            if($request->pot_qty){
+                $extra_pot = $orders->extrapot_qty - $request->pot_qty;
+                // dd($extra_pot);
+            }else{
+                $extra_pot = $orders->extrapot_qty;
+            }
 			  $fromadd = 1;
 			  $tablenoo = 0;
 			  $date = new DateTime('Asia/Yangon');
 
         	$real_date = $date->format('d-m-Y h:i:s');
 
-			return view('Sale.kitchen_soup',compact('tableno','fromadd','tablenoo','real_date','shop_order'));
+            if($extra_pot == 0){
+                return redirect()->back();
+            }else{
+                return view('Sale.kitchen_soup',compact('tableno','fromadd','tablenoo','real_date','shop_order','extra_pot'));
+            }
 
 		} else {
 
