@@ -406,7 +406,7 @@
           </div>
 
         </div>
-      </div>
+    </div>
 
       <div class="modal" tabindex="-1" role="dialog" id="scanshow">
         <div class="modal-dialog" role="document" style="max-width: 300px;">

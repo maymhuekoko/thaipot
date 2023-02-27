@@ -77,7 +77,7 @@
                                         <tr>
                                             <td>Extra</td>
                                             <td>{{$shop_order->soup_name}}</td>
-                                            <td>{{$shop_order->extrapot_qty+1}}</td>
+                                            <td>{{$extra_pot}}</td>
                                         </tr>
                                         @if ($shop_order->remark != null)
                                         <tr>

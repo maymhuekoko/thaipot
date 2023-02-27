@@ -24,22 +24,23 @@
 </style>
 
 
-<div class="row"  id='printableArea'>
+<div class="row">
 <div class="offset-md-2 col-md-8">
 <div class="card">
-    <div class="card-body p-5">
-    <h3 class="mb-4">Daily Sales Report</h3>
-    <div class="float-right" style="position: relative; top: -10px;">
+    <h3 class="mt-4 pl-2">Daily Sales Report</h3>
+    <div class="offset-8 col-3 mt-2 form-group" style="position: relative; top: -10px;">
         <label for="">Date:</label>
-        <input type="date" id="datePicker">
+        <input type="date" id="datePicker" class="form-control">
     </div>
+    <div class="card-body" id='printableArea'>
+    <div class="row pt-1">
+        <div class="offset-3 col-6">
     <table class="table table-hover" id="sale_table">
     <thead style="background-color: lightblue; color: white; font-weight: bold;">
             <tr>
             <th></th>
             <th>Pax</th>
             <th>Amount</th>
-            <th>Remark</th>
             </tr>
         </thead>
         <tbody>
@@ -47,98 +48,98 @@
                 <td>Adult</td>
                 <td>{{$adults}}</td>
                 <td>{{$adults * 21900}}</td>
-                <td></td>
+
             </tr>
             <tr>
                 <td>Child 9 to 12</td>
                 <td>{{$children}}</td>
                 <td>{{$children * 11000}}</td>
-                <td></td>
+
             </tr>
             <tr>
                 <td>Child 4 to 8</td>
                 <td>{{$kids}}</td>
                 <td>{{$kids * 9000}}</td>
-                <td></td>
+
             </tr>
 
             <tr>
                 <td>Extra Pot</td>
                 <td>{{$extra_pots}}</td>
                 <td>{{$extra_pots * 3000}}</td>
-                <td></td>
+
             </tr>
             <tr>
                 <td>Extra Food</td>
                 <td>{{$extra_grams}}</td>
                 <td>{{$extra_amount}}</td>
-                <td></td>
+
             </tr>
             <tr>
                 <td>Total</td>
                 <td></td>
                 <td>{{$first_total}}</td>
-                <td></td>
+
             </tr>
             <tr>
                 <td>Service Charge 5%</td>
                 <td></td>
                 <td>{{$service_charge}}</td>
-                <td></td>
+
             </tr>
             <tr>
                 <td>Gov Tax 5%</td>
                 <td></td>
                 <td>{{$govtax}}</td>
-                <td></td>
+
             </tr>
             <tr>
                 <td>Total</td>
                 <td></td>
                 <td>{{$second_total}}</td>
-                <td></td>
+
             </tr>
             <tr>
                 <td>Discount</td>
                 <td></td>
                 <td>{{$discount_amount}}</td>
-                <td></td>
+
             </tr>
             <tr style="height: 43.933px;">
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+
             </tr>
             <tr style="height: 43.933px;">
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+
             </tr>
             <tr style="height: 43.933px;">
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+
             </tr>
             <tr style="height: 43.933px;">
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+
             </tr>
             <tr>
                 <td>Take away</td>
                 <td></td>
                 <td>{{$take_total}}</td>
-                <td></td>
+
             </tr>
             <tr>
                 <td>Sub Total</td>
                 <td></td>
                 <td>{{($second_total - $discount_amount) + $take_total}}</td>
-                <td></td>
+
             </tr>
             <tr>
                 <td colspan="4">
@@ -149,6 +150,9 @@
                 <p class="mt-3">AYA - {{$aya}}</p>
                 <p class="mt-3">YoMa - {{$yoma}}</p>
                 <p class="mt-3">A+ - {{$aplus}}</p>
+                <p class="mt-3">MPU - {{$mpu}}</p>
+                <p class="mt-3">Visa - {{$visa}}</p>
+                <p class="mt-3">Master - {{$master}}</p>
                 <p class="mt-3">Total - {{$second_total}}</p>
                 </td>
             </tr>
@@ -160,13 +164,15 @@
             </tr>
         </tbody>
     </table>
+        </div>
+    </div>
 
+    <div class="d-flex justify-content-between table-bottom">
+        <p>Checked By</p>
+        <p>Received By</p>
+    </div>
+</div>
 
-</div>
-<div class="d-flex justify-content-between table-bottom">
-    <p>Checked By</p>
-    <p>Received By</p>
-</div>
 </div>
 
 </div>
@@ -235,7 +241,6 @@
                         <th></th>
                         <th>Pax</th>
                         <th>Amount</th>
-                        <th>Remark</th>
                         </tr>
                     </thead>`;
                 // $.each(data, function(i,v){
@@ -248,97 +253,97 @@
                             <td>Adult</td>
                             <td>${data.adults}</td>
                             <td>${data.adults * 21900}</td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td>Child 9 to 12</td>
                             <td>${data.children}</td>
                             <td>${data.children * 11000}</td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td>Child 4 to 8</td>
                             <td>${data.kids}</td>
                             <td>${data.kids * 9000}</td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td>Extra Pot</td>
                             <td>${data.extra_pots}</td>
                             <td>${data.extra_pots * 3000}</td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td>Extra Food</td>
                             <td>${data.extra_grams}</td>
                             <td>${data.extra_amount}</td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td>Total</td>
                             <td></td>
                             <td>${data.first_total}</td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td>Service Charge 5%</td>
                             <td></td>
                             <td>${data.service_charge}</td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td>Gov Tax 5%</td>
                             <td></td>
                             <td>${data.govtax}</td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td>Total</td>
                             <td></td>
                             <td>${data.second_total}</td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td>Discount</td>
                             <td></td>
                             <td>${data.discount_amount}</td>
-                            <td></td>
+
                         </tr>
                         <tr style="height: 43.933px;">
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
+
                         </tr>
                         <tr style="height: 43.933px;">
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
+
                         </tr>
                         <tr style="height: 43.933px;">
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
+
                         </tr>
                         <tr style="height: 43.933px;">
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td>Take away</td>
                             <td></td>
                             <td>${data.take_total}</td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td>Sub Total</td>
                             <td></td>
                             <td>${(data.second_total - data.discount_amount) + data.take_total}</td>
-                            <td></td>
+
                         </tr>
                         <tr>
                             <td colspan="4">
@@ -349,6 +354,9 @@
                             <p class="mt-3">AYA - ${data.aya}</p>
                             <p class="mt-3">YoMa - ${data.yoma}</p>
                             <p class="mt-3">A+ - ${data.aplus}</p>
+                            <p class="mt-3">MPU - ${data.mpu}</p>
+                            <p class="mt-3">Visa - ${data.visa}</p>
+                            <p class="mt-3">Master - ${data.master}</p>
                             <p class="mt-3">Total - ${data.second_total}</p>
                             </td>
                         </tr>
