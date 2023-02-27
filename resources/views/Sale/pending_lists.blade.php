@@ -526,7 +526,7 @@ function extragramadd(val){
     // alert(val);
     if(val == 01){
         var tot = parseInt($('#voucher_total_dis').val()) + parseInt($('#no_extra').val());
-        var ser = tot * 0.05;
+        var ser = tot * 0.1;
         $('#govtax_val').val(ser);
     }
     else if(val == 02){
@@ -550,7 +550,7 @@ function extragramadd1(val){
     // alert(val);
     if(val == 01){
         var total = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
-        var ser1 = total * 0.05;
+        var ser1 = total * 0.1;
         $('#govtax_val1').val(ser1);
     }
     else if(val == 02){
@@ -655,8 +655,8 @@ function change_price(){
     var extra_gram = $('#no_extraamt').val();
     var pay_type = $('#pay_type').val();
     var pay_type_dis = $('#pay_type_dis').val();
-    var govtax_amt = $('#govtax_val').val();
-    var govtax_amt1 = $('#govtax_val1').val();
+    var govtax_amt = parseInt($('#govtax_val').val())*0.5;
+    var govtax_amt1 =parseInt($('#govtax_val1').val())*0.5;
 
     if($('#gov_yes').is(":checked")){
         var govtax_dis = 1;
@@ -885,7 +885,7 @@ function change_price(){
     }
 
     function showscancode(id){
-        alert(id);
+        // alert(id);
         $('#showorder'+id).modal('hide');
     if(document.getElementById('simchk').checked == true){
         if(document.getElementById('simrchk').checked == true){

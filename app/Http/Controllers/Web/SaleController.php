@@ -771,19 +771,19 @@ class SaleController extends Controller
 			  $orders = ShopOrder::find($request->order_id);
 			  $tableno = Table::find($orders->table_id);
 
-            if($request->pot_qty){
+            if($request->pot_qty != ''){
                 $extra_pot = $orders->extrapot_qty - $request->pot_qty;
-                // dd($extra_pot);
             }else{
-                $extra_pot = $orders->extrapot_qty;
+                $extra_pot = $orders->extrapot_qty + 1;
             }
+            // dd($extra_pot);
 			  $fromadd = 1;
 			  $tablenoo = 0;
 			  $date = new DateTime('Asia/Yangon');
 
         	$real_date = $date->format('d-m-Y h:i:s');
 
-            if($extra_pot == 0){
+            if($extra_pot == 0 || $extra_pot < 0){
                 return redirect()->back();
             }else{
                 return view('Sale.kitchen_soup',compact('tableno','fromadd','tablenoo','real_date','shop_order','extra_pot'));
