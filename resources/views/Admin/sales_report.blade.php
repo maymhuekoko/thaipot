@@ -166,11 +166,6 @@
     </table>
         </div>
     </div>
-
-    <div class="d-flex justify-content-between table-bottom">
-        <p>Checked By</p>
-        <p>Received By</p>
-    </div>
 </div>
 
 </div>
