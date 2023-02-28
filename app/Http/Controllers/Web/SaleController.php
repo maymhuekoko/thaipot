@@ -1326,7 +1326,7 @@ class SaleController extends Controller
 
 		$order_lists = ShopOrder::where('status', 2)->get();
     	$vouchers = Voucher::with('shopOrder')->latest()->get();
-        dd($vouchers);
+        // dd($vouchers);
 
 		return view('Sale.finished_lists', compact('order_lists','vouchers'));
 	}
