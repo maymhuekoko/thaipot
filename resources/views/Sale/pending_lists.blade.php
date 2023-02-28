@@ -204,7 +204,6 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" onclick="showscancode({{$order->id}})">Save</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
 
@@ -305,7 +304,7 @@
 
                 <div class="form-group mt-3">
                     <label class="font-weight-bold">Pay Amount</label>
-                    <input type="text" class="form-control"  value="" id="pay_amount" placeholder="Enter Pay Amount" onkeyup="pay_amt1(this.value)">
+                    <input type="text" class="form-control"  value="" id="pay_amount" placeholder="Enter Pay Amount" onkeyup="pay_amt1(this.value)" required>
                 </div>
                 <div class="form-group mt-3" id="type_pay">
                     <label class="font-weight-bold">Pay Type</label>
@@ -402,7 +401,7 @@
             </div>
             <div class="form-group mt-3" id="dis_pay_amount">
                 <label class="font-weight-bold">Pay Amount</label>
-                <input type="text" class="form-control"  value="" id="pay_amount_dis" placeholder="Enter Pay Amount" onkeyup="pay_amt(this.value)">
+                <input type="text" class="form-control"  value="" id="pay_amount_dis" placeholder="Enter Pay Amount" onkeyup="pay_amt(this.value)" required>
             </div>
             <div class="form-group mt-3" id="dis_pay_type">
                 <label class="font-weight-bold">Pay Type</label>
@@ -707,6 +706,13 @@ function change_price(){
                 swal({
                 title: "Failed!",
                 text : "Something Wrong!",
+                icon : "error",
+            });
+            }
+            else if(data == 0){
+                swal({
+                title: "Failed!",
+                text : "You Need to fill pay amount!",
                 icon : "error",
             });
             }

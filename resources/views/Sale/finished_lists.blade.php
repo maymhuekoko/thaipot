@@ -73,10 +73,13 @@
                                     Total Amount
                                 </th>
                                 <th>
-                                    Total Quantity
+                                    Adult
                                 </th>
                                 <th>
-                                    Table No.
+                                    Child
+                                </th>
+                                <th>
+                                    Kid
                                 </th>
                                 <th>
                                     Date
@@ -91,7 +94,9 @@
                             <tr class="text-center">
                                 <td>{{$vouc->voucher_code}}</td>
                                 <td>{{$vouc->total_price}}</td>
-                                <td>{{$vouc->total_quantity}}</td>
+                                <td>{{$vouc->shopOrder->adult_qty==0? '-':$vouc->shopOrder->adult_qty}}</td>
+                                <td>{{$vouc->shopOrder->child_qty==0? '-':$vouc->shopOrder->child_qty}}</td>
+                                <td>{{$vouc->shopOrder->kid_qty==0? '-':$vouc->shopOrder->kid_qty}}</td>
                                 @if ($vouc->type == 1)
                                 <td>{{isset($vouc->shopOrder->table->table_number)? $vouc->shopOrder->table->table_number: "Take Away"}}</td>
                                 @elseif($vouc->type == 2)
@@ -169,7 +174,7 @@
                     <td>${v.total_quantity}</td>
                     <td>${table_no}</td>
                     <td>${v.voucher_date.substring(0, 10)}</td>`;
-                
+
                 if(v.type == 1){
                     html +=`    <td>
                                 <a href="${url1}" class="btn btn-info">Check Voucher</a>
@@ -180,7 +185,7 @@
                                 <a href="${url2}" class="btn btn-info">Check Voucher</a>
                                 </td>
                         </tr>`;
-                }   
+                }
 
             })
             $('#sale_table').html(html);
