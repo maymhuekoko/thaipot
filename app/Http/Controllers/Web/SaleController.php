@@ -914,7 +914,15 @@ class SaleController extends Controller
 
 		}
 
-
+        if($request->discount_type !=null && $request->discount_value != null){
+            if($request->pay_amount == ''){
+                return response()->json(0);
+            }
+        }else{
+            if($request->pay_amount_dis == ''){
+                return response()->json(0);
+            }
+        }
 
 		$table = Table::where('id', $shop_order->table_id)->first();
 
@@ -1052,6 +1060,16 @@ class SaleController extends Controller
 		foreach($quantities as $qty){
 			$total_qty += $qty->quantity;
 		}
+
+        if($request->discount_type !=null && $request->discount_value != null){
+            if($request->pay_amount == ''){
+                return response()->json(0);
+            }
+        }else{
+            if($request->pay_amount_dis == ''){
+                return response()->json(0);
+            }
+        }
 
         $voucher = Voucher::create([
             'sale_by' => $user_code,
@@ -1308,6 +1326,7 @@ class SaleController extends Controller
 
 		$order_lists = ShopOrder::where('status', 2)->get();
     	$vouchers = Voucher::with('shopOrder')->latest()->get();
+        // dd($vouchers);
 
 		return view('Sale.finished_lists', compact('order_lists','vouchers'));
 	}
