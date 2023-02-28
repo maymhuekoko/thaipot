@@ -94,7 +94,7 @@
                             <tr class="text-center">
                                 <td>{{$vouc->voucher_code}}</td>
                                 <td>{{$vouc->total_price}}</td>
-                                <td>{{$vouc->shopOrder->adult_qty==0? '-':$vouc->shopOrder->adult_qty}}</td>
+                                <td>{{$vouc->shopOrder->id}}</td>
                                 <td>{{$vouc->shopOrder->child_qty==0? '-':$vouc->shopOrder->child_qty}}</td>
                                 <td>{{$vouc->shopOrder->kid_qty==0? '-':$vouc->shopOrder->kid_qty}}</td>
                                 @if ($vouc->type == 1)
