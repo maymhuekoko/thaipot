@@ -105,6 +105,15 @@
                     <input class="form-control" type="text" placeholder="0" value="{{$order->kid_qty}}" id="kid" disabled>
                 </div>
                 <div class="form-check offset-md-2 col-md-4">
+                    <input class="form-check-input" type="checkbox" value="" id="cheesechk" onclick="showdis()">
+                    <label class="form-check-label" for="cheesechk">
+                      Cheese
+                    </label>
+                </div>
+                <div class="form-group col-md-4">
+                    <input class="form-control" type="text" value="{{$order->cheese_qty}}" id="cheese" disabled>
+                </div>
+                <div class="form-check offset-md-2 col-md-4">
                     <input class="form-check-input" type="checkbox" value="" id="potchk" onclick="showdis()">
                     <label class="form-check-label" for="potchk">
                       Extra Pot
@@ -525,21 +534,21 @@ function extragramadd(val){
     // alert(val);
     if(val == 01){
         var tot = parseInt($('#voucher_total_dis').val()) + parseInt($('#no_extra').val());
-        var ser = tot * 0.1;
+        var ser = parseInt(tot * 0.1);
         $('#govtax_val').val(ser);
     }
     else if(val == 02){
         var tot = parseInt($('#voucher_total_dis').val()) + parseInt($('#no_extra').val());
-        var ser = tot * 0.05;
+        var ser = parseInt(tot * 0.05);
         $('#govtax_val').val(0);
     }
     else{
         $('#no_extra').val(val*35);
         var tot = parseInt($('#voucher_total_dis').val()) + parseInt(val*35);
-        var ser = tot * 0.05;
+        var ser = parseInt(tot * 0.05);
         $('#govtax_val').val(0);
     }
-    var bd = $('#bd_exit').val();
+    var bd = parseInt($('#bd_exit').val());
     // alert(bd);
     var vtot = (tot + ser) - bd;
     $('#curr_voucher_total').val(vtot);
@@ -549,21 +558,21 @@ function extragramadd1(val){
     // alert(val);
     if(val == 01){
         var total = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
-        var ser1 = total * 0.1;
+        var ser1 = parseInt(total * 0.1);
         $('#govtax_val1').val(ser1);
     }
     else if(val == 02){
         var total = parseInt($('#voucher_total').val()) + parseInt($('#no_extra1').val());
-        var ser1 = (total * 0.05);
+        var ser1 = parseInt(total * 0.05);
         $('#govtax_val1').val(0);
     }
     else{
         $('#no_extra1').val(val*35);
         var total = parseInt($('#voucher_total').val()) + parseInt(val*35);
-        var ser1 = total * 0.05;
+        var ser1 = parseInt(total * 0.05);
         $('#govtax_val1').val(0);
     }
-    var bd1 = $('#bd_exit').val();
+    var bd1 = parseInt($('#bd_exit').val());
     // alert(bd1);
     var vtotal = ( total + ser1 )-bd1;
     $('#curr_voucher_total1').val(vtotal);
@@ -875,6 +884,9 @@ function change_price(){
     if($('#potchk').is(':checked')){
         $('#pot').removeAttr('disabled');
     }
+    if($('#cheesechk').is(':checked')){
+        $('#cheese').removeAttr('disabled');
+    }
     if($('#bdchk').is(':checked')){
         $('#bd').removeAttr('disabled');
     }
@@ -927,6 +939,7 @@ function change_price(){
     var child_qty = $('#child').val();
     var kid_qty = $('#kid').val();
     var extrapot_qty = $('#pot').val();
+    var cheese_qty = $('#cheese').val();
     var birth_qty = $('#bd').val();
     var remark = $('#soupremark').val();
     var old_pot_qty = $('#old_pot_qty').val();
@@ -950,6 +963,7 @@ function change_price(){
     "child_qty" : child_qty ,
     "kid_qty" : kid_qty,
     "extrapot_qty" : extrapot_qty,
+    "cheese_qty" : cheese_qty,
     "birth_qty" : birth_qty,
     "soup_name" : soup,
     'remark' : remark,
