@@ -79,6 +79,14 @@
                                         <th>{{$pending_order_details->kid_qty * 9000}}</th>
                                     </tr>
                                     @endif
+                                    @if ($pending_order_details->cheese_qty != 0)
+                                    <tr style="text-align:left;">
+                                        <th >Cheese Sauce</th>
+                                        <th ><span>{{$pending_order_details->cheese_qty}}</span></th>
+                                        <th>1900</th>
+                                        <th>{{$pending_order_details->cheese_qty * 1900}}</th>
+                                    </tr>
+                                    @endif
                                     @if ($pending_order_details->extrapot_qty != 0)
                                     <tr style="text-align:left;">
                                         <th >Extra Pot</th>

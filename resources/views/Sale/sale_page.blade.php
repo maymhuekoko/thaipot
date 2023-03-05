@@ -305,6 +305,15 @@
                         <input class="form-control" type="text" placeholder="0" value="0" id="kid" disabled>
                     </div>
                     <div class="form-check offset-md-2 col-md-4">
+                        <input class="form-check-input" type="checkbox" value="" id="cheesechk" onclick="showdis()">
+                        <label class="form-check-label" for="cheesechk">
+                          Cheese
+                        </label>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input class="form-control" type="text" value="0" id="cheese" disabled>
+                    </div>
+                    <div class="form-check offset-md-2 col-md-4">
                         <input class="form-check-input" type="checkbox" value="" id="potchk" onclick="showdis()">
                         <label class="form-check-label" for="potchk">
                           Extra Pot
@@ -527,6 +536,7 @@
     var adult_qty = $('#adult').val();
     var child_qty = $('#child').val();
     var kid_qty = $('#kid').val();
+    var cheese_qty = $('#cheese').val();
     var extrapot_qty = $('#pot').val();
     var birth_qty = $('#bd').val();
     var start_time = $('#time').val();
@@ -552,6 +562,7 @@
     "adult_qty":adult_qty,
     "child_qty" : child_qty ,
     "kid_qty" : kid_qty,
+    "cheese_qty" : cheese_qty,
     "extrapot_qty" : extrapot_qty,
     "birth_qty" : birth_qty,
     "start_time" : start_time,
@@ -597,6 +608,12 @@
     }else{
         $('#pot').attr('disabled','disabled');
         $('#pot').val(0);
+    }
+    if($('#cheesechk').is(':checked')){
+        $('#cheese').removeAttr('disabled');
+    }else{
+        $('#cheese').attr('disabled','disabled');
+        $('#cheese').val(0);
     }
     if($('#bdchk').is(':checked')){
         $('#bd').removeAttr('disabled');

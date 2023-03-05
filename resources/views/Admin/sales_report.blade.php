@@ -62,7 +62,12 @@
                 <td>{{$kids * 9000}}</td>
 
             </tr>
+            <tr>
+                <td>Cheese Sauce</td>
+                <td>{{$cheeses}}</td>
+                <td>{{$cheeses * 1900}}</td>
 
+            </tr>
             <tr>
                 <td>Extra Pot</td>
                 <td>{{$extra_pots}}</td>
@@ -260,6 +265,12 @@
                             <td>Child 4 to 8</td>
                             <td>${data.kids}</td>
                             <td>${data.kids * 9000}</td>
+
+                        </tr>
+                        <tr>
+                            <td>Extra Pot</td>
+                            <td>${data.cheeses}</td>
+                            <td>${data.cheeses * 1900}</td>
 
                         </tr>
                         <tr>
