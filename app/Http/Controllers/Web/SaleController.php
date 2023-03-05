@@ -316,6 +316,7 @@ class SaleController extends Controller
                         'child_qty' => $request->child_qty,
                         'kid_qty' => $request->kid_qty,
                         'birth_qty' => $request->birth_qty,
+                        'cheese_qty' => $request->cheese_qty,
                         'extrapot_qty' => $request->extrapot_qty,
                         'soup_name' => $request->soup_name,
                         'remark' => $request->remark,
@@ -378,6 +379,7 @@ class SaleController extends Controller
                         $shop_order->kid_qty = $request->kid_qty;
                         $shop_order->birth_qty = $request->birth_qty;
                         $shop_order->extrapot_qty = $request->extrapot_qty;
+                        $shop_order->cheese_qty = $request->cheese_qty;
                         $shop_order->soup_name = $request->soup_name;
                         $shop_order->remark = $request->remark;
                         $shop_order->save();
@@ -1264,7 +1266,7 @@ class SaleController extends Controller
 
 		$total_qty = 0 ;
 
-        $tota = $shop_order->adult_qty * 21900 + $shop_order->child_qty * 11000 + $shop_order->kid_qty * 9000 + $shop_order->extrapot_qty * 3000;
+        $tota = $shop_order->adult_qty * 21900 + $shop_order->child_qty * 11000 + $shop_order->kid_qty * 9000 + $shop_order->extrapot_qty * 3000 +$shop_order->cheese_qty * 1900;
         $ser = $tota * 0.05;
         $total = $tota + $ser - ($shop_order->birth_qty * 4600);
         $bd = $shop_order->birth_qty * 4600;
@@ -1367,9 +1369,9 @@ class SaleController extends Controller
 
     	$voucher = Voucher::where('id', $order->voucher_id)->first();
 
-        $voutotal = ($order->adult_qty * 21900)+($order->child_qty * 11000)+ ($order->kid_qty * 9000)+ ($order->extrapot_qty *3000) + $voucher->extra_amount;
+        $voutotal = ($order->adult_qty * 21900)+($order->child_qty * 11000)+ ($order->kid_qty * 9000)+ ($order->extrapot_qty *3000) +($order->cheese_qty *1900)+ $voucher->extra_amount;
 
-        $servicecharges =($voutotal/100 * 5);
+        $servicecharges = (int)($voutotal/100 * 5);
 
     	return view('Sale.voucher', compact('voucher','order','voutotal','servicecharges'));
 	}

@@ -2111,6 +2111,7 @@ protected function updateIncome($id, Request $request)
         $adults = 0;
         $children = 0;
         $kids = 0;
+        $cheeses = 0;
         $extra_pots = 0;
         $extra_grams = 0;
         $extra_amount = 0;
@@ -2141,12 +2142,14 @@ protected function updateIncome($id, Request $request)
             $kids += $order->kid_qty;
             $discount_amount += $order->birth_qty * 4600;
             $extra_pots += $order->extrapot_qty;
+            $cheeses += $order->cheese_qty;
         }
 
         $adult_amount = $adults * 21900;
         $children_amount = $children * 11000;
         $kid_amount = $kids * 9000;
         $extra_pot_amount = $extra_pots * 3000;
+        $cheese_amount = $cheeses * 1900;
 
         foreach($vouchers as $voucher){
             $extra_grams += $voucher->extra_gram;
@@ -2185,16 +2188,16 @@ protected function updateIncome($id, Request $request)
             }
         }
 
-        $first_total = $adult_amount + $children_amount + $kid_amount + $extra_pot_amount + $extra_amount;
+        $first_total = $adult_amount + $children_amount + $kid_amount + $extra_pot_amount + $cheese_amount + $extra_amount;
 
         // dd($first_total);
 
-        $service_charge = $first_total * 0.05;
+        $service_charge = (int)($first_total * 0.05);
 
         $second_total = $first_total + $service_charge + $govtax;
 
         return view('Admin.sales_report',
-        compact('adults','children', 'kids', 'extra_pots', 'extra_grams', 'extra_amount', 'first_total',
+        compact('adults','children', 'kids', 'extra_pots', 'cheeses', 'extra_grams', 'extra_amount', 'first_total',
         'service_charge', 'second_total','discount_amount', 'govtax',
         'cash','kpay','wave','cb','aya','yoma','aplus','mpu','visa','master','take_total','expend'));
     }
@@ -2205,6 +2208,7 @@ protected function updateIncome($id, Request $request)
         $children = 0;
         $kids = 0;
         $extra_pots = 0;
+        $cheeses = 0;
         $extra_grams = 0;
         $extra_amount = 0;
         $discount_amount = 0;
@@ -2234,12 +2238,14 @@ protected function updateIncome($id, Request $request)
             $kids += $order->kid_qty;
             $discount_amount += $order->birth_qty * 4600;
             $extra_pots += $order->extrapot_qty;
+            $cheeses += $order->cheese_qty;
         }
 
         $adult_amount = $adults * 21900;
         $children_amount = $children * 11000;
         $kid_amount = $kids * 9000;
         $extra_pot_amount = $extra_pots * 3000;
+        $cheese_amount = $cheeses * 1900;
 
         foreach($vouchers as $voucher){
             $extra_grams += $voucher->extra_gram;
@@ -2278,11 +2284,11 @@ protected function updateIncome($id, Request $request)
             }
         }
 
-        $first_total = $adult_amount + $children_amount + $kid_amount + $extra_pot_amount + $extra_amount;
+        $first_total = $adult_amount + $children_amount + $kid_amount + $extra_pot_amount + $cheese_amount+ $extra_amount;
 
         // dd($first_total);
 
-        $service_charge = $first_total * 0.05;
+        $service_charge = (int)($first_total * 0.05);
 
         $second_total = $first_total + $service_charge + $govtax;
 
@@ -2291,6 +2297,7 @@ protected function updateIncome($id, Request $request)
             "children" => $children,
             "kids" => $kids,
             "extra_pots" => $extra_pots,
+            "cheeses" => $cheeses,
             "extra_grams" => $extra_grams,
             "extra_amount" => $extra_amount,
             "first_total" => $first_total,
