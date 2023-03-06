@@ -79,121 +79,121 @@
         <div class="modal-body">
             <div class="row">
                 <div class="form-check offset-md-2 col-md-4">
-                    <input class="form-check-input" type="checkbox" value="" id="adultchk" onclick="showdis()">
-                    <label class="form-check-label" for="adultchk">
+                    <input class="form-check-input" type="checkbox" value="" id="adultchk{{$order->id}}" onclick="showdis({{$order->id}})">
+                    <label class="form-check-label" for="adultchk{{$order->id}}">
                       Adult
                     </label>
                 </div>
                 <div class="form-group col-md-4">
-                    <input class="form-control" type="text" placeholder="0"  id="adult" value="{{$order->adult_qty}}" disabled>
+                    <input class="form-control" type="text" placeholder="0"  id="adult{{$order->id}}" value="{{$order->adult_qty}}" disabled>
                 </div>
                 <div class="form-check offset-md-2 col-md-4">
-                    <input class="form-check-input" type="checkbox" value="" id="childchk" onclick="showdis()">
-                    <label class="form-check-label" for="childchk">
+                    <input class="form-check-input" type="checkbox" value="" id="childchk{{$order->id}}" onclick="showdis({{$order->id}})">
+                    <label class="form-check-label" for="childchk{{$order->id}}">
                       Children
                     </label>
                 </div>
                 <div class="form-group col-md-4">
-                    <input class="form-control" type="text" placeholder="0" value="{{$order->child_qty}}" id="child" disabled>
+                    <input class="form-control" type="text" placeholder="0" value="{{$order->child_qty}}" id="child{{$order->id}}" disabled>
                 </div><div class="form-check offset-md-2 col-md-4">
-                    <input class="form-check-input" type="checkbox" value="" id="kidchk" onclick="showdis()">
-                    <label class="form-check-label" for="kidchk">
+                    <input class="form-check-input" type="checkbox" value="" id="kidchk{{$order->id}}" onclick="showdis({{$order->id}})">
+                    <label class="form-check-label" for="kidchk{{$order->id}}">
                       Kid
                     </label>
                 </div>
                 <div class="form-group col-md-4">
-                    <input class="form-control" type="text" placeholder="0" value="{{$order->kid_qty}}" id="kid" disabled>
+                    <input class="form-control" type="text" placeholder="0" value="{{$order->kid_qty}}" id="kid{{$order->id}}" disabled>
                 </div>
                 <div class="form-check offset-md-2 col-md-4">
-                    <input class="form-check-input" type="checkbox" value="" id="cheesechk" onclick="showdis()">
-                    <label class="form-check-label" for="cheesechk">
+                    <input class="form-check-input" type="checkbox" value="" id="cheesechk{{$order->id}}" onclick="showdis({{$order->id}})">
+                    <label class="form-check-label" for="cheesechk{{$order->id}}">
                       Cheese
                     </label>
                 </div>
                 <div class="form-group col-md-4">
-                    <input class="form-control" type="text" value="{{$order->cheese_qty}}" id="cheese" disabled>
+                    <input class="form-control" type="text" value="{{$order->cheese_qty}}" id="cheese{{$order->id}}" disabled>
                 </div>
                 <div class="form-check offset-md-2 col-md-4">
-                    <input class="form-check-input" type="checkbox" value="" id="potchk" onclick="showdis()">
-                    <label class="form-check-label" for="potchk">
+                    <input class="form-check-input" type="checkbox" value="" id="potchk{{$order->id}}" onclick="showdis({{$order->id}})">
+                    <label class="form-check-label" for="potchk{{$order->id}}">
                       Extra Pot
                     </label>
                 </div>
                 <div class="form-group col-md-4" hidden>
-                    <input class="form-control" type="text" value="{{$order->extrapot_qty}}" id="old_pot_qty" disabled>
+                    <input class="form-control" type="text" value="{{$order->extrapot_qty}}" id="old_pot_qty{{$order->id}}" disabled>
                 </div>
                 <div class="form-group col-md-4">
-                    <input class="form-control" type="text" value="{{$order->extrapot_qty}}" id="pot" disabled>
+                    <input class="form-control" type="text" value="{{$order->extrapot_qty}}" id="pot{{$order->id}}" disabled>
                 </div>
                 <div class="form-check offset-md-2 col-md-4">
-                    <input class="form-check-input" type="checkbox" value="" id="bdchk" onclick="showdis()">
-                    <label class="form-check-label" for="bdchk">
+                    <input class="form-check-input" type="checkbox" value="" id="bdchk{{$order->id}}" onclick="showdis({{$order->id}})">
+                    <label class="form-check-label" for="bdchk{{$order->id}}">
                       Birthday Person
                     </label>
                 </div>
                 <div class="form-group col-md-4">
-                    <input class="form-control" type="text"  value="{{$order->birth_qty}}" id="bd" disabled>
+                    <input class="form-control" type="text"  value="{{$order->birth_qty}}" id="bd{{$order->id}}" disabled>
                 </div>
                 <div class="form-check offset-md-3 col-md-3">
-                    <input class="form-check-input" type="radio" value="" name="selectsoup" id="simchk" onclick="simplechg()">
-                    <label class="form-check-label" for="simchk">
+                    <input class="form-check-input" type="radio" value="" name="selectsoup" id="simchk{{$order->id}}" onclick="simplechg({{$order->id}})">
+                    <label class="form-check-label" for="simchk{{$order->id}}">
                       Simple
                     </label>
                 </div>
                 <div class="form-check col-md-4">
-                    <input class="form-check-input" type="radio" value=""  name="selectsoup" id="mixchk" onclick="mixchg()">
-                    <label class="form-check-label" for="mixchk">
+                    <input class="form-check-input" type="radio" value=""  name="selectsoup" id="mixchk{{$order->id}}" onclick="mixchg({{$order->id}})">
+                    <label class="form-check-label" for="mixchk{{$order->id}}">
                       Mix
                     </label>
                 </div>
-                <div id="soupchk" class="mt-3">
+                <div id="soupchk{{$order->id}}" class="mt-3" hidden>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="mchk">
-                    <label class="form-check-label" for="mchk">
+                    <input class="form-check-input" type="checkbox" value="" id="mchk{{$order->id}}">
+                    <label class="form-check-label" for="mchk{{$order->id}}">
                       Tom-yum
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="mchk1">
-                    <label class="form-check-label" for="mchk1">
+                    <input class="form-check-input" type="checkbox" value="" id="mchk1{{$order->id}}">
+                    <label class="form-check-label" for="mchk1{{$order->id}}">
                       Marla
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="mchk2">
-                    <label class="form-check-label" for="mchk2">
+                    <input class="form-check-input" type="checkbox" value="" id="mchk2{{$order->id}}">
+                    <label class="form-check-label" for="mchk2{{$order->id}}">
                       Sweet Soup
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="mchk3">
-                    <label class="form-check-label" for="mchk3">
+                    <input class="form-check-input" type="checkbox" value="" id="mchk3{{$order->id}}">
+                    <label class="form-check-label" for="mchk3{{$order->id}}">
                       Kimchi
                     </label>
                 </div>
                 </div>
-                <div id="soupradio"  class="mt-3">
+                <div id="soupradio{{$order->id}}"  class="mt-3" hidden>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk">
-                        <label class="form-check-label" for="simrchk">
+                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk{{$order->id}}">
+                        <label class="form-check-label" for="simrchk{{$order->id}}">
                           Tom-yum
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk1">
-                        <label class="form-check-label" for="simrchk1">
+                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk1{{$order->id}}">
+                        <label class="form-check-label" for="simrchk1{{$order->id}}">
                           Marla
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk2">
-                        <label class="form-check-label" for="simrchk2">
+                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk2{{$order->id}}">
+                        <label class="form-check-label" for="simrchk2{{$order->id}}">
                           Sweet Soup
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk3">
-                        <label class="form-check-label" for="simrchk3">
+                        <input class="form-check-input" type="radio" value="" name="sradio" id="simrchk3{{$order->id}}">
+                        <label class="form-check-label" for="simrchk3{{$order->id}}">
                           Kimchi
                         </label>
                     </div>
@@ -206,7 +206,7 @@
                     </label>
                 </div>
                 <div class="form-group col-md-4">
-                    <input class="form-control" type="text" placeholder="Enter Remark" id="soupremark">
+                    <input class="form-control" type="text" placeholder="Enter Remark" id="soupremark{{$order->id}}">
                 </div>
             </div>
 
@@ -486,8 +486,6 @@
     $('#dis_percent').hide();
     $('#dis_amount').hide();
     $('#dis_pay_type').hide();
-    $('#soupradio').hide();
-    $('#soupchk').hide();
 
     $("#print").click(function() {
             $('#scanshow').modal('hide');
@@ -871,78 +869,78 @@ function change_price(){
 
     }
 
-    function showdis(){
-    if($('#adultchk').is(':checked')){
-        $('#adult').removeAttr('disabled');
+    function showdis(id){
+    if($('#adultchk'+id).is(':checked')){
+        $('#adult'+id).removeAttr('disabled');
     }
-    if($('#childchk').is(':checked')){
-        $('#child').removeAttr('disabled');
+    if($('#childchk'+id).is(':checked')){
+        $('#child'+id).removeAttr('disabled');
     }
-    if($('#kidchk').is(':checked')){
-        $('#kid').removeAttr('disabled');
+    if($('#kidchk'+id).is(':checked')){
+        $('#kid'+id).removeAttr('disabled');
     }
-    if($('#potchk').is(':checked')){
-        $('#pot').removeAttr('disabled');
+    if($('#potchk'+id).is(':checked')){
+        $('#pot'+id).removeAttr('disabled');
     }
-    if($('#cheesechk').is(':checked')){
-        $('#cheese').removeAttr('disabled');
+    if($('#cheesechk'+id).is(':checked')){
+        $('#cheese'+id).removeAttr('disabled');
     }
-    if($('#bdchk').is(':checked')){
-        $('#bd').removeAttr('disabled');
+    if($('#bdchk'+id).is(':checked')){
+        $('#bd'+id).removeAttr('disabled');
     }
    }
 
-   function simplechg(){
-        $('#soupradio').show();
-        $('#soupchk').hide();
+   function simplechg(id){
+        $('#soupradio'+id).removeAttr('hidden');
+        $('#soupchk'+id).attr('hidden',true);
     }
 
-    function mixchg(){
-        $('#soupradio').hide();
-        $('#soupchk').show();
+    function mixchg(id){
+        $('#soupradio'+id).attr('hidden',true);
+        $('#soupchk'+id).removeAttr('hidden');
     }
 
     function showscancode(id){
         // alert(id);
         $('#showorder'+id).modal('hide');
-    if(document.getElementById('simchk').checked == true){
-        if(document.getElementById('simrchk').checked == true){
+    if(document.getElementById('simchk'+id).checked == true){
+        if(document.getElementById('simrchk'+id).checked == true){
             var soup = 'Tom-yum';
         }
-        if(document.getElementById('simrchk1').checked == true){
+        if(document.getElementById('simrchk1'+id).checked == true){
             var soup = 'Marla';
         }
-        if(document.getElementById('simrchk2').checked == true){
+        if(document.getElementById('simrchk2'+id).checked == true){
             var soup = 'Sweet Soup';
         }
-        if(document.getElementById('simrchk3').checked == true){
+        if(document.getElementById('simrchk3'+id).checked == true){
             var soup = 'Kimchi';
         }
     }
-    if(document.getElementById('mixchk').checked == true){
+    if(document.getElementById('mixchk'+id).checked == true){
         var soup ='';
-        if(document.getElementById('mchk').checked == true){
+        if(document.getElementById('mchk'+id).checked == true){
             soup += 'Tom-yum,';
         }
-        if(document.getElementById('mchk1').checked == true){
+        if(document.getElementById('mchk1'+id).checked == true){
             soup += 'Marla,';
         }
-        if(document.getElementById('mchk2').checked == true){
+        if(document.getElementById('mchk2'+id).checked == true){
             soup += 'Sweet Soup,';
         }
-        if(document.getElementById('mchk3').checked == true){
+        if(document.getElementById('mchk3'+id).checked == true){
             soup += 'Kimchi,';
         }
     }
 
-    var adult_qty = $('#adult').val();
-    var child_qty = $('#child').val();
-    var kid_qty = $('#kid').val();
-    var extrapot_qty = $('#pot').val();
-    var cheese_qty = $('#cheese').val();
-    var birth_qty = $('#bd').val();
-    var remark = $('#soupremark').val();
-    var old_pot_qty = $('#old_pot_qty').val();
+    var adult_qty = $('#adult'+id).val();
+    var child_qty = $('#child'+id).val();
+    var kid_qty = $('#kid'+id).val();
+    var extrapot_qty = $('#pot'+id).val();
+    var cheese_qty = $('#cheese'+id).val();
+    var birth_qty = $('#bd'+id).val();
+    var remark = $('#soupremark'+id).val();
+    var old_pot_qty = $('#old_pot_qty'+id).val();
 
     if(adult_qty == 0){
         swal({
